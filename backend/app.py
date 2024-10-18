@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, g
+from flask_cors import CORS
 from config.db_config import connect_to_db
 from routes.ticket_routes import tickets_bp
 
 app = Flask(__name__)
+CORS(app)
 
 # CRUD Blueprints
 app.register_blueprint(tickets_bp)
@@ -10,7 +12,6 @@ app.register_blueprint(tickets_bp)
 # DB Connection
 def get_db():
     if 'db' not in g:
-        print("Attempting to connect to the database...")
         g.db = connect_to_db()
         if g.db:
             print("Database connection successful.")

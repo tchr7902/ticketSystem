@@ -3,7 +3,6 @@ import TicketList from "../components/TicketList.jsx";
 import TicketForm from "../components/TicketForm.jsx";
 
 function TicketPage() {
-    console.log("TicketPage rendered")
     const [selectedTicket, setSelectedTicket] = useState(null);
 
     const handleEdit = (ticket) => setSelectedTicket(ticket);
@@ -11,7 +10,7 @@ function TicketPage() {
 
     return (
         <div>
-            <h1>Ticketing System</h1>
+            <h1>Ticket Submission</h1>
             <TicketForm selectedTicket={selectedTicket} onSave={handleSave} />
             <TicketList onEdit={handleEdit} />
         </div>
