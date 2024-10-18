@@ -1,30 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { fetchTickets, deleteTicket } from "../utils/api.js";
 
-function TicketList({ onEdit }) {
+export function TicketList({ onEdit, loadTickets }) {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);  // Track loading state
     const [error, setError] = useState(null);      // Track errors
 
+    // Load tickets function
+    const loadTicketsInternal = async () => {
+        setLoading(true); // Set loading state before fetching
+        try {
+            const fetchedTickets = await fetchTickets();
+            setTickets(fetchedTickets);
+        } catch (err) {
+            console.error("Failed to fetch tickets:", err);
+            setError("Unable to load tickets.");
+        } finally {
+            setLoading(false);  // Hide loader after fetch
+        }
+    };
+
     useEffect(() => {
-        const loadTickets = async () => {
-            try {
-                const fetchedTickets = await fetchTickets();
-                setTickets(fetchedTickets);
-            } catch (err) {
-                console.error("Failed to fetch tickets:", err);
-                setError("Unable to load tickets.");
-            } finally {
-                setLoading(false);  // Hide loader after fetch
-            }
-        };
-        loadTickets();
+        loadTicketsInternal(); // Load tickets on component mount
     }, []);
 
     const handleDelete = async (id) => {
         try {
             await deleteTicket(id);
+            // Remove the deleted ticket from the state
             setTickets(tickets.filter((ticket) => ticket.id !== id));
+            // Optionally reload tickets
+            await loadTickets(); // Call loadTickets to refresh after deletion
         } catch (err) {
             console.error("Failed to delete ticket:", err);
             alert("Error deleting ticket. Please try again.");
