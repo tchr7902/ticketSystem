@@ -3,6 +3,7 @@ import TicketList from "../components/TicketList.jsx";
 import TicketForm from "../components/TicketForm.jsx";
 
 function TicketPage() {
+    console.log("TicketPage rendered")
     const [selectedTicket, setSelectedTicket] = useState(null);
 
     const handleEdit = (ticket) => setSelectedTicket(ticket);
