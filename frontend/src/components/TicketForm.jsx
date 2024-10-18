@@ -6,14 +6,12 @@ function TicketForm({ selectedTicket, onSave }) {
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("open");
 
-    // Effect to populate form fields when a ticket is selected for editing
     useEffect(() => {
         if (selectedTicket) {
             setTitle(selectedTicket.title);
             setDescription(selectedTicket.description);
             setStatus(selectedTicket.status);
         } else {
-            // Reset form fields if no selected ticket
             setTitle("");
             setDescription("");
             setStatus("open");
@@ -24,23 +22,8 @@ function TicketForm({ selectedTicket, onSave }) {
         e.preventDefault();
         const ticketData = { title, description, status };
 
-        try {
-            // Create or update the ticket based on whether one is selected
-            if (selectedTicket) {
-                await updateTicket(selectedTicket.id, ticketData);
-            } else {
-                await createTicket(ticketData);
-            }
-            // Trigger the onSave callback to reload tickets
-            onSave();
-        } catch (error) {
-            console.error("Error while submitting ticket:", error);
-        } finally {
-            // Clear input fields after submission
-            setTitle("");
-            setDescription("");
-            setStatus("open");
-        }
+        // Call the onSave prop to create or update a ticket
+        onSave(ticketData); 
     };
 
     return (

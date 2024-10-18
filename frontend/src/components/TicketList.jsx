@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { fetchTickets, deleteTicket } from "../utils/api.js";
+import { fetchTickets, createTicket, updateTicket, deleteTicket } from "../utils/api.js";
+import TicketForm from "./TicketForm.jsx"; // Import TicketForm
 
-export function TicketList({ onEdit, loadTickets }) {
+export function TicketList() {
     const [tickets, setTickets] = useState([]);
-    const [loading, setLoading] = useState(true);  // Track loading state
-    const [error, setError] = useState(null);      // Track errors
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedTicket, setSelectedTicket] = useState(null); // Manage selected ticket for editing
 
     // Load tickets function
-    const loadTicketsInternal = async () => {
-        setLoading(true); // Set loading state before fetching
+    const loadTickets = async () => {
+        setLoading(true);
         try {
             const fetchedTickets = await fetchTickets();
             setTickets(fetchedTickets);
@@ -16,24 +18,39 @@ export function TicketList({ onEdit, loadTickets }) {
             console.error("Failed to fetch tickets:", err);
             setError("Unable to load tickets.");
         } finally {
-            setLoading(false);  // Hide loader after fetch
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        loadTicketsInternal(); // Load tickets on component mount
+        loadTickets(); // Load tickets on component mount
     }, []);
 
     const handleDelete = async (id) => {
         try {
             await deleteTicket(id);
-            // Remove the deleted ticket from the state
-            setTickets(tickets.filter((ticket) => ticket.id !== id));
-            // Optionally reload tickets
-            await loadTickets(); // Call loadTickets to refresh after deletion
+            await loadTickets(); // Reload tickets after deletion
         } catch (err) {
             console.error("Failed to delete ticket:", err);
             alert("Error deleting ticket. Please try again.");
+        }
+    };
+
+    const handleEdit = (ticket) => {
+        setSelectedTicket(ticket); // Set selected ticket for editing
+    };
+
+    const handleSave = async (ticketData) => {
+        try {
+            if (selectedTicket) {
+                await updateTicket(selectedTicket.id, ticketData);
+            } else {
+                await createTicket(ticketData);
+            }
+            setSelectedTicket(null); // Reset selection after save
+            await loadTickets(); // Reload tickets after saving
+        } catch (error) {
+            console.error("Error while saving ticket:", error);
         }
     };
 
@@ -43,6 +60,10 @@ export function TicketList({ onEdit, loadTickets }) {
     return (
         <div>
             <h2>Tickets</h2>
+            <TicketForm 
+                selectedTicket={selectedTicket} 
+                onSave={handleSave} // Pass handleSave to TicketForm
+            />
             <ul>
                 {tickets.length === 0 ? (
                     <p>No tickets available.</p>
@@ -50,7 +71,7 @@ export function TicketList({ onEdit, loadTickets }) {
                     tickets.map((ticket) => (
                         <li key={ticket.id}>
                             <strong>{ticket.title}</strong> - {ticket.status}
-                            <button onClick={() => onEdit(ticket)}>Edit</button>
+                            <button onClick={() => handleEdit(ticket)}>Edit</button>
                             <button onClick={() => handleDelete(ticket.id)}>Delete</button>
                         </li>
                     ))
