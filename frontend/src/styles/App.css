@@ -1,0 +1,17 @@
+.App {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  form input, form textarea, form select {
+    display: block;
+    margin: 10px auto;
+    width: 300px;
+    padding: 8px;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 5px 10px;
+  }
+  
