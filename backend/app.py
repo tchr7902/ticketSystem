@@ -2,14 +2,32 @@ from flask import Flask, jsonify, g
 from flask_cors import CORS
 from config.db_config import connect_to_db
 from routes.ticket_routes import tickets_bp
+from routes.user_routes import user_bp
+from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
+import os
 
+# Load environment variables
+load_dotenv()
+
+# Get JWT key from environment variables
+jwt_key = os.getenv('JWT_KEY')
+
+# Initialize Flask app
 app = Flask(__name__)
-CORS(app)
 
-# CRUD Blueprints
-app.register_blueprint(tickets_bp)
+# Configure the JWT secret key before initializing JWTManager
+app.config['JWT_SECRET_KEY'] = jwt_key
+jwt = JWTManager(app)
 
-# DB Connection
+# Enable CORS for all routes, with support for JWT headers
+CORS(app, supports_credentials=True)
+
+# Register blueprints with URL prefixes
+app.register_blueprint(tickets_bp, url_prefix="/api/tickets")
+app.register_blueprint(user_bp, url_prefix="/api/users")
+
+# Database connection management
 def get_db():
     if 'db' not in g:
         g.db = connect_to_db()
@@ -25,5 +43,6 @@ def close_db(exception):
     if db is not None:
         db.close()
 
+# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
