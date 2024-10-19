@@ -4,8 +4,7 @@ from config.db_config import connect_to_db
 tickets_bp = Blueprint('tickets', __name__)
 
 
-##################### Create Ticket #####################
-
+# Create ticket
 @tickets_bp.route('/api/tickets', methods=['POST'])
 
 def create_ticket():
@@ -27,8 +26,7 @@ def create_ticket():
 
     return jsonify({'id': ticket_id, 'title': title, 'description': description, 'status': status}), 201
 
-####################### Get Tickets ########################
-
+# Get tickets
 @tickets_bp.route('/api/tickets', methods=['GET'])
 def get_tickets():
     connection = connect_to_db()
@@ -52,8 +50,7 @@ def get_tickets():
 
     return jsonify(ticket_list)
 
-###################### Update Tickets ########################
-
+# Update ticket
 @tickets_bp.route('/api/tickets/<int:ticket_id>', methods=['PUT'])
 def update_ticket(ticket_id):
     data = request.json
@@ -73,8 +70,7 @@ def update_ticket(ticket_id):
 
     return jsonify({'id': ticket_id, 'title': title, 'description': description, 'status': status}), 200
 
-####################### Delete Tickets ########################
-
+# Delete ticket
 @tickets_bp.route('/api/tickets/<int:ticket_id>', methods=['DELETE'])
 def delete_ticket(ticket_id):
     connection = connect_to_db()
