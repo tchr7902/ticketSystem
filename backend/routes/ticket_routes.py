@@ -1,86 +1,85 @@
 from flask import Blueprint, request, jsonify
 from config.db_config import connect_to_db
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 tickets_bp = Blueprint('tickets', __name__)
+db = connect_to_db()
 
-
-# Create ticket
-@tickets_bp.route('/api/tickets', methods=['POST'])
-
-def create_ticket():
-    data = request.json
-    title = data.get('title')
-    description = data.get('description')
-    status = data.get('status', 'open')
-
-    connection = connect_to_db()
-    cursor = connection.cursor()
-
-    query = "INSERT INTO tickets (title, description, status) VALUES (%s, %s, %s)"
-    cursor.execute(query, (title, description, status))
-    connection.commit()
-
-    ticket_id = cursor.lastrowid
-    cursor.close()
-    connection.close()
-
-    return jsonify({'id': ticket_id, 'title': title, 'description': description, 'status': status}), 201
-
-# Get tickets
-@tickets_bp.route('/api/tickets', methods=['GET'])
+# Get Tickets (Admin sees all, users see only their own)
+@tickets_bp.route('/tickets', methods=['GET'])
+@jwt_required()
 def get_tickets():
-    connection = connect_to_db()
-    cursor = connection.cursor()
+    user = get_jwt_identity()
+    cursor = db.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM tickets")
+    if user['role'] == 'admin':
+        cursor.execute('SELECT * FROM tickets')
+    else:
+        cursor.execute('SELECT * FROM tickets WHERE user_id = %s', (user['id'],))
+
     tickets = cursor.fetchall()
+    return jsonify(tickets), 200
 
-    ticket_list = []
-    for ticket in tickets:
-        ticket_list.append({
-            'id': ticket[0],
-            'title': ticket[1],
-            'description': ticket[2],
-            'status': ticket[3],
-            'created_at': ticket[4]
-        })
-
-    cursor.close()
-    connection.close()
-
-    return jsonify(ticket_list)
-
-# Update ticket
-@tickets_bp.route('/api/tickets/<int:ticket_id>', methods=['PUT'])
-def update_ticket(ticket_id):
+# Create Ticket
+@tickets_bp.route('/tickets', methods=['POST'])
+@jwt_required()
+def create_ticket():
+    user = get_jwt_identity()
     data = request.json
-    title = data.get('title')
-    description = data.get('description')
-    status = data.get('status')
 
-    connection = connect_to_db()
-    cursor = connection.cursor()
+    cursor = db.cursor()
+    cursor.execute(
+        "INSERT INTO tickets (title, description, status, user_id) VALUES (%s, %s, %s, %s)",
+        (data['title'], data['description'], 'open', user['id'])
+    )
+    db.commit()
+    return jsonify({"message": "Ticket created successfully!"}), 201
 
-    query = "UPDATE tickets SET title = %s, description = %s, status = %s WHERE id = %s"
-    cursor.execute(query, (title, description, status, ticket_id))
-    connection.commit()
+# Update Ticket (Only the owner or admin can update)
+@tickets_bp.route('/tickets/<int:ticket_id>', methods=['PUT'])
+@jwt_required()
+def update_ticket(ticket_id):
+    user = get_jwt_identity()
+    data = request.json
 
-    cursor.close()
-    connection.close()
+    cursor = db.cursor()
 
-    return jsonify({'id': ticket_id, 'title': title, 'description': description, 'status': status}), 200
+    # Check if the ticket exists and belongs to the user (or is accessible by admin)
+    cursor.execute("SELECT * FROM tickets WHERE id = %s", (ticket_id,))
+    ticket = cursor.fetchone()
 
-# Delete ticket
-@tickets_bp.route('/api/tickets/<int:ticket_id>', methods=['DELETE'])
+    if not ticket:
+        return jsonify({"error": "Ticket not found."}), 404
+
+    if ticket['user_id'] != user['id'] and user['role'] != 'admin':
+        return jsonify({"error": "Unauthorized access."}), 403
+
+    # Perform the update
+    cursor.execute(
+        "UPDATE tickets SET title = %s, description = %s, status = %s WHERE id = %s",
+        (data['title'], data['description'], data['status'], ticket_id)
+    )
+    db.commit()
+    return jsonify({"message": "Ticket updated successfully!"}), 200
+
+# Delete Ticket (Only the owner or admin can delete)
+@tickets_bp.route('/tickets/<int:ticket_id>', methods=['DELETE'])
+@jwt_required()
 def delete_ticket(ticket_id):
-    connection = connect_to_db()
-    cursor = connection.cursor()
+    user = get_jwt_identity()
+    cursor = db.cursor()
 
-    query = "DELETE FROM tickets WHERE id = %s"
-    cursor.execute(query, (ticket_id,))
-    connection.commit()
+    # Check if the ticket exists and belongs to the user (or is accessible by admin)
+    cursor.execute("SELECT * FROM tickets WHERE id = %s", (ticket_id,))
+    ticket = cursor.fetchone()
 
-    cursor.close()
-    connection.close()
+    if not ticket:
+        return jsonify({"error": "Ticket not found."}), 404
 
-    return jsonify({'message': 'Ticket deleted successfully.'}), 204
+    if ticket['user_id'] != user['id'] and user['role'] != 'admin':
+        return jsonify({"error": "Unauthorized access."}), 403
+
+    # Perform the deletion
+    cursor.execute("DELETE FROM tickets WHERE id = %s", (ticket_id,))
+    db.commit()
+    return jsonify({"message": "Ticket deleted successfully."}), 204

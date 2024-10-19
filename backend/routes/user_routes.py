@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
-from mysql.connector import connect
+from config.db_config import connect_to_db
 
-db = connect(user='root', password='password', host='localhost', database='your_db')
+db = connect_to_db()
 
 user_bp = Blueprint('user_bp', __name__)
 
