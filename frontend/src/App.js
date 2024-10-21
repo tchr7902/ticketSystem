@@ -4,26 +4,18 @@ import LoginPage from "./pages/Login";
 import TicketPage from "./pages/TicketPage"; 
 import { AuthProvider, useAuth } from './utils/authContext'; // Import useAuth
 
-function AuthRoutes() {
-    const { user } = useAuth(); // Access user from context
+const App = () => {
+    const { token } = useAuth();
 
     return (
         <Routes>
-            <Route path="/" element={user ? <Navigate to="/tickets" /> : <Navigate to="/users/login" />} />
-            <Route path="/tickets" element={user ? <TicketPage /> : <Navigate to="/users/login" />} />
+            {/* Redirect to tickets if logged in, otherwise go to login */}
+            <Route path="/" element={token ? <Navigate to="/tickets" /> : <Navigate to="/users/login" />} />
+            <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/users/login" />} />
             <Route path="/users/login" element={<LoginPage />} />
+            {/* Add other routes here */}
         </Routes>
     );
-}
-
-function App() {
-    return (
-        <AuthProvider>
-            <Router>
-                <AuthRoutes />
-            </Router>
-        </AuthProvider>
-    );
-}
+};
 
 export default App;

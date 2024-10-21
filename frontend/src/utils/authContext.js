@@ -1,23 +1,20 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { fetchUser } from "./api.js";
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('token') || null);
-
-    const isTokenValid = () => {
-        const expirationTime = localStorage.getItem('tokenExpiration');
-        if (!token || !expirationTime) return false;
-        return new Date().getTime() < expirationTime;
-    };
+    const [token, setToken] = useState(sessionStorage.getItem('token') || null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadUser = async () => {
-            if (token && isTokenValid()) {
+            const expirationTime = sessionStorage.getItem('tokenExpiration');
+            if (token && expirationTime && new Date().getTime() < expirationTime) {
                 try {
-                    console.log("Loading user with valid token:", token)
+                    console.log("Loading user with valid token.");
                     const userData = await fetchUser(token);
                     setUser(userData);
                 } catch (err) {
@@ -25,26 +22,28 @@ export const AuthProvider = ({ children }) => {
                     logout();
                 }
             } else {
-                console.log("Token is not valid or does not exist.");
+                console.log("Token is not valid or has expired.");
                 logout();
             }
         };
-        loadUser();
+
+        loadUser(); // Call loadUser when the component mounts
     }, [token]);
 
     const login = (token, userData) => {
         const expirationTime = new Date().getTime() + 60 * 60 * 1000; // Token expires in 1 hour
-        localStorage.setItem('token', token);
-        localStorage.setItem('tokenExpiration', expirationTime);
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('tokenExpiration', expirationTime);
         setToken(token);
         setUser(userData);
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('tokenExpiration');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('tokenExpiration');
         setToken(null);
         setUser(null);
+        navigate("/users/login"); // Redirect to login on logout
     };
 
     return (
