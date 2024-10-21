@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { fetchTickets, deleteTicket, createTicket, updateTicket } from "../utils/api.js";
 import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx"; // Import TicketForm
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function TicketList() {
     const { user } = useContext(AuthContext);
@@ -57,29 +58,66 @@ function TicketList() {
         }
     };
 
-    if (loading) return <p>Loading tickets...</p>;
-    if (error) return <p>{error}</p>;
+    const getBadgeClass = (severity) => {
+        switch (severity) {
+            case "low":
+                return "bg-success"; // Green for low severity
+            case "medium":
+                return "bg-warning"; // Yellow for medium severity
+            case "high":
+                return "bg-danger"; // Red for high severity
+            default:
+                return "bg-secondary"; // Default color
+        }
+    };
+
+    if (loading) return <div className="text-center mt-3"><p>Loading tickets...</p></div>;
+    if (error) return <div className="text-center mt-3"><p className="text-danger">{error}</p></div>;
 
     return (
-        <div>
-            <h2>{user.role === "admin" ? "All Tickets" : "Your Tickets"}</h2>
+        <div className="container mt-5">
+            <h2 className="text-center mb-4">
+                {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
+            </h2>
             <TicketForm 
                 selectedTicket={selectedTicket} 
                 onSave={handleSave} // Pass handleSave to TicketForm
             />
-            <ul>
+            <div className="mt-4">
                 {tickets.length === 0 ? (
-                    <p>No tickets available.</p>
+                    <p className="text-center">No tickets available.</p>
                 ) : (
-                    tickets.map((ticket) => (
-                        <li key={ticket.id}>
-                            <strong>{ticket.title}</strong> - {ticket.status}
-                            <button onClick={() => handleEdit(ticket)}>Edit</button>
-                            <button onClick={() => handleDelete(ticket.id)}>Delete</button>
-                        </li>
-                    ))
+                    <ul className="list-group">
+                        {tickets.map((ticket) => (
+                            <li 
+                                key={ticket.id} 
+                                className="list-group-item d-flex justify-content-between align-items-center"
+                            >
+                                <div>
+                                    <strong>{ticket.title}</strong> - 
+                                    <span className={`badge ms-2 ${getBadgeClass(ticket.severity)}`}>
+                                        {ticket.severity}
+                                    </span>
+                                </div>
+                                <div>
+                                    <button 
+                                        className="btn btn-warning btn-sm me-2" 
+                                        onClick={() => handleEdit(ticket)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button 
+                                        className="btn btn-danger btn-sm" 
+                                        onClick={() => handleDelete(ticket.id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 )}
-            </ul>
+            </div>
         </div>
     );
 }

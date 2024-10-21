@@ -1,3 +1,20 @@
+.custom-navbar {
+  background-color: #D3D3D3;
+}
+
+body, h2, h1 {
+  font-family: 'Lato', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+
 .App {
     text-align: center;
     margin: 20px;
@@ -13,5 +30,5 @@
   button {
     margin: 5px;
     padding: 5px 10px;
+    font-family: inherit;
   }
-  
