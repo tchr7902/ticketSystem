@@ -7,23 +7,29 @@ function LoginPage() {
     const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isRegister, setIsRegister] = useState(false); // Toggle between login and register
+    const [isRegister, setIsRegister] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false); // New loading state
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Start loading
+        setError(""); // Clear previous errors
         try {
             const data = isRegister
                 ? await registerUser(email, password)
                 : await loginUser(email, password);
+            
+            console.log('Login response:', data)
 
-            // On successful login or registration, store the token and user data
             login(data.access_token, data.user);
             navigate("/tickets"); // Redirect to the ticket page
         } catch (err) {
             console.error("Auth error:", err);
             setError("Authentication failed. Please try again.");
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
@@ -45,7 +51,9 @@ function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button type="submit">{isRegister ? "Register" : "Login"}</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? "Loading..." : (isRegister ? "Register" : "Login")}
+                </button>
                 <p onClick={() => setIsRegister(!isRegister)}>
                     {isRegister ? "Already have an account? Login" : "Don't have an account? Register"}
                 </p>

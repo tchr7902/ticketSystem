@@ -10,13 +10,14 @@ export const AuthProvider = ({ children }) => {
     const isTokenValid = () => {
         const expirationTime = localStorage.getItem('tokenExpiration');
         if (!token || !expirationTime) return false;
-        return new Date().getTime() < expirationTime; // Valid if current time is less than expiration time
+        return new Date().getTime() < expirationTime;
     };
 
     useEffect(() => {
         const loadUser = async () => {
             if (token && isTokenValid()) {
                 try {
+                    console.log("Loading user with valid token:", token)
                     const userData = await fetchUser(token);
                     setUser(userData);
                 } catch (err) {
