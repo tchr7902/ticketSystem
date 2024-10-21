@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { fetchTickets, createTicket, updateTicket, deleteTicket } from "../utils/api.js";
-import TicketForm from "./TicketForm.jsx"; // Import TicketForm
+// src/pages/TicketPage.jsx
+import React, { useEffect, useState, useContext } from "react";
+import { fetchTickets } from "../utils/api";
+import { AuthContext } from "../utils/authContext";
+import TicketForm from "../components/TicketForm";
 
-export function TicketList() {
+function TicketPage() {
+    const { user } = useContext(AuthContext);
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedTicket, setSelectedTicket] = useState(null); // Manage selected ticket for editing
 
-    // Load tickets function
     const loadTickets = async () => {
         setLoading(true);
         try {
@@ -23,62 +24,25 @@ export function TicketList() {
     };
 
     useEffect(() => {
-        loadTickets(); // Load tickets on component mount
+        loadTickets();
     }, []);
-
-    const handleDelete = async (id) => {
-        try {
-            await deleteTicket(id);
-            await loadTickets(); // Reload tickets after deletion
-        } catch (err) {
-            console.error("Failed to delete ticket:", err);
-            alert("Error deleting ticket. Please try again.");
-        }
-    };
-
-    const handleEdit = (ticket) => {
-        setSelectedTicket(ticket); // Set selected ticket for editing
-    };
-
-    const handleSave = async (ticketData) => {
-        try {
-            if (selectedTicket) {
-                await updateTicket(selectedTicket.id, ticketData);
-            } else {
-                await createTicket(ticketData);
-            }
-            setSelectedTicket(null); // Reset selection after save
-            await loadTickets(); // Reload tickets after saving
-        } catch (error) {
-            console.error("Error while saving ticket:", error);
-        }
-    };
 
     if (loading) return <p>Loading tickets...</p>;
     if (error) return <p>{error}</p>;
 
     return (
         <div>
-            <h2>Tickets</h2>
-            <TicketForm 
-                selectedTicket={selectedTicket} 
-                onSave={handleSave} // Pass handleSave to TicketForm
-            />
+            <h2>{user.role === "admin" ? "All Tickets" : "Your Tickets"}</h2>
+            <TicketForm onSave={loadTickets} />
             <ul>
-                {tickets.length === 0 ? (
-                    <p>No tickets available.</p>
-                ) : (
-                    tickets.map((ticket) => (
-                        <li key={ticket.id}>
-                            <strong>{ticket.title}</strong> - {ticket.status}
-                            <button onClick={() => handleEdit(ticket)}>Edit</button>
-                            <button onClick={() => handleDelete(ticket.id)}>Delete</button>
-                        </li>
-                    ))
-                )}
+                {tickets.map((ticket) => (
+                    <li key={ticket.id}>
+                        <strong>{ticket.title}</strong> - {ticket.status}
+                    </li>
+                ))}
             </ul>
         </div>
     );
 }
 
-export default TicketList;
+export default TicketPage;

@@ -15,6 +15,7 @@ jwt_key = os.getenv('JWT_KEY')
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
 
 # Configure the JWT secret key before initializing JWTManager
 app.config['JWT_SECRET_KEY'] = jwt_key
@@ -24,8 +25,8 @@ jwt = JWTManager(app)
 CORS(app, supports_credentials=True)
 
 # Register blueprints with URL prefixes
-app.register_blueprint(tickets_bp, url_prefix="/api/tickets")
-app.register_blueprint(user_bp, url_prefix="/api/users")
+app.register_blueprint(tickets_bp, url_prefix="/tickets")
+app.register_blueprint(user_bp, url_prefix="/users")
 
 # Database connection management
 def get_db():
