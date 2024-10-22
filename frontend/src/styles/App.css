@@ -1,115 +1,174 @@
-.custom-navbar {
-  padding: 20px;
-  display: block;
-}
-
-.backup-navbar {
-  display: none;
-}
-
-h1, h2, a{
-  font-weight: bold;
-  font-family: Helvetica, sans-serif
-}
-
-img {
-  max-width: 100%;
-}
-
+/* Global Styles */
 body {
+  background-color: #b7d0af;
   font-family: 'Lato', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+body::before {
+  content: ""; 
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../images/gem-singlelogo.png');
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  opacity: 0.04; 
+  z-index: -1;
+}
+
+li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 5px;
+  background-color: #f1f6ef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 15px;
+}
+
+/* Other body styles */
+
+
+h1, h2, a {
+  font-weight: bold;
+  font-family: Helvetica, sans-serif;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+/* Container Styles */
+.ticket-header {
+  background-color: none;
+  justify-content: center;
+}
+
+.container {
+  max-width: 800px;
+  width: 90%; 
+  margin: auto;
+}
+
+.card {
+  background-color: rgba(212, 227, 207, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.main-div {
+  padding: 40px;
+  background-color: rgba(255, 255, 255, .45);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar Styles */
+.custom-navbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .5);
+  background-color: #b7d0af;
+}
+
+.backup-navbar {
+  display: none;
+}
+
+.profile-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 30px;
+}
+
+/* Form Styles */
+form input, form textarea, form select {
+  display: block;
+  margin: 10px auto;
+  width: 200px;
+  padding: 8px;
+}
 
 input, select, textarea {
   font-family: inherit;
 }
 
+.pass-form {
+  max-width: 400px;
+}
 
-.App {
-    text-align: center;
-    margin: 20px;
-  }
-  
-  form input, form textarea, form select {
-    display: block;
-    margin: 10px auto;
-    width: 200px;
-    padding: 8px;
-  }
-  
-  button {
-    margin: 5px;
-    padding: 5px 10px;
-    font-family: inherit;
-  }
+/* Button Styles */
+button {
+  margin: 5px;
+  padding: 5px 10px;
+  font-family: inherit;
+}
 
-  .container {
-    max-width: 800px;
-    width: 90%; 
-    margin: auto;
-  }
-  
-  h2 {
-    font-size: 2rem;
-  }
+/* List Group Styles */
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 15px;
+}
 
-  .list-group-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 10px 15px;
-  }
-  
+.li-header {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 1.6rem;
+  padding: 10px;
+}
 
-  .badge {
-    font-size: 0.9rem;
-    margin-top: 5px;
-  }
+.badge {
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
 
-  .li-header {
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 1.6rem;
-    padding: 10px;
-  }
+/* Change Password Styles */
+.change-pass {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-  .profile-navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 30px;
-  }
+/* My Info Styles */
+.my-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap-reverse;
+  align-items: center;
+}
 
-  .my-info {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap-reverse;
-    align-items: center;
-  }
+/* Background Styles */
+.background {
+  background-color: #d9e3ce;
+}
 
-  .pass-form {
-    max-width: 400px;
-  }
-
-  .change-pass {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
+/* Toast Styles */
 .custom-toast-container .Toastify__toast {
   opacity: 0.8;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   border-radius: 8px;
 }
+
 .Toastify__toast--success {
   background-color: rgba(40, 167, 69, 0.9);
   color: white;
@@ -120,36 +179,68 @@ input, select, textarea {
   color: white;
 }
 
+/* Responsive Icon Styles */
+.responsive-icon {
+  width: 61px;
+  height: 61px;
+  cursor: pointer;
+}
 
-@media screen and (max-width: 560px) {
+/* Media Queries */
+@media screen and (max-width: 570px) {
   .custom-navbar {
-    display: none;
+      display: none;
   }
 
   .backup-navbar {
       display: flex;
-      justify-content: space-between;
-      margin-left: 25px;
-      margin-right: 25px;
-      padding-top: 20px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .5);
+      background-color: #b7d0af;
+  }
+
+  .responsive-icon {
+      width: 41px;
+      height: 41px;
+      cursor: pointer;
   }
 
   .list-group-item div {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 10px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
   }
 
   .btn {
-    margin-bottom: 5px;
+      margin-bottom: 5px;
   }
 
   h2 {
-    font-size: 1.5rem;
+      font-size: 1.5rem;
   }
 
   .severity {
-    display: none;
+      display: none;
+  }
+}
+
+.img-1 {
+  display: block;
+}
+
+.img-2 {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .img-1 {
+      display: none;
   }
 
+  .img-2 {
+      display: block;
+  }
 }

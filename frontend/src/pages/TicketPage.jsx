@@ -48,20 +48,20 @@ function TicketPage() {
     }
 
     return (
-        <div>
+        <div className="vh-100">
             {/* Navbar with Header */}
-            <nav className="navbar navbar-expand-lg custom-navbar px-5">
-                <div className="container-fluid">
-                    <a className="navbar-brand fw-bold fs-2" href="#">
+            <nav className="custom-navbar">
+                <div className="container-fluid d-flex justify-content-between align-items-center">
+                    <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
                         <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
                         IT Tickets
                     </a>
                     <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
                         <img 
+                            className="responsive-icon" 
                             src={user_logo} 
                             alt="user icon" 
-                            style={{ width: '51px', height: '51px', cursor: 'pointer' }} 
-                            onClick={handleUserIconClick}
+                            onClick={handleUserIconClick} 
                         />
                         {dropdownOpen && (
                             <div className="dropdown-menu show position-absolute" style={{ right: 0, top: '60px' }}>
@@ -81,13 +81,13 @@ function TicketPage() {
                 </div>
             </nav>
 
+
             <nav className="backup-navbar">
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
-                <img 
+                <img class="responsive-icon"
                     src={user_logo} 
                     alt="user icon" 
-                    style={{ width: '61px', height: '61px' }} 
-                    onClick={handleUserIconClick} 
+                    onClick={handleUserIconClick}
                 />
             </nav>
 

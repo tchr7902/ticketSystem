@@ -4,6 +4,7 @@ import { AuthContext } from "../utils/authContext.js";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../images/gem_logo.png';
+import logo2 from '../images/gem-singlelogo.png';
 import '../styles/App.css';
 
 function LoginPage() {
@@ -48,12 +49,17 @@ function LoginPage() {
 
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
-            <img 
+            <img className="img-1" 
                 src={logo} 
                 alt="Logo" 
-                style={{ width: '469px', height: '108px', marginBottom: '40px'}} 
+                style={{ width: '469px', height: '108px', marginBottom: '20px'}} 
             />
-            <h1 style={{ marginBottom: '40px'}}><strong>IT Tickets</strong></h1>
+            <img className="img-2" 
+                src={logo2} 
+                alt="Logo2" 
+                style={{ width: '150px', height: '150px', marginBottom: '20px'}} 
+            />
+            <h1 style={{ marginBottom: '20px'}}><strong>IT Tickets</strong></h1>
             <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {isRegister ? "Register" : "Login"}

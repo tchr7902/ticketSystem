@@ -103,7 +103,7 @@ function TicketList() {
     if (error) return <div className="text-center mt-3"><p className="text-danger">{error}</p></div>;
 
     return (
-        <div className="container mt-5 pb-5">
+        <div className="container mt-5 pb-5 main-div">
             {/* Toast Container */}
             <ToastContainer
                 position="top-center"
@@ -133,11 +133,11 @@ function TicketList() {
                     <p className="text-center">No tickets available.</p>
                 ) : (
                     <ul className="list-group">
-                        <li className="li-header d-flex justify-content-center align-items-center">Your Tickets</li>
+                        <h3 className="d-flex justify-content-center">Your Tickets</h3>
                         {tickets.map((ticket) => (
                             <li
                                 key={ticket.id}
-                                className="list-group-item d-flex justify-content-between align-items-center"
+                                className=""
                             >
                                 <div>
                                     <strong>{ticket.title}</strong> - 
