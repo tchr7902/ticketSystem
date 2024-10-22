@@ -1,8 +1,22 @@
 .custom-navbar {
-  background-color: #D3D3D3;
+  padding: 20px;
+  display: block;
 }
 
-body, h2, h1 {
+.backup-navbar {
+  display: none;
+}
+
+h1, h2, a{
+  font-weight: bold;
+  font-family: Helvetica, sans-serif
+}
+
+img {
+  max-width: 100%;
+}
+
+body {
   font-family: 'Lato', sans-serif;
   margin: 0;
   padding: 0;
@@ -23,7 +37,7 @@ input, select, textarea {
   form input, form textarea, form select {
     display: block;
     margin: 10px auto;
-    width: 300px;
+    width: 200px;
     padding: 8px;
   }
   
@@ -32,3 +46,69 @@ input, select, textarea {
     padding: 5px 10px;
     font-family: inherit;
   }
+
+  .container {
+    max-width: 800px;
+    width: 90%; 
+    margin: auto;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+
+  .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px 15px;
+  }
+  
+
+  .badge {
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+
+  .li-header {
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1.6rem;
+    padding: 10px;
+  }
+
+
+
+@media screen and (max-width: 480px) {
+  .custom-navbar {
+    display: none;
+  }
+
+  .backup-navbar {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 20px;
+      width: 50%;
+  }
+
+  .list-group-item div {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    margin-bottom: 5px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .severity {
+    display: none;
+  }
+
+}

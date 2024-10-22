@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { fetchTickets, deleteTicket, createTicket, updateTicket } from "../utils/api.js";
 import { AuthContext } from "../utils/authContext";
-import TicketForm from "./TicketForm.jsx"; // Import TicketForm
+import TicketForm from "./TicketForm.jsx";
+import '../styles/App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function TicketList() {
@@ -9,7 +10,7 @@ function TicketList() {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedTicket, setSelectedTicket] = useState(null); // Manage selected ticket for editing
+    const [selectedTicket, setSelectedTicket] = useState(null);
 
     // Load tickets function
     const loadTickets = async () => {
@@ -76,7 +77,7 @@ function TicketList() {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center mb-4">
+            <h2 className="text-center mb-2">
                 {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
             </h2>
             <TicketForm 
@@ -88,6 +89,7 @@ function TicketList() {
                     <p className="text-center">No tickets available.</p>
                 ) : (
                     <ul className="list-group">
+                        <li className="li-header d-flex justify-content-center align-items-center">Your Tickets</li>
                         {tickets.map((ticket) => (
                             <li 
                                 key={ticket.id} 
@@ -95,7 +97,7 @@ function TicketList() {
                             >
                                 <div>
                                     <strong>{ticket.title}</strong> - 
-                                    <span className={`badge ms-2 ${getBadgeClass(ticket.severity)}`}>
+                                    <span className={`severity badge ms-2 ${getBadgeClass(ticket.severity)}`}>
                                         {ticket.severity}
                                     </span>
                                 </div>

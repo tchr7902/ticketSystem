@@ -30,7 +30,7 @@ function TicketForm({ selectedTicket, onSave }) {
     return (
         <form onSubmit={handleSubmit} className="mb-4">
             <div className="d-flex flex-column align-items-center">
-                <div className="col-md-6 col-lg-4"> {/* Responsive size for input fields */}
+                <div className="col-md-6 col-lg-4">
                     <input
                         type="text"
                         className="form-control"
@@ -42,7 +42,7 @@ function TicketForm({ selectedTicket, onSave }) {
                 </div>
             </div>
             <div className="d-flex flex-column align-items-center">
-                <div className="col-md-6 col-lg-4"> {/* Responsive size for input fields */}
+                <div className="col-md-6 col-lg-4">
                     <textarea
                         className="form-control"
                         placeholder="Description"
@@ -53,7 +53,7 @@ function TicketForm({ selectedTicket, onSave }) {
                 </div>
             </div>
             <div className="d-flex flex-column align-items-center">
-                <div className="col-md-6 col-lg-4"> {/* Responsive size for input fields */}
+                <div className="col-md-6 col-lg-4">
                     <select 
                         className="form-select" 
                         value={severity} 
@@ -69,7 +69,7 @@ function TicketForm({ selectedTicket, onSave }) {
             </div>
             <div className="d-flex justify-content-center">
                 <div> {/* Responsive size for button */}
-                    <button type="submit" className="btn btn-primary">Save</button> {/* Full-width button */}
+                    <button type="submit" className="btn btn-primary">Save</button>
                 </div>
             </div>
         </form>

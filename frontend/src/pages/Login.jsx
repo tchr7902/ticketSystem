@@ -10,29 +10,39 @@ function LoginPage() {
     const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [isRegister, setIsRegister] = useState(false);
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false); // New loading state
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true); // Start loading
-        setError(""); // Clear previous errors
-        try {
-            const data = isRegister
-                ? await registerUser(email, password)
-                : await loginUser(email, password);
-            
-            console.log('Login response:', data);
+        setLoading(true);
+        setError("");
 
-            login(data.access_token, data.user);
-            navigate("/tickets"); // Redirect to the ticket page
+        if (isRegister && password !== confirmPassword) {
+            setError("Passwords do not match.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            if (isRegister) {
+                await registerUser(email, password);
+            }
+
+
+            const data = await loginUser(email, password);
+
+            console.log('Login response:', data);
+            login(data.access_token, data.user); 
+            navigate("/tickets"); 
         } catch (err) {
             console.error("Auth error:", err);
-            setError("Authentication failed. Please try again.");
+            setError("Login/registration failed. Please try again.");
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
@@ -41,8 +51,9 @@ function LoginPage() {
             <img 
                 src={logo} 
                 alt="Logo" 
-                style={{ width: '370px', height: '100px', marginBottom: '40px'}} // Added margin for spacing below the logo
+                style={{ width: '469px', height: '108px', marginBottom: '40px'}} 
             />
+            <h1 style={{ marginBottom: '40px'}}><strong>IT Tickets</strong></h1>
             <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {isRegister ? "Register" : "Login"}
@@ -68,6 +79,18 @@ function LoginPage() {
                             required
                         />
                     </div>
+                    {isRegister && (
+                        <div className="mb-3">
+                            <input
+                                type="password"
+                                className="form-control"
+                                placeholder="Confirm Password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                    )}
                     <button 
                         type="submit" 
                         className="btn btn-primary w-100 mb-3" 

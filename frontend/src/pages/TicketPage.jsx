@@ -17,8 +17,8 @@ function TicketPage() {
             {/* Navbar with Header */}
             <nav className="navbar navbar-expand-lg custom-navbar px-5">
                 <div className="container-fluid">
-                    <a className="navbar-brand fw-bold fs-3" href="#">
-                    <img src={logo} alt="Logo" style={{ width: '200px', height: '40px', marginRight: '30px'}} />
+                    <a className="navbar-brand fw-bold fs-2" href="#">
+                    <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px'}} />
                         IT Tickets
                     </a>
                     <div className="d-flex">
@@ -28,6 +28,9 @@ function TicketPage() {
                         </span>
                     </div>
                 </div>
+            </nav>
+            <nav className="backup-navbar">
+                <img src={logo} alt="Logo" style={{ width: '188px', height: '43px'}} />
             </nav>
 
             {/* Ticket List Section */}
