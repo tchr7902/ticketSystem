@@ -6,7 +6,7 @@ import '../styles/App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function TicketList() {
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -21,6 +21,7 @@ function TicketList() {
         } catch (err) {
             console.error("Failed to fetch tickets:", err);
             setError("Unable to load tickets.");
+            logout();
         } finally {
             setLoading(false);  // Hide loader after fetch
         }
@@ -76,7 +77,8 @@ function TicketList() {
     if (error) return <div className="text-center mt-3"><p className="text-danger">{error}</p></div>;
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5 pb-5">
+            <div className="new-ticket">
             <h2 className="text-center mb-2">
                 {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
             </h2>
@@ -84,6 +86,7 @@ function TicketList() {
                 selectedTicket={selectedTicket} 
                 onSave={handleSave} // Pass handleSave to TicketForm
             />
+            </div>
             <div className="mt-4">
                 {tickets.length === 0 ? (
                     <p className="text-center">No tickets available.</p>

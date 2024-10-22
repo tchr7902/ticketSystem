@@ -60,7 +60,7 @@ function TicketForm({ selectedTicket, onSave }) {
                         onChange={(e) => setSeverity(e.target.value)}
                         required
                     >
-                        <option value="" disabled>Select Severity</option> {/* Placeholder */}
+                        <option value="" disabled>Select Priority</option> {/* Placeholder */}
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
                         <option value="High">High</option>

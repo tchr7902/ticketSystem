@@ -47,7 +47,7 @@ def login():
             'access_token': access_token,
             'user': {
                 'id': user['id'],
-                'email': user['email'],  # Add any other fields you want to include
+                'email': user['email'],
                 'role': 'user',
             }
         }), 200
@@ -62,7 +62,7 @@ def login():
             'access_token': access_token,
             'user': {
                 'id': admin['id'],
-                'email': admin['email'],  # Add any other fields you want to include
+                'email': admin['email'],
                 'role': 'admin',
             }
         }), 200
@@ -81,3 +81,27 @@ def get_current_user():
     if user:
         return jsonify(user), 200  # Return user details
     return jsonify({"error": "User not found"}), 404
+
+# Change user password
+@user_bp.route('/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    user_identity = get_jwt_identity()  # Get user identity from the token
+    data = request.json
+    current_password = data['currentPassword']
+    new_password = data['newPassword']
+
+    cursor = db.cursor(dictionary=True)
+
+    # Fetch the user's current password
+    cursor.execute("SELECT password FROM users WHERE id = %s", (user_identity['id'],))
+    user = cursor.fetchone()
+
+    if user and check_password_hash(user['password'], current_password):
+        # Current password matches, proceed to update the password
+        hashed_new_password = generate_password_hash(new_password)
+        cursor.execute("UPDATE users SET password = %s WHERE id = %s", (hashed_new_password, user_identity['id']))
+        db.commit()
+        return jsonify({"message": "Password changed successfully."}), 200
+
+    return jsonify({"error": "Current password is incorrect."}), 401

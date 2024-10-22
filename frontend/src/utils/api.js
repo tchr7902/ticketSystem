@@ -26,7 +26,7 @@ export const deleteTicket = async (id) => {
 // User-related functions
 export const loginUser = async (email, password) => {
     const response = await axiosInstance.post(`${USER_URL}/login`, { email, password });
-    return response.data; // This will return access_token and user data
+    return response.data;
 };
 
 export const registerUser = async (email, password) => {
@@ -37,8 +37,17 @@ export const registerUser = async (email, password) => {
 export const fetchUser = async (token) => {
     const response = await axiosInstance.get(`${USER_URL}/me`, {
         headers: {
-            Authorization: `Bearer ${token}`, // Send the token in the header
+            Authorization: `Bearer ${token}`, 
         },
     });
-    return response.data; // This will return the user's info
+    return response.data; 
+};
+
+export const changeUserPassword = async (email, currentPassword, newPassword) => {
+    const response = await axiosInstance.post(`${USER_URL}/change-password`, {
+        email,
+        currentPassword,
+        newPassword,
+    });
+    return response.data;
 };

@@ -78,19 +78,44 @@ input, select, textarea {
     padding: 10px;
   }
 
+  .profile-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 30px;
+  }
+
+  .my-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
+    align-items: center;
+  }
+
+  .pass-form {
+    max-width: 400px;
+  }
+
+  .change-pass {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 560px) {
   .custom-navbar {
     display: none;
   }
 
   .backup-navbar {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      display: flex;
+      justify-content: space-between;
+      margin-left: 25px;
+      margin-right: 25px;
       padding-top: 20px;
-      width: 50%;
   }
 
   .list-group-item div {

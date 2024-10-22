@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { fetchUser } from "./api.js";
+import { fetchUser, changeUserPassword } from "./api.js";
 import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
@@ -27,11 +27,11 @@ export const AuthProvider = ({ children }) => {
             }
         };
 
-        loadUser(); // Call loadUser when the component mounts
+        loadUser(); 
     }, [token]);
 
     const login = (token, userData) => {
-        const expirationTime = new Date().getTime() + 60 * 60 * 1000; // Token expires in 1 hour
+        const expirationTime = new Date().getTime() + 5 * 60 * 60 * 1000;
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('tokenExpiration', expirationTime);
         setToken(token);
@@ -43,11 +43,25 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.removeItem('tokenExpiration');
         setToken(null);
         setUser(null);
-        navigate("/users/login"); // Redirect to login on logout
+        navigate("/users/login");
+    };
+
+    const changePassword = async (currentPassword, newPassword) => {
+        if (!user) {
+            throw new Error("User not authenticated.");
+        }
+
+        try {
+            const response = await changeUserPassword(user.email, currentPassword, newPassword);
+            return response;
+        } catch (err) {
+            console.error("Failed to change password:", err);
+            throw new Error("Failed to change password. Please try again.");
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, token, login, logout, changePassword }}>
             {children}
         </AuthContext.Provider>
     );
