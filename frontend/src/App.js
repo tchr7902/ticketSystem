@@ -6,6 +6,7 @@ import ProfilePage from "./pages/Profile"
 import SettingsPage from './pages/Settings';
 import { AuthProvider, useAuth } from './utils/authContext';
 
+
 const App = () => {
     const { token } = useAuth();
 

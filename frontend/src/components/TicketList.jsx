@@ -2,7 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { fetchTickets, deleteTicket, createTicket, updateTicket } from "../utils/api.js";
 import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
-import '../styles/App.css'
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { Modal, Button } from 'react-bootstrap';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function TicketList() {
@@ -11,10 +16,13 @@ function TicketList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [ticketToDelete, setTicketToDelete] = useState(null);
 
-    // Load tickets function
+
     const loadTickets = async () => {
-        setLoading(true); // Set loading state before fetching
+        setLoading(true);
         try {
             const fetchedTickets = await fetchTickets();
             setTickets(fetchedTickets);
@@ -23,53 +31,71 @@ function TicketList() {
             setError("Unable to load tickets.");
             logout();
         } finally {
-            setLoading(false);  // Hide loader after fetch
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        loadTickets(); // Load tickets on component mount
+        loadTickets();
     }, []);
 
-    const handleDelete = async (id) => {
+    const showToast = (message, type = "success") => {
+        toast(message, { type });
+    };
+
+    const handleDelete = async () => {
         try {
-            await deleteTicket(id);
-            // Remove the deleted ticket from the state
-            setTickets(tickets.filter((ticket) => ticket.id !== id));
+            if (ticketToDelete) {
+                await deleteTicket(ticketToDelete.id);
+                setTickets(tickets.filter((ticket) => ticket.id !== ticketToDelete.id));
+                setTicketToDelete(null);
+                showToast("Ticket deleted successfully!", "success");
+            }
         } catch (err) {
             console.error("Failed to delete ticket:", err);
-            alert("Error deleting ticket. Please try again.");
+            showToast("Error deleting ticket. Please try again.", "error");
+        } finally {
+            setShowDeleteModal(false);
         }
     };
 
     const handleEdit = (ticket) => {
-        setSelectedTicket(ticket); // Set selected ticket for editing
+        setSelectedTicket(ticket);
+        setShowEditModal(true);
     };
 
     const handleSave = async (ticketData) => {
         try {
             if (selectedTicket) {
                 await updateTicket(selectedTicket.id, ticketData);
+                setTimeout(() => toast.success("Ticket updated successfully!"), 100);
             } else {
                 await createTicket(ticketData);
+                setTimeout(() => toast.success("Ticket created successfully!"), 100);
             }
-            setSelectedTicket(null); // Reset selection after save
-            await loadTickets(); // Reload tickets after saving
+            setSelectedTicket(null);
+            await loadTickets();
         } catch (error) {
             console.error("Error while saving ticket:", error);
+            setTimeout(() => toast.error("Error saving ticket. Please try again."), 100);
+        } finally {
+            setShowEditModal(false);
         }
     };
+    
+    
+    
 
     const getBadgeClass = (severity) => {
         switch (severity) {
             case "low":
-                return "bg-success"; // Green for low severity
+                return "bg-success";
             case "medium":
-                return "bg-warning"; // Yellow for medium severity
+                return "bg-warning";
             case "high":
-                return "bg-danger"; // Red for high severity
+                return "bg-danger";
             default:
-                return "bg-secondary"; // Default color
+                return "bg-secondary";
         }
     };
 
@@ -78,15 +104,30 @@ function TicketList() {
 
     return (
         <div className="container mt-5 pb-5">
-            <div className="new-ticket">
-            <h2 className="text-center mb-2">
-                {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
-            </h2>
-            <TicketForm 
-                selectedTicket={selectedTicket} 
-                onSave={handleSave} // Pass handleSave to TicketForm
+            {/* Toast Container */}
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
             />
+            <div className="new-ticket">
+                <h2 className="text-center mb-2">
+                    {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
+                </h2>
+                <TicketForm
+                    selectedTicket={null}
+                    onSave={handleSave}
+                />
             </div>
+
             <div className="mt-4">
                 {tickets.length === 0 ? (
                     <p className="text-center">No tickets available.</p>
@@ -94,8 +135,8 @@ function TicketList() {
                     <ul className="list-group">
                         <li className="li-header d-flex justify-content-center align-items-center">Your Tickets</li>
                         {tickets.map((ticket) => (
-                            <li 
-                                key={ticket.id} 
+                            <li
+                                key={ticket.id}
                                 className="list-group-item d-flex justify-content-between align-items-center"
                             >
                                 <div>
@@ -105,17 +146,20 @@ function TicketList() {
                                     </span>
                                 </div>
                                 <div>
-                                    <button 
-                                        className="btn btn-warning btn-sm me-2" 
+                                    <button
+                                        className="btn btn-light btn-sm me-2"
                                         onClick={() => handleEdit(ticket)}
                                     >
-                                        Edit
+                                        <FaEdit />
                                     </button>
-                                    <button 
-                                        className="btn btn-danger btn-sm" 
-                                        onClick={() => handleDelete(ticket.id)}
+                                    <button
+                                        className="btn btn-light btn-sm"
+                                        onClick={() => {
+                                            setTicketToDelete(ticket);
+                                            setShowDeleteModal(true);
+                                        }}
                                     >
-                                        Delete
+                                        <FaTrash />
                                     </button>
                                 </div>
                             </li>
@@ -123,6 +167,60 @@ function TicketList() {
                     </ul>
                 )}
             </div>
+
+            {/* Edit Ticket Modal */}
+            <Modal
+                show={showEditModal}
+                onHide={() => {
+                    setShowEditModal(false);
+                    setSelectedTicket(null);
+                }}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Ticket</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <TicketForm
+                        selectedTicket={selectedTicket}
+                        onSave={handleSave}
+                    />
+                </Modal.Body>
+                <Modal.Footer className="d-flex justify-content-between">
+                    <Button
+                        variant="outline-secondary"
+                        onClick={() => {
+                            setShowEditModal(false);
+                            setSelectedTicket(null);
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Delete Confirmation Modal */}
+            <Modal
+                show={showDeleteModal}
+                onHide={() => setShowDeleteModal(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to delete "{ticketToDelete ? ticketToDelete.title : ''}"?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="outline-secondary"
+                        onClick={() => setShowDeleteModal(false)}
+                    >
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleDelete}>
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

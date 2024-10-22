@@ -11,8 +11,7 @@ const SettingsPage = () => {
     return (
         <div className="container mt-5">
             <h2>Settings</h2>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Role:</strong> {user.role}</p>
+            <p><strong>Under construction...</strong></p>
         </div>
     );
 };

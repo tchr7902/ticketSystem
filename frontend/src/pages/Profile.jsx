@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
@@ -27,19 +28,17 @@ const ProfilePage = () => {
 
     const handlePasswordChange = async (e) => {
         e.preventDefault();
-        setError("");
-        setSuccessMessage("");
 
         if (newPassword !== confirmPassword) {
-            setError("New passwords do not match.");
+            setTimeout(() => toast.error("Passwords do not match."), 100);
             return;
         }
 
         try {
             await changePassword(currentPassword, newPassword);
-            setSuccessMessage("Password changed successfully!");
+            setTimeout(() => toast.success("Password changed successfully!"), 100);
         } catch (err) {
-            setError("Failed to change password. Please try again.");
+            setTimeout(() => toast.error("Failed to change password."), 100);
             console.error("Password change error:", err);
         }
     };
@@ -50,6 +49,20 @@ const ProfilePage = () => {
 
     return (
     <div className="container mt-5">
+            {/* Toast Container */}
+            <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition={Bounce}
+        />
     <navbar className="profile-navbar">
         <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
         <img src={logo} alt="Logo" style={{ width: '375px', height: '86px', marginRight: '30px' }} />

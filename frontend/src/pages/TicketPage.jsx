@@ -44,7 +44,7 @@ function TicketPage() {
     }, []);
 
     if (!user) {
-        return <p className="text-center text-danger mt-5">Please log in to view your tickets.</p>;
+        return <p className="text-center mt-5">Loading...</p>;
     }
 
     return (
