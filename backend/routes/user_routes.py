@@ -91,7 +91,7 @@ def login():
 def get_current_user():
     user_identity = get_jwt_identity()  # Get user identity from the token
     cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT id, email, role FROM users WHERE id = %s", (user_identity['id'],))
+    cursor.execute("SELECT first_name, email, store_id FROM users WHERE id = %s", (user_identity['id'],))
     user = cursor.fetchone()
 
     if user:

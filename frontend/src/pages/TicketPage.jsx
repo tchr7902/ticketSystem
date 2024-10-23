@@ -102,7 +102,7 @@ function TicketPage() {
                     newestOnTop={false}
                     closeOnClick
                     rtl={false}
-                    pauseOnFocusLoss
+                    pauseOnFocusLoss={false}
                     draggable
                     pauseOnHover={false}
                     theme="light"

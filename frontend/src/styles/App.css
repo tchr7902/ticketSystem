@@ -145,6 +145,10 @@ img {
   padding-bottom: 30px;
 }
 
+.backup-profile-navbar {
+  display: none;
+}
+
 /* Form Styles */
 form input, form textarea, form select {
   display: block;
@@ -285,11 +289,16 @@ input, select, textarea {
 
 /* My Info Styles */
 .my-info {
-  padding: 20px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap-reverse;
   align-items: center;
+  p {
+    margin: 0;
+  }
+  h4 {
+    margin: 5px;
+  }
 }
 
 /* Background Styles */
@@ -382,3 +391,17 @@ input, select, textarea {
   }
 }
 
+@media screen and (max-width: 775px) {
+  .profile-navbar {
+    display: none;
+  }
+
+  .backup-profile-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 30px;
+  }
+
+
+  }

@@ -40,7 +40,7 @@ export const fetchUser = async (token) => {
             Authorization: `Bearer ${token}`, 
         },
     });
-    return response.data; 
+    return response.data;
 };
 
 export const changeUserPassword = async (email, currentPassword, newPassword) => {
