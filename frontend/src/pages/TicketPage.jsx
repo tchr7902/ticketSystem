@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
 import user_logo from '../images/user_icon.png';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 function TicketPage() {
     const { user, logout } = useContext(AuthContext);
@@ -54,7 +55,7 @@ function TicketPage() {
                 <div className="container-fluid d-flex justify-content-between align-items-center">
                     <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
                         <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
-                        IT Tickets
+                        <h2>IT Tickets</h2>
                     </a>
                     <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
                         <img 
@@ -84,7 +85,7 @@ function TicketPage() {
 
             <nav className="backup-navbar">
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
-                <img class="responsive-icon"
+                <img className="responsive-icon"
                     src={user_logo} 
                     alt="user icon" 
                     onClick={handleUserIconClick}
@@ -93,6 +94,20 @@ function TicketPage() {
 
             {/* Ticket List Section */}
             <div className="container mt-5 mb-5">
+                {/* Toast Container */}
+                <ToastContainer
+                    position="top-center"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover={false}
+                    theme="light"
+                    transition={Bounce}
+                />
                 <TicketList />
             </div>
         </div>

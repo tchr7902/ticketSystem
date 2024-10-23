@@ -31,7 +31,7 @@ function TicketForm({ selectedTicket, onSave }) {
                 <div className="col-md-8 col-lg-9">
                     <input
                         type="text"
-                        className="form-control"
+                        className="form-control input-box"
                         placeholder="Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -42,7 +42,7 @@ function TicketForm({ selectedTicket, onSave }) {
             <div className="d-flex flex-column align-items-center">
                 <div className="col-md-8 col-lg-9">
                     <textarea
-                        className="form-control"
+                        className="form-control input-box"
                         placeholder="Description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -54,7 +54,7 @@ function TicketForm({ selectedTicket, onSave }) {
             <div className="d-flex flex-column align-items-center">
                 <div className="col-md-8 col-lg-4">
                     <select 
-                        className="form-select" 
+                        className="form-select select-box" 
                         value={severity} 
                         onChange={(e) => setSeverity(e.target.value)}
                         required
@@ -68,7 +68,7 @@ function TicketForm({ selectedTicket, onSave }) {
             </div>
             <div className="d-flex justify-content-center">
                 <div>
-                    <button type="submit" className="btn btn-primary">Save</button>
+                    <button type="submit" className="btn-important">Save</button>
                 </div>
             </div>
         </form>

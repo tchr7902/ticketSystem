@@ -66,11 +66,11 @@ const ProfilePage = () => {
     <navbar className="profile-navbar">
         <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
         <img src={logo} alt="Logo" style={{ width: '375px', height: '86px', marginRight: '30px' }} />
-        <button className="btn btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
+        <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
     </navbar>
             <div className="my-info">
                 <h2>My Profile</h2>
-                <p><strong>Email:</strong> {user.email}</p>
+                <p>{user.email}</p>
             </div>
                 <div className="change-pass">
                     <h3>Change Password</h3>
@@ -80,7 +80,7 @@ const ProfilePage = () => {
                         <div className="mb-3">
                             <input
                                 type="password"
-                                className="form-control pass-form"
+                                className="form-control pass-form input-box"
                                 placeholder="Current Password"
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
@@ -90,7 +90,7 @@ const ProfilePage = () => {
                         <div className="mb-3">
                             <input
                                 type="password"
-                                className="form-control pass-form"
+                                className="form-control pass-form input-box"
                                 placeholder="New Password"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
@@ -100,7 +100,7 @@ const ProfilePage = () => {
                         <div className="mb-3">
                             <input
                                 type="password"
-                                className="form-control pass-form"
+                                className="form-control pass-form input-box"
                                 placeholder="Confirm New Password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}

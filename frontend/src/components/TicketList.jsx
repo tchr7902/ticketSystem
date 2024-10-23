@@ -104,20 +104,6 @@ function TicketList() {
 
     return (
         <div className="container mt-5 pb-5 main-div">
-            {/* Toast Container */}
-            <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={Bounce}
-            />
             <div className="new-ticket">
                 <h2 className="text-center mb-2">
                     {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
@@ -133,7 +119,7 @@ function TicketList() {
                     <p className="text-center">No tickets available.</p>
                 ) : (
                     <ul className="list-group">
-                        <h3 className="d-flex justify-content-center">Your Tickets</h3>
+                        <h3 className="d-flex justify-content-center">My Tickets</h3>
                         {tickets.map((ticket) => (
                             <li
                                 key={ticket.id}
@@ -147,13 +133,13 @@ function TicketList() {
                                 </div>
                                 <div>
                                     <button
-                                        className="btn btn-light btn-sm me-2"
+                                        className="icon"
                                         onClick={() => handleEdit(ticket)}
                                     >
                                         <FaEdit />
                                     </button>
                                     <button
-                                        className="btn btn-light btn-sm"
+                                        className="icon"
                                         onClick={() => {
                                             setTicketToDelete(ticket);
                                             setShowDeleteModal(true);
@@ -187,7 +173,7 @@ function TicketList() {
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-between">
                     <Button
-                        variant="outline-secondary"
+                        variant="btn"
                         onClick={() => {
                             setShowEditModal(false);
                             setSelectedTicket(null);
@@ -211,12 +197,12 @@ function TicketList() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
-                        variant="outline-secondary"
+                        variant="btn"
                         onClick={() => setShowDeleteModal(false)}
                     >
                         Cancel
                     </Button>
-                    <Button variant="danger" onClick={handleDelete}>
+                    <Button className="btn-important" onClick={handleDelete}>
                         Delete
                     </Button>
                 </Modal.Footer>

@@ -1,1 +1,0 @@
-# Python class to represent ticket schema for interaction with MySQL db
