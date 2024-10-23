@@ -7,6 +7,8 @@ import '../styles/App.css';
 import logo from '../images/gem_logo.png';
 import user_logo from '../images/user_icon.png';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
 
 function TicketPage() {
     const { user, logout } = useContext(AuthContext);
@@ -20,16 +22,21 @@ function TicketPage() {
     
     const handleLogout = () => {
         logout();
-        navigate("/login")
-    }
+        navigate("/login");
+    };
 
     const handleProfileClick = () => {
-        navigate("/profile")
-    }
+        navigate("/profile");
+    };
 
     const handleSettingsClick = () => {
-        navigate("/settings")
-    }
+        navigate("/settings");
+    };
+
+    const handleChatClick = () => {
+        // Add functionality for chat (e.g., open chat window)
+        alert("Chat functionality coming soon!"); // Placeholder for chat functionality
+    };
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -45,14 +52,16 @@ function TicketPage() {
     }, []);
 
     if (!user) {
-        return <div className="loader-wrapper">
-                    <div className="lds-ellipsis">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                </div>;
+        return (
+            <div className="loader-wrapper">
+                <div className="lds-ellipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -89,7 +98,6 @@ function TicketPage() {
                 </div>
             </nav>
 
-
             <nav className="backup-navbar">
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
                 <img className="responsive-icon"
@@ -116,6 +124,27 @@ function TicketPage() {
                     transition={Bounce}
                 />
                 <TicketList />
+            </div>
+
+            {/* Chat Icon */}
+            <div 
+                className="chat-icon" 
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    cursor: 'pointer',
+                    zIndex: 1000,
+                    backgroundColor: '#fff',
+                    borderRadius: '50%', 
+                    padding: '10px'
+                }}
+                onClick={handleChatClick}
+            >
+                <FontAwesomeIcon 
+                    icon={faComment} 
+                    style={{ width: '40px', height: '40px', color: '#007bff' }} // Customize the icon's color
+                />
             </div>
         </div>
     );

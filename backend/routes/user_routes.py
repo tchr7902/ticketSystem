@@ -121,3 +121,36 @@ def change_password():
         return jsonify({"message": "Password changed successfully."}), 200
 
     return jsonify({"error": "Current password is incorrect."}), 401
+
+
+# Change user email
+@user_bp.route('/change-email', methods=['POST'])
+@jwt_required()
+def change_email():
+    user_identity = get_jwt_identity()  # Get user identity from the token
+    data = request.json
+    current_email = data['currentEmail']
+    new_email = data['newEmail']
+
+    cursor = db.cursor(dictionary=True)
+
+    # Fetch the user's current email and password
+    cursor.execute("SELECT email, password FROM users WHERE id = %s", (user_identity['id'],))
+    user = cursor.fetchone()
+
+    if user:
+        # Verify the current email
+        if user['email'] != current_email:
+            return jsonify({"error": "Current email is incorrect."}), 401
+
+        # Validate new email format
+        if '@goodearthmarkets.com' not in new_email:
+            return jsonify({"error": "Please enter a valid GEM email."}), 400
+
+        # Update the user's email
+        cursor.execute("UPDATE users SET email = %s WHERE id = %s", (new_email, user_identity['id']))
+        db.commit()
+
+        return jsonify({"message": "Email updated successfully."}), 200
+
+    return jsonify({"error": "User not found."}), 404

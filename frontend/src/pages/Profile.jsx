@@ -43,23 +43,6 @@ const ProfilePage = () => {
         navigate('/tickets')
     }
 
-    const handlePasswordChange = async (e) => {
-        e.preventDefault();
-
-        if (newPassword !== confirmPassword) {
-            setTimeout(() => toast.error("Passwords do not match."), 100);
-            return;
-        }
-
-        try {
-            await changePassword(currentPassword, newPassword);
-            setTimeout(() => toast.success("Password changed successfully!"), 100);
-        } catch (err) {
-            setTimeout(() => toast.error("Failed to change password."), 100);
-            console.error("Password change error:", err);
-        }
-    };
-
     if (!user) {
         return <p className="text-center text-danger mt-5">No user logged in.</p>;
     }
@@ -95,50 +78,10 @@ const ProfilePage = () => {
                     src={user_logo} 
                     alt="user icon" 
                 />
-                <h4>Hello, {user.first_name}!</h4>
+                <h1>Hello, {user.first_name}!</h1>
                 <p>{user.email}</p>
                 <p>{getStoreName(user.store_id)}</p>
             </div>
-                <div className="change-pass">
-                    <h3>Change Password</h3>
-                    {error && <p className="text-danger">{error}</p>}
-                    {successMessage && <p className="text-success">{successMessage}</p>}
-                    <form onSubmit={handlePasswordChange}>
-                        <div className="mb-3">
-                            <input
-                                type="password"
-                                className="form-control pass-form input-box"
-                                placeholder="Current Password"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <input
-                                type="password"
-                                className="form-control pass-form input-box"
-                                placeholder="New Password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <input
-                                type="password"
-                                className="form-control pass-form input-box"
-                                placeholder="Confirm New Password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                <button type="submit" className="btn btn-primary">
-                    Confirm
-                </button>
-            </form>
-        </div>
     </div>
     );
 };

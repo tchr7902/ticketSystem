@@ -51,3 +51,11 @@ export const changeUserPassword = async (email, currentPassword, newPassword) =>
     });
     return response.data;
 };
+
+export const changeUserEmail = async (currentEmail, newEmail) => {
+    const response = await axiosInstance.post(`${USER_URL}/change-email`, {
+        currentEmail,
+        newEmail
+    });
+    return response.data;
+};

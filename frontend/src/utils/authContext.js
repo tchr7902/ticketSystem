@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { fetchUser, changeUserPassword } from "./api.js";
+import { fetchUser, changeUserPassword, changeUserEmail } from "./api.js";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     const login = (token, userData) => {
-        const expirationTime = new Date().getTime() + 5 * 60 * 60 * 1000;
+        const expirationTime = new Date().getTime() + 12 * 60 * 60 * 1000;
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('tokenExpiration', expirationTime);
         setToken(token);
@@ -59,8 +60,21 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const changeEmail = async (currentEmail, newEmail) => {
+        if (!user) {
+            throw new Error("User not authenticated.");
+        }
+
+        try {
+            const response = await changeUserEmail(currentEmail, newEmail);
+            return response;
+        } catch (err) {
+            console.error("Failed to change email:", err);
+            throw new Error("Failed to change email. Please try again.");
+        }
+    };
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, changePassword }}>
+        <AuthContext.Provider value={{ user, token, login, logout, changePassword, changeEmail }}>
             {children}
         </AuthContext.Provider>
     );
