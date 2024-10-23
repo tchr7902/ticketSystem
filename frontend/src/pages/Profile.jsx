@@ -63,11 +63,11 @@ const ProfilePage = () => {
             theme="light"
             transition={Bounce}
         />
-    <navbar className="profile-navbar">
+    <nav className="profile-navbar">
         <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
         <img src={logo} alt="Logo" style={{ width: '375px', height: '86px', marginRight: '30px' }} />
         <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
-    </navbar>
+    </nav>
             <div className="my-info">
                 <h2>My Profile</h2>
                 <p>{user.email}</p>

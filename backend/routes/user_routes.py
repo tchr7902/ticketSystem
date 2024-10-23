@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
+import logging
 
 db = connect_to_db()
 
@@ -11,22 +12,37 @@ user_bp = Blueprint('user_bp', __name__)
 @user_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
-    email = data['email']
-    password = data['password']
+    email = data.get('email')
+    password = data.get('password')
+    store_id = data.get('store_id')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+
+    # Ensure all required fields are present
+    if not all([email, password, first_name, last_name, store_id]):
+        return jsonify({"error": "All fields are required"}), 400
 
     # Ensure email is a valid Good Earth Markets address
     if not email.endswith("@goodearthmarkets.com"):
         return jsonify({"error": "Invalid email domain"}), 400
 
-    hashed_password = generate_password_hash(password)
-
     cursor = db.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, hashed_password))
+        # Check for existing email
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        if cursor.fetchone():
+            return jsonify({"error": "Account already registered with this email."}), 400
+
+        hashed_password = generate_password_hash(password)
+        cursor.execute("INSERT INTO users (email, password, store_id, first_name, last_name) VALUES (%s, %s, %s, %s, %s)", 
+                       (email, hashed_password, store_id, first_name, last_name))
         db.commit()
         return jsonify({"message": "User registered successfully"}), 201
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logging.error(f"Database error: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+    finally:
+        cursor.close()
 
 # Login route for users and admins
 @user_bp.route('/login', methods=['POST'])

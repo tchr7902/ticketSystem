@@ -12,33 +12,57 @@ function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [first_name, setFirstName] = useState("");
+    const [last_name, setLastName] = useState("");
+    const [store_id, setStoreId] = useState("");
     const [isRegister, setIsRegister] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
+
+    const stores = [
+        { store_id: 1, store_name: "Headquarters" },
+        { store_id: 2, store_name: "Warehouse" },
+        { store_id: 3, store_name: "American Fork" },
+        { store_id: 4, store_name: "Spanish Fork" },
+        { store_id: 5, store_name: "Orem" },
+        { store_id: 6, store_name: "Riverdale" },
+        { store_id: 7, store_name: "Sandy" },
+        { store_id: 8, store_name: "Park City" },
+        { store_id: 9, store_name: "Layton" },
+    ];
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
-
+    
         if (isRegister && password !== confirmPassword) {
             setError("Passwords do not match.");
             setLoading(false);
             return;
         }
-
+    
         try {
             if (isRegister) {
-                await registerUser(email, password);
+                // Register the user
+                const registerResponse = await registerUser(email, password, first_name, last_name, store_id);
+                console.log('Registration response:', registerResponse);
+    
+                // If registration is successful, log in the user
+                const loginResponse = await loginUser(email, password);
+                console.log('Login response:', loginResponse);
+                login(loginResponse.access_token, loginResponse.user); // Store user info in context
+                navigate("/tickets"); // Redirect to tickets page after login
+            } else {
+                // Login existing user
+                console.log('Logging in with data:', { email, password });
+                const loginResponse = await loginUser(email, password);
+                console.log('Login response:', loginResponse);
+                login(loginResponse.access_token, loginResponse.user);
+                navigate("/tickets");
             }
-
-
-            const data = await loginUser(email, password);
-
-            console.log('Login response:', data);
-            login(data.access_token, data.user); 
-            navigate("/tickets"); 
         } catch (err) {
             console.error("Auth error:", err);
             setError("Login/registration failed. Please try again.");
@@ -86,16 +110,53 @@ function LoginPage() {
                         />
                     </div>
                     {isRegister && (
-                        <div className="mb-3">
-                            <input
-                                type="password"
-                                className="form-control"
-                                placeholder="Confirm Password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                            />
-                        </div>
+                        <>
+                            <div className="mb-3">
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    placeholder="Confirm Password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="First Name"
+                                    value={first_name}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Last Name"
+                                    value={last_name}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <select
+                                    className="form-control"
+                                    value={store_id}
+                                    onChange={(e) => setStoreId(e.target.value)}
+                                    required
+                                >
+                                    <option value="" disabled>Select Store</option>
+                                    {stores.map((store) => (
+                                        <option key={store.store_id} value={store.store_id}>
+                                            {store.store_name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </>
                     )}
                     <button 
                         type="submit" 

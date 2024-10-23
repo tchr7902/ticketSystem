@@ -15,14 +15,13 @@ jwt_key = os.getenv('JWT_KEY')
 
 # Initialize Flask app
 app = Flask(__name__)
+
+# Enable CORS for the app with specific origins
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
 
 # Configure the JWT secret key before initializing JWTManager
 app.config['JWT_SECRET_KEY'] = jwt_key
 jwt = JWTManager(app)
-
-# Enable CORS for all routes, with support for JWT headers
-CORS(app, supports_credentials=True)
 
 # Register blueprints with URL prefixes
 app.register_blueprint(tickets_bp, url_prefix="/tickets")
