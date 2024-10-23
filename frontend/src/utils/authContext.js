@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
             const expirationTime = sessionStorage.getItem('tokenExpiration');
             if (token && expirationTime && new Date().getTime() < expirationTime) {
                 try {
-                    console.log("Loading user with valid token.");
                     const userData = await fetchUser(token);
                     setUser(userData);
                 } catch (err) {

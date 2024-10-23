@@ -89,17 +89,25 @@ function TicketList() {
     const getBadgeClass = (severity) => {
         switch (severity) {
             case "low":
-                return "bg-success";
+                return "low";
             case "medium":
-                return "bg-warning";
+                return "medium";
             case "high":
-                return "bg-danger";
+                return "high";
             default:
-                return "bg-secondary";
+                return "";
         }
     };
 
-    if (loading) return <div className="text-center mt-3"><p>Loading tickets...</p></div>;
+    if (loading) return <div className="loader-wrapper">
+                            <div className="lds-ellipsis">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+;
     if (error) return <div className="text-center mt-3"><p className="text-danger">{error}</p></div>;
 
     return (
@@ -127,7 +135,7 @@ function TicketList() {
                             >
                                 <div>
                                     <strong>{ticket.title}</strong> - 
-                                    <span className={`severity badge ms-2 ${getBadgeClass(ticket.severity)}`}>
+                                    <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity)}`}>
                                         {ticket.severity}
                                     </span>
                                 </div>

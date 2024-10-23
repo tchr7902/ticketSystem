@@ -45,7 +45,14 @@ function TicketPage() {
     }, []);
 
     if (!user) {
-        return <p className="text-center mt-5">Loading...</p>;
+        return <div className="loader-wrapper">
+                    <div className="lds-ellipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>;
     }
 
     return (
@@ -93,7 +100,7 @@ function TicketPage() {
             </nav>
 
             {/* Ticket List Section */}
-            <div className="container mt-5 mb-5">
+            <div className="container page-div">
                 {/* Toast Container */}
                 <ToastContainer
                     position="top-center"
