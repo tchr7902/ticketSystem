@@ -5,6 +5,7 @@ import TicketForm from "./TicketForm.jsx";
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Modal, Button } from 'react-bootstrap';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { Tooltip, TooltipProvider } from 'react-tooltip';
 
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/App.css';
@@ -19,7 +20,6 @@ function TicketList() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [ticketToDelete, setTicketToDelete] = useState(null);
-
 
     const loadTickets = async () => {
         setLoading(true);
@@ -82,9 +82,6 @@ function TicketList() {
             setShowEditModal(false);
         }
     };
-    
-    
-    
 
     const getBadgeClass = (severity) => {
         switch (severity) {
@@ -99,15 +96,29 @@ function TicketList() {
         }
     };
 
-    if (loading) return <div className="loader-wrapper">
-                            <div className="lds-ellipsis">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-;
+    const getDotColor = (status) => {
+        switch (status) {
+            case 'Open':
+                return 'green';
+            case 'In Progress':
+                return 'orange';
+            case 'Closed':
+                return 'gray';
+            default:
+                return '';
+        }
+    };
+
+    if (loading) return (
+        <div className="loader-wrapper">
+            <div className="lds-ellipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    );
     if (error) return <div className="text-center mt-3"><p className="text-danger">{error}</p></div>;
 
     return (
@@ -129,12 +140,26 @@ function TicketList() {
                     <ul className="list-group">
                         <h3 className="d-flex justify-content-center">My Tickets</h3>
                         {tickets.map((ticket) => (
-                            <li
-                                key={ticket.id}
-                                className=""
-                            >
-                                <div style={{ width: '75%'}}>
-                                    <strong className="hide-text">{ticket.title}</strong> - 
+                            <li key={ticket.id}>
+                                <div style={{ display: 'flex', alignItems: 'center', width: '75%' }}>
+                                    <span
+                                        style={{
+                                            width: '10px',
+                                            height: '10px',
+                                            borderRadius: '50%',
+                                            backgroundColor: getDotColor(ticket.status),
+                                            marginRight: '8px',
+                                            position: 'relative',
+                                        }}
+                                        data-tooltip-id={`tooltip-${ticket.id}`} // Link to the tooltip
+                                        data-tooltip-content={ticket.status} // Tooltip content
+                                    />
+
+                                    <Tooltip id={`tooltip-${ticket.id}`} className="custom-tooltip" place="top" effect="solid">
+                                        {ticket.status}
+                                    </Tooltip>
+
+                                    <strong>{ticket.title} -</strong>
                                     <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
                                         {ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1)}
                                     </span>

@@ -24,7 +24,7 @@ function TicketPage() {
     
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        navigate("/users/login");
     };
 
     const handleProfileClick = () => {
@@ -158,7 +158,7 @@ function TicketPage() {
                 >
                     <Modal.Header closeButton className="modal-title text-white">
                         <Modal.Title>
-                            <h3 className="m-0">Have a Showstopper?</h3>
+                            <h3 className="m-0">Have a showstopping problem?</h3>
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="chat-modal px-4 py-3">

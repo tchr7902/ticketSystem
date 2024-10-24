@@ -11,7 +11,6 @@ export const fetchTickets = async () => {
 
 export const createTicket = async (ticket) => {
     const response = await axiosInstance.post(BASE_URL, ticket); 
-    console.log(ticket)
     return response.data; 
 };
 

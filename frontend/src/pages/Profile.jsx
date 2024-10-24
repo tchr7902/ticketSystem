@@ -30,7 +30,7 @@ const ProfilePage = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/users/login');
     };
 
     const backButton = () => {
@@ -43,20 +43,6 @@ const ProfilePage = () => {
 
     return (
     <div className="container mt-5">
-            {/* Toast Container */}
-            <ToastContainer
-            position="top-center"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-            transition={Bounce}
-        />
     <nav className="profile-navbar">
         <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
         <img src={logo} alt="Logo" style={{ width: '375px', height: '86px', marginRight: '30px' }} />
@@ -75,7 +61,7 @@ const ProfilePage = () => {
                 <h1>Hello, {user.first_name}!</h1>
                 <p>{user.email}</p>
                 <p>{getStoreName(user.store_id)}</p>
-                <p>{user.role}</p>
+                <p>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</p>
             </div>
     </div>
     );

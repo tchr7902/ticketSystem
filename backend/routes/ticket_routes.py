@@ -32,10 +32,12 @@ def create_ticket():
     user = get_jwt_identity()
     data = request.json
 
+    status = data.get('status') if data.get('status') else 'Open'
+
     cursor = get_db().cursor()
     cursor.execute(
-        "INSERT INTO tickets (title, description, severity, user_id) VALUES (%s, %s, %s, %s)",
-        (data['title'], data['description'], data['severity'], user['id'])
+        "INSERT INTO tickets (title, description, severity, user_id, status) VALUES (%s, %s, %s, %s, %s)",
+        (data['title'], data['description'], data['severity'], user['id'], status)
     )
     get_db().commit()
     cursor.close()
@@ -60,8 +62,8 @@ def update_ticket(ticket_id):
         return jsonify({"error": "Unauthorized access."}), 403
 
     cursor.execute(
-        "UPDATE tickets SET title = %s, description = %s, severity = %s WHERE id = %s",
-        (data['title'], data['description'], data['severity'], ticket_id)
+        "UPDATE tickets SET title = %s, description = %s, severity = %s, status = %s WHERE id = %s",
+        (data['title'], data['description'], data['severity'], data['status'], ticket_id)
     )
     get_db().commit()
     cursor.close()
