@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { fetchUser, changeUserPassword, changeUserEmail } from "./api.js";
+import { fetchUser, changeUserPassword, changeUserEmail, fetchArchivedTickets } from "./api.js";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -88,12 +88,22 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const getArchivedTickets = async (userId) => {
+        try {
+            const data = await fetchArchivedTickets(userId);
+            return data;
+        } catch (error) {
+            console.error('Error fetching archived tickets:', error);
+            throw error;
+        }
+    };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, changePassword, changeEmail, archiveTicket }}>
+        <AuthContext.Provider value={{ user, token, login, logout, changePassword, changeEmail, archiveTicket, getArchivedTickets }}>
             {children}
         </AuthContext.Provider>
     );
+
 };
 
 export const useAuth = () => useContext(AuthContext);

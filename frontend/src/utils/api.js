@@ -82,3 +82,13 @@ export const archiveTicket = async (ticketId, notes) => {
         throw error;
     }
 };
+
+export const fetchArchivedTickets = async (userId) => {
+    try {
+        const response = await axiosInstance.get(`${BASE_URL}/users/${userId}/archived`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching archived tickets:', error);
+        throw error;
+    }
+};

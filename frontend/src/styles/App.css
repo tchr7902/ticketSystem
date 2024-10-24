@@ -160,6 +160,11 @@ button.btn-secondary {
   box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
 }
 
+.my-tickets {
+  display: flex;
+  flex-direction: column;
+}
+
 .new-ticket {
   display: flex;
   flex-direction: column;
@@ -453,6 +458,60 @@ input, select, textarea {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+
+.accordion {
+  gap: 15px; 
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Accordion Item Styles */
+.accordion-item {
+  margin-bottom: 10px;
+  border: none; 
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.accordion-item:hover {
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Header Styles */
+.custom-accordion-header {
+  color: white;
+  font-weight: bold;
+  font-size: 1.25rem; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, padding 0.2s;
+}
+
+
+
+.custom-accordion-header:hover {
+  padding: 10px;
+}
+
+/* Accordion Body Styles */
+.custom-accordion-body {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.05);
+  transition: max-height 0.5s ease-out, padding 0.3s ease-out;
+}
+
+/* Accordion Collapse Motion */
+.accordion-collapse {
+  transition: max-height 0.5s ease-out;
 }
 
 
