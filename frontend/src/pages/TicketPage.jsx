@@ -8,11 +8,13 @@ import logo from '../images/gem_logo.png';
 import user_logo from '../images/user_icon.png';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
+import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
+import { Modal, Button } from 'react-bootstrap';
 
 function TicketPage() {
     const { user, logout } = useContext(AuthContext);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [chatWindowOpen, setChatWindowOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
 
@@ -34,9 +36,9 @@ function TicketPage() {
     };
 
     const handleChatClick = () => {
-        // Add functionality for chat (e.g., open chat window)
-        alert("Chat functionality coming soon!"); // Placeholder for chat functionality
+        setChatWindowOpen(true);
     };
+    
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -71,7 +73,7 @@ function TicketPage() {
                 <div className="container-fluid d-flex justify-content-between align-items-center">
                     <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
                         <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
-                        <h2>IT Tickets</h2>
+                        <h2>IT Support Hub</h2>
                     </a>
                     <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
                         <img 
@@ -128,7 +130,7 @@ function TicketPage() {
 
             {/* Chat Icon */}
             <div 
-                className="chat-icon" 
+                className="chat-div" 
                 style={{
                     position: 'fixed',
                     bottom: '20px',
@@ -141,11 +143,50 @@ function TicketPage() {
                 }}
                 onClick={handleChatClick}
             >
-                <FontAwesomeIcon 
-                    icon={faComment} 
-                    style={{ width: '40px', height: '40px', color: '#007bff' }} // Customize the icon's color
+                <FontAwesomeIcon
+                    className="responsive-chat-icon"
+                    icon={regularComment}
+                    style={{ color: '#1C1C1C' }}
                 />
             </div>
+            <Modal
+                    show={chatWindowOpen}
+                    onHide={() => {
+                        setChatWindowOpen(false);
+                    }}
+                    centered
+                >
+                    <Modal.Header closeButton className="modal-title text-white">
+                        <Modal.Title>
+                            <h3 className="m-0">Have a Showstopper?</h3>
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="chat-modal px-4 py-3">
+                        <h5 className="modal-header text-secondary">
+                            Call or Text the IT Team Directly
+                        </h5>
+                        <div className="contact-info mb-2">
+                            <p className="mb-1">
+                                <strong>Nathan Bascom</strong> 
+                                <span className="text-muted"> - (385) 272-1205</span>
+                            </p>
+                            <p>
+                                <strong>Trevor Christensen</strong> 
+                                <span className="text-muted"> - (385) 228-6977</span>
+                            </p>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className="d-flex justify-content-end px-4">
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setChatWindowOpen(false);
+                            }}
+                        >
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
         </div>
     );
 }

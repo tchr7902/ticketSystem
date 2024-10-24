@@ -64,7 +64,7 @@ const SettingsPage = () => {
             setNewEmail("");
             setConfirmEmail("");
 
-            setTimeout(() => toast.success('Email updated successfully!'), 5000);
+            setTimeout(() => toast.success('Email updated successfully!'), 100);
         } catch (err) {
             setTimeout(() => toast.error('Failed to update email.'), 100);
         }
@@ -101,9 +101,9 @@ const SettingsPage = () => {
                 newestOnTop={false}
                 closeOnClick
                 rtl={false}
-                pauseOnFocusLoss
+                pauseOnFocusLoss={false}
                 draggable
-                pauseOnHover
+                pauseOnHover={false}
                 theme="light"
                 transition={Bounce}
             />
@@ -119,6 +119,10 @@ const SettingsPage = () => {
                 <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>
                     Logout
                 </button>
+            </nav>
+            <nav className="backup-profile-navbar">
+            <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
+            <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
             </nav>
             <div className="d-flex justify-content-center">
                 <img 

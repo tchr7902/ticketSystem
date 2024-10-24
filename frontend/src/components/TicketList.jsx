@@ -88,12 +88,12 @@ function TicketList() {
 
     const getBadgeClass = (severity) => {
         switch (severity) {
-            case "low":
-                return "low";
-            case "medium":
-                return "medium";
-            case "high":
-                return "high";
+            case "Low":
+                return "Low";
+            case "Medium":
+                return "Medium";
+            case "High":
+                return "High";
             default:
                 return "";
         }
@@ -133,10 +133,10 @@ function TicketList() {
                                 key={ticket.id}
                                 className=""
                             >
-                                <div>
-                                    <strong>{ticket.title}</strong> - 
-                                    <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity)}`}>
-                                        {ticket.severity}
+                                <div style={{ width: '75%'}}>
+                                    <strong className="hide-text">{ticket.title}</strong> - 
+                                    <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
+                                        {ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1)}
                                     </span>
                                 </div>
                                 <div>

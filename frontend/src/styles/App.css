@@ -44,6 +44,16 @@ li:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
 }
 
+.hide-text {
+  white-space: nowrap;   
+  overflow: hidden;   
+  text-overflow: ellipsis;
+  display: inline-block; 
+  max-width: 70%;   
+  vertical-align: middle; 
+}
+
+
 /* Other body styles */
 
 
@@ -89,6 +99,34 @@ img {
 
 
 /* Container Styles */
+.chat-modal {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.contact-info p {
+  padding-top: 20px;
+  padding-left: 20px;
+  font-size: 1.1rem;
+}
+
+.modal-header {
+  padding-bottom: 30px;
+  padding-right: 40px;
+}
+
+.modal-header h3 {
+  font-weight: bold;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+button.btn-secondary {
+  padding: 10px 20px;
+  font-size: 1rem;
+}
+
+
 .ticket-header {
   background-color: none;
   justify-content: center;
@@ -119,7 +157,7 @@ img {
 }
 
 .main-div:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
 }
 
 .new-ticket {
@@ -301,6 +339,11 @@ input, select, textarea {
   border: .5px solid #D3D3D3;
 }
 
+.change:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+  scale: 1.01;
+}
+
 /* My Info Styles */
 .my-info {
   padding: 40px;
@@ -343,9 +386,20 @@ input, select, textarea {
   width: 61px;
   height: 61px;
   cursor: pointer;
+  background-color: transparent;
 }
 
 .responsive-icon:hover {
+  transform: scale(1.07);
+}
+
+.responsive-chat-icon {
+  width: 51px;
+  height: 51px;
+  cursor: pointer;
+}
+
+.responsive-chat-icon:hover {
   transform: scale(1.07);
 }
 
@@ -358,19 +412,19 @@ input, select, textarea {
   font-size: .85rem;
 }
 
-.badge-outline.low {
+.badge-outline.Low {
   border-color: #28a745;
   color: #28a745;
   background-color: transparent;
 }
 
-.badge-outline.medium {
+.badge-outline.Medium {
   border-color: #ffa600; 
   color: #ffa600;
   background-color: transparent;
 }
 
-.badge-outline.high {
+.badge-outline.High {
   border-color: #dc3545; 
   color: #dc3545;
   background-color: transparent;
@@ -378,7 +432,7 @@ input, select, textarea {
 
 
 /* Media Queries */
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 630px) {
   .custom-navbar {
       display: none;
   }
@@ -399,6 +453,12 @@ input, select, textarea {
       height: 41px;
       cursor: pointer;
   }
+
+  .responsive-chat-icon {
+    width: 31px;
+    height: 31px;
+    cursor: pointer;
+}
 
   .list-group-item div {
       width: 100%;

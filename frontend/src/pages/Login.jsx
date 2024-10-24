@@ -57,7 +57,6 @@ function LoginPage() {
                 navigate("/tickets"); // Redirect to tickets page after login
             } else {
                 // Login existing user
-                console.log('Logging in with data:', { email, password });
                 const loginResponse = await loginUser(email, password);
                 console.log('Login response:', loginResponse);
                 login(loginResponse.access_token, loginResponse.user);
@@ -83,7 +82,7 @@ function LoginPage() {
                 alt="Logo2" 
                 style={{ width: '150px', height: '150px', marginBottom: '20px'}} 
             />
-            <h1 style={{ marginBottom: '20px'}}><strong>IT Tickets</strong></h1>
+            <h1 style={{ marginBottom: '20px'}}><strong>IT Support Hub</strong></h1>
             <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {isRegister ? "Register" : "Login"}
