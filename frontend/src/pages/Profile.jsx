@@ -75,6 +75,7 @@ const ProfilePage = () => {
                 <h1>Hello, {user.first_name}!</h1>
                 <p>{user.email}</p>
                 <p>{getStoreName(user.store_id)}</p>
+                <p>{user.role}</p>
             </div>
     </div>
     );

@@ -123,36 +123,47 @@ def get_current_user():
     return jsonify({"error": "User not found"}), 404
 
 
-# Change user password
+# Change password
 @user_bp.route('/change-password', methods=['POST'])
 @jwt_required()
 def change_password():
     user_identity = get_jwt_identity()  # Get user identity from the token
     data = request.json
-    current_password = data['currentPassword']
-    new_password = data['newPassword']
+    current_password = data.get('currentPassword')
+    new_password = data.get('newPassword')
 
     cursor = db.cursor(dictionary=True)
 
-    # Fetch the user's current password
-    cursor.execute("SELECT password FROM users WHERE id = %s", (user_identity['id'],))
+    # Determine if user is admin or user
+    if user_identity['role'] == 'admin':
+        # Fetch the admin's current password
+        cursor.execute("SELECT password FROM admin WHERE id = %s", (user_identity['id'],))
+    else:
+        # Fetch the user's current password
+        cursor.execute("SELECT password FROM users WHERE id = %s", (user_identity['id'],))
+
     user = cursor.fetchone()
 
     if user and check_password_hash(user['password'], current_password):
         # Current password matches, proceed to update the password
         hashed_new_password = generate_password_hash(new_password)
-        cursor.execute("UPDATE users SET password = %s WHERE id = %s", (hashed_new_password, user_identity['id']))
+        
+        if user_identity['role'] == 'admin':
+            cursor.execute("UPDATE admin SET password = %s WHERE id = %s", (hashed_new_password, user_identity['id']))
+        else:
+            cursor.execute("UPDATE users SET password = %s WHERE id = %s", (hashed_new_password, user_identity['id']))
+        
         db.commit()
         return jsonify({"message": "Password changed successfully."}), 200
 
     return jsonify({"error": "Current password is incorrect."}), 401
 
 
-# Change user email
+# Change email
 @user_bp.route('/change-email', methods=['POST'])
 @jwt_required()
 def change_email():
-    user_identity = get_jwt_identity() 
+    user_identity = get_jwt_identity()
     data = request.json
     current_email = data.get('currentEmail')
     new_email = data.get('newEmail')
@@ -164,14 +175,15 @@ def change_email():
     cursor = db.cursor(dictionary=True)
 
     try:
-        # Check in users table first
-        cursor.execute("SELECT email FROM users WHERE id = %s", (user_identity['id'],))
-        user = cursor.fetchone()
-
-        # If not found in users, check in admins
-        if not user:
+        # Determine if user is admin or user
+        if user_identity['role'] == 'admin':
+            # Check in admins table
             cursor.execute("SELECT email FROM admin WHERE id = %s", (user_identity['id'],))
-            user = cursor.fetchone()
+        else:
+            # Check in users table
+            cursor.execute("SELECT email FROM users WHERE id = %s", (user_identity['id'],))
+
+        user = cursor.fetchone()
 
         if user:
             # Verify the current email
@@ -183,7 +195,7 @@ def change_email():
                 return jsonify({"error": "Please enter a valid GEM email."}), 400
 
             # Update the user's email
-            if user_identity.get('isAdmin'):
+            if user_identity['role'] == 'admin':
                 cursor.execute("UPDATE admin SET email = %s WHERE id = %s", (new_email, user_identity['id']))
             else:
                 cursor.execute("UPDATE users SET email = %s WHERE id = %s", (new_email, user_identity['id']))
@@ -200,4 +212,3 @@ def change_email():
 
     finally:
         cursor.close()  # Always close the cursor
-
