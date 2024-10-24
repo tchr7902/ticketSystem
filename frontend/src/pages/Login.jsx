@@ -45,22 +45,29 @@ function LoginPage() {
         }
     
         try {
+            let loginResponse;
             if (isRegister) {
                 // Register the user
-                const registerResponse = await registerUser(email, password, first_name, last_name, store_id);
-                console.log('Registration response:', registerResponse);
+                await registerUser(email, password, first_name, last_name, store_id);
+                console.log('Registration successful');
     
-                // If registration is successful, log in the user
-                const loginResponse = await loginUser(email, password);
-                console.log('Login response:', loginResponse);
-                login(loginResponse.access_token, loginResponse.user); // Store user info in context
-                navigate("/tickets"); // Redirect to tickets page after login
+                // Log in the user after registration
+                loginResponse = await loginUser(email, password);
             } else {
-                // Login existing user
-                const loginResponse = await loginUser(email, password);
-                console.log('Login response:', loginResponse);
-                login(loginResponse.access_token, loginResponse.user);
-                navigate("/tickets");
+                // Log in existing user
+                loginResponse = await loginUser(email, password);
+            }
+    
+            const { access_token, user } = loginResponse;
+    
+            // Save access token and user info in context
+            login(access_token, user);
+    
+            // Redirect based on user role
+            if (user.role === 'admin') {
+                navigate('/tickets'); // Redirect admin to all tickets
+            } else {
+                navigate('/tickets'); // Regular user route
             }
         } catch (err) {
             console.error("Auth error:", err);
@@ -69,6 +76,7 @@ function LoginPage() {
             setLoading(false);
         }
     };
+    
 
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center vh-100">

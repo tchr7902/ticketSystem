@@ -85,18 +85,43 @@ def login():
 
     return jsonify({"error": "Invalid email or password"}), 401
 
-# Get the current user's info
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
-    user_identity = get_jwt_identity()  # Get user identity from the token
+    user_identity = get_jwt_identity()  # Get user identity and role from the token
     cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT first_name, email, store_id FROM users WHERE id = %s", (user_identity['id'],))
-    user = cursor.fetchone()
 
-    if user:
-        return jsonify(user), 200  # Return user details
+    if user_identity['role'] == 'admin':
+        # If the role is admin, fetch admin details
+        cursor.execute("SELECT id, first_name, last_name, store_id, email FROM admin WHERE id = %s", (user_identity['id'],))
+        admin = cursor.fetchone()
+
+        if admin:
+            return jsonify({
+                'id': admin['id'],
+                'first_name': admin['first_name'],
+                'last_name': admin['last_name'],
+                'email': admin['email'],
+                'store_id': admin['store_id'],
+                'role': 'admin'
+            }), 200
+
+    else:
+        # Otherwise, fetch user details
+        cursor.execute("SELECT id, first_name, email, store_id FROM users WHERE id = %s", (user_identity['id'],))
+        user = cursor.fetchone()
+
+        if user:
+            return jsonify({
+                'id': user['id'],
+                'first_name': user['first_name'],
+                'email': user['email'],
+                'store_id': user['store_id'],
+                'role': 'user'
+            }), 200
+
     return jsonify({"error": "User not found"}), 404
+
 
 # Change user password
 @user_bp.route('/change-password', methods=['POST'])
@@ -127,30 +152,52 @@ def change_password():
 @user_bp.route('/change-email', methods=['POST'])
 @jwt_required()
 def change_email():
-    user_identity = get_jwt_identity()  # Get user identity from the token
+    user_identity = get_jwt_identity() 
     data = request.json
-    current_email = data['currentEmail']
-    new_email = data['newEmail']
+    current_email = data.get('currentEmail')
+    new_email = data.get('newEmail')
+
+    # Ensure that the request contains the necessary fields
+    if not current_email or not new_email:
+        return jsonify({"error": "Current email and new email must be provided."}), 400
 
     cursor = db.cursor(dictionary=True)
 
-    # Fetch the user's current email and password
-    cursor.execute("SELECT email, password FROM users WHERE id = %s", (user_identity['id'],))
-    user = cursor.fetchone()
+    try:
+        # Check in users table first
+        cursor.execute("SELECT email FROM users WHERE id = %s", (user_identity['id'],))
+        user = cursor.fetchone()
 
-    if user:
-        # Verify the current email
-        if user['email'] != current_email:
-            return jsonify({"error": "Current email is incorrect."}), 401
+        # If not found in users, check in admins
+        if not user:
+            cursor.execute("SELECT email FROM admin WHERE id = %s", (user_identity['id'],))
+            user = cursor.fetchone()
 
-        # Validate new email format
-        if '@goodearthmarkets.com' not in new_email:
-            return jsonify({"error": "Please enter a valid GEM email."}), 400
+        if user:
+            # Verify the current email
+            if user['email'] != current_email:
+                return jsonify({"error": "Current email is incorrect."}), 401
 
-        # Update the user's email
-        cursor.execute("UPDATE users SET email = %s WHERE id = %s", (new_email, user_identity['id']))
-        db.commit()
+            # Validate new email format
+            if '@goodearthmarkets.com' not in new_email:
+                return jsonify({"error": "Please enter a valid GEM email."}), 400
 
-        return jsonify({"message": "Email updated successfully."}), 200
+            # Update the user's email
+            if user_identity.get('isAdmin'):
+                cursor.execute("UPDATE admin SET email = %s WHERE id = %s", (new_email, user_identity['id']))
+            else:
+                cursor.execute("UPDATE users SET email = %s WHERE id = %s", (new_email, user_identity['id']))
 
-    return jsonify({"error": "User not found."}), 404
+            db.commit()  # Commit the changes
+            return jsonify({"message": "Email updated successfully."}), 200
+
+        return jsonify({"error": "User not found."}), 404
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of any error
+        print("Error during email change:", e)  # Log the error for debugging
+        return jsonify({"error": "An error occurred while updating the email."}), 500
+
+    finally:
+        cursor.close()  # Always close the cursor
+

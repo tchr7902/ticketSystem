@@ -8,15 +8,9 @@ import logo from '../images/gem_logo.png';
 import user_logo from '../images/user_icon.png';
 
 const ProfilePage = () => {
-    const { user, logout, changePassword } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
-
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
     const stores = [
         { store_id: 1, store_name: "Headquarters" },
         { store_id: 2, store_name: "Warehouse" },
