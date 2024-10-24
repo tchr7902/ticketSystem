@@ -64,3 +64,8 @@ export const getUserTickets = async (user_id) => {
     const response = await axiosInstance.get(`${BASE_URL}/user/${user_id}`);
     return response.data;
 };
+
+export const archiveTicket = async(id) => {
+    const response = await axiosInstance.get(`${BASE_URL}/${id}/archive`)
+    return response.data;
+}

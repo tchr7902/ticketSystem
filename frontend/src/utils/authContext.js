@@ -73,8 +73,24 @@ export const AuthProvider = ({ children }) => {
             throw new Error("Failed to change email. Please try again.");
         }
     };
+
+    const archiveTicket = async (ticketId, notes) => {
+        try {
+            const response = await axios.post(`/tickets/${ticketId}/archive`, { notes }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error archiving ticket:', error);
+            throw new Error('Failed to archive ticket. Please try again.');
+        }
+    };
+
+
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, changePassword, changeEmail }}>
+        <AuthContext.Provider value={{ user, token, login, logout, changePassword, changeEmail, archiveTicket }}>
             {children}
         </AuthContext.Provider>
     );

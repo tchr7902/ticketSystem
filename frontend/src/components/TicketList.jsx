@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import { fetchTickets, deleteTicket, createTicket, updateTicket } from "../utils/api.js";
+import { fetchTickets, deleteTicket, createTicket, updateTicket, archiveTicket } from "../utils/api.js";
 import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
+import { FaEdit, FaTrash, FaArchive } from 'react-icons/fa';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { Tooltip, TooltipProvider } from 'react-tooltip';
 
@@ -19,7 +19,10 @@ function TicketList() {
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showArchiveModal, setShowArchiveModal] = useState(false);
     const [ticketToDelete, setTicketToDelete] = useState(null);
+    const [ticketToArchive, setTicketToArchive] = useState(null);
+    const [archiveNotes, setArchiveNotes] = useState("");
 
     const loadTickets = async () => {
         setLoading(true);
@@ -83,6 +86,27 @@ function TicketList() {
         }
     };
 
+    const openArchiveModal = (ticket) => {
+        setTicketToArchive(ticket);
+        setShowArchiveModal(true);
+    };
+
+    const handleArchiveConfirm = async () => {
+        try {
+            if (ticketToArchive) {
+                await archiveTicket(ticketToArchive.id, archiveNotes);
+                setTickets(tickets.filter((ticket) => ticket.id !== ticketToArchive.id));
+                showToast("Ticket archived successfully!", "success");
+            }
+        } catch (error) {
+            console.error("Error archiving ticket:", error);
+            showToast("Error archiving ticket. Please try again.", "error");
+        } finally {
+            setShowArchiveModal(false);
+            setArchiveNotes("");
+        }
+    };
+
     const getBadgeClass = (severity) => {
         switch (severity) {
             case "Low":
@@ -127,10 +151,7 @@ function TicketList() {
                 <h2 className="text-center mb-2">
                     {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
                 </h2>
-                <TicketForm
-                    selectedTicket={null}
-                    onSave={handleSave}
-                />
+                <TicketForm selectedTicket={null} onSave={handleSave} />
             </div>
 
             <div className="mt-4">
@@ -151,34 +172,31 @@ function TicketList() {
                                             marginRight: '8px',
                                             position: 'relative',
                                         }}
-                                        data-tooltip-id={`tooltip-${ticket.id}`} // Link to the tooltip
-                                        data-tooltip-content={ticket.status} // Tooltip content
+                                        data-tooltip-id={`tooltip-${ticket.id}`}
+                                        data-tooltip-content={ticket.status}
                                     />
 
                                     <Tooltip id={`tooltip-${ticket.id}`} className="custom-tooltip" place="top" effect="solid">
                                         {ticket.status}
                                     </Tooltip>
 
-                                    <strong>{ticket.title} -</strong>
+                                    <strong className="hide-text">{ticket.title}</strong> - 
                                     <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
-                                        {ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1)}
+                                    {ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1)}
                                     </span>
                                 </div>
                                 <div>
-                                    <button
-                                        className="icon"
-                                        onClick={() => handleEdit(ticket)}
-                                    >
+                                    <button className="icon" onClick={() => handleEdit(ticket)}>
                                         <FaEdit />
                                     </button>
-                                    <button
-                                        className="icon"
-                                        onClick={() => {
-                                            setTicketToDelete(ticket);
-                                            setShowDeleteModal(true);
-                                        }}
-                                    >
+                                    <button className="icon" onClick={() => {
+                                        setTicketToDelete(ticket);
+                                        setShowDeleteModal(true);
+                                    }}>
                                         <FaTrash />
+                                    </button>
+                                    <button className="icon" onClick={() => openArchiveModal(ticket)}>
+                                        <FaArchive />
                                     </button>
                                 </div>
                             </li>
@@ -186,9 +204,9 @@ function TicketList() {
                     </ul>
                 )}
             </div>
-
-            {/* Edit Ticket Modal */}
-            <Modal
+            
+             {/* Edit Ticket Modal */}
+             <Modal
                 show={showEditModal}
                 onHide={() => {
                     setShowEditModal(false);
@@ -237,6 +255,35 @@ function TicketList() {
                     </Button>
                     <Button className="btn-important" onClick={handleDelete}>
                         Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Archive Modal */}
+            <Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Archive Ticket</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="archiveNotes">
+                            <Form.Label>Notes</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={archiveNotes}
+                                onChange={(e) => setArchiveNotes(e.target.value)}
+                                placeholder="Enter notes for archiving"
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowArchiveModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleArchiveConfirm}>
+                        Confirm Archive
                     </Button>
                 </Modal.Footer>
             </Modal>
