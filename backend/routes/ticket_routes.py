@@ -90,3 +90,21 @@ def delete_ticket(ticket_id):
     get_db().commit()
     cursor.close()
     return jsonify({"message": "Ticket deleted successfully."}), 204
+
+
+@tickets_bp.route('/user/<int:user_id>', methods=['GET'])
+@jwt_required()
+def get_user_tickets(user_id):
+    cursor = get_db().cursor()
+
+    cursor.execute("""
+            SELECT status, COUNT(*) as count
+            FROM tickets
+            WHERE user_id = %s
+            GROUP BY status
+            """, (user_id,))
+    tickets = cursor.fetchall()
+    cursor.close()
+
+    results = {status: count for status, count in tickets}
+    return jsonify(results), 200

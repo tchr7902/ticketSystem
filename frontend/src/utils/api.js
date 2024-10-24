@@ -59,3 +59,8 @@ export const changeUserEmail = async (currentEmail, newEmail) => {
     });
     return response.data;
 };
+
+export const getUserTickets = async (user_id) => {
+    const response = await axiosInstance.get(`${BASE_URL}/user/${user_id}`);
+    return response.data;
+};
