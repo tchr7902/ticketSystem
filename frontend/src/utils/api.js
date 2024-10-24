@@ -65,7 +65,20 @@ export const getUserTickets = async (user_id) => {
     return response.data;
 };
 
-export const archiveTicket = async(id) => {
-    const response = await axiosInstance.get(`${BASE_URL}/${id}/archive`)
-    return response.data;
-}
+export const archiveTicket = async (ticketId, notes) => {
+    try {
+        const response = await axiosInstance.post(
+            `${BASE_URL}/${ticketId}/archive`,
+            { notes },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error archiving ticket:', error);
+        throw error;
+    }
+};

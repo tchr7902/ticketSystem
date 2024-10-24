@@ -279,10 +279,10 @@ function TicketList() {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowArchiveModal(false)}>
+                    <Button variant="btn" onClick={() => setShowArchiveModal(false)}>
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={handleArchiveConfirm}>
+                    <Button variant="btn-important" onClick={handleArchiveConfirm}>
                         Confirm Archive
                     </Button>
                 </Modal.Footer>
