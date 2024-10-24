@@ -108,3 +108,52 @@ def get_user_tickets(user_id):
 
     results = {status: count for status, count in tickets}
     return jsonify(results), 200
+
+
+@tickets_bp.route('/<int:ticket_id>/archive', methods=['POST'])
+@jwt_required()
+def archive_ticket(ticket_id):
+    data = request.get_json()
+    notes = data.get('notes', '')
+
+    cursor = get_db().cursor()
+
+    try:
+        cursor.execute("""
+            INSERT INTO archived_tickets 
+            (original_ticket_id, user_id, title, description, created_at, severity, status, notes)
+            SELECT id, user_id, title, description, created_at, severity, status, %s
+            FROM tickets
+            WHERE id = %s
+        """, (notes, ticket_id))
+
+        if cursor.rowcount == 0:
+            raise Exception("Ticket transfer failed. No ticket with this ID found.")
+
+        get_db().commit()
+
+        cursor.execute("DELETE FROM tickets WHERE id = %s", (ticket_id,))
+
+        get_db().commit()
+
+    except Exception as e:
+        get_db().rollback()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cursor.close()
+
+    return jsonify({"message": "Ticket archived successfully."}), 200
+
+
+
+
+@tickets_bp.route('/users/<int:user_id>/archived', methods=['GET'])
+@jwt_required()
+def get_archived_tickets(user_id):
+    cursor = get_db().cursor()
+    cursor.execute("SELECT * FROM archived_tickets WHERE user_id = %s", (user_id,))
+    tickets = cursor.fetchall()
+    cursor.close()
+
+    return jsonify(tickets), 200

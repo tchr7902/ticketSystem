@@ -99,7 +99,7 @@ function TicketForm({ selectedTicket, onSave }) {
             </div>
             <div className="d-flex justify-content-center">
                 <div>
-                    <button type="submit" className="btn-important ticket-save">Save</button>
+                    <button type="submit" className="btn-important ticket-save">Submit</button>
                 </div>
             </div>
         </form>
