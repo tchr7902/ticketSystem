@@ -185,7 +185,7 @@ function TicketList() {
                                     {ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1)}
                                     </span>
                                 </div>
-                                <div>
+                                <div className="icon-div">
                                     <button className="icon" onClick={() => handleEdit(ticket)}>
                                         <FaEdit />
                                     </button>

@@ -15,11 +15,17 @@ function TicketPage() {
     const { user, logout } = useContext(AuthContext);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [chatWindowOpen, setChatWindowOpen] = useState(false);
+    const [backupDropdownOpen, setBackupDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const backupDropdownRef = useRef(null);
     const navigate = useNavigate();
 
     const handleUserIconClick = () => {
         setDropdownOpen((prevState) => !prevState);
+    };
+
+    const handleBackupUserIconClick = () => {
+        setBackupDropdownOpen((prevState) => !prevState);
     };
     
     const handleLogout = () => {
@@ -42,8 +48,17 @@ function TicketPage() {
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
                 setDropdownOpen(false);
+            }
+            if (
+                backupDropdownRef.current &&
+                !backupDropdownRef.current.contains(event.target)
+            ) {
+                setBackupDropdownOpen(false);
             }
         };
 
@@ -102,11 +117,28 @@ function TicketPage() {
 
             <nav className="backup-navbar">
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
-                <img className="responsive-icon"
-                    src={user_logo} 
-                    alt="user icon" 
-                    onClick={handleUserIconClick}
-                />
+                <div ref={backupDropdownRef} className="position-relative">
+                    <img
+                        className="responsive-icon"
+                        src={user_logo}
+                        alt="user icon"
+                        onClick={handleBackupUserIconClick}
+                    />
+                    {backupDropdownOpen && (
+                        <div className="dropdown-menu show position-absolute" style={{ right: '20px', top: '80px' }}>
+                            <button className="dropdown-item" onClick={handleProfileClick}>
+                                Profile
+                            </button>
+                            <button className="dropdown-item" onClick={handleSettingsClick}>
+                                Settings
+                            </button>
+                            <div className="dropdown-divider"></div>
+                            <button className="dropdown-item text-danger" onClick={handleLogout}>
+                                Logout
+                            </button>
+                        </div>
+                    )}
+                </div>
             </nav>
 
             {/* Ticket List Section */}

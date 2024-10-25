@@ -163,6 +163,8 @@ button.btn-secondary {
 .my-tickets {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .new-ticket {
@@ -280,7 +282,7 @@ input, select, textarea {
               rgba(78, 113, 65, 0.25) 0px 4px 8px, 
               rgba(78, 113, 65, 0.25) 0px 8px 16px, 
               rgba(78, 113, 65, 0.25) 0px 16px 32px;
-  transform: scale(1.05) rotate(-1deg);
+  transform: scale(1.05);
 }
 
 .btn-important {
@@ -304,7 +306,7 @@ input, select, textarea {
 
 .btn-important:hover {
   box-shadow: rgba(78, 113, 65,.35) 0 -25px 18px -14px inset,rgba(78, 113, 65,.25) 0 1px 2px,rgba(78, 113, 65,.25) 0 2px 4px,rgba(78, 113, 65,.25) 0 4px 8px,rgba(78, 113, 65,.25) 0 8px 16px,rgba(78, 113, 65,.25) 0 16px 32px;
-  transform: scale(1.05) rotate(-1deg);
+  transform: scale(1.05);
 }
 
 .icon {
@@ -443,10 +445,12 @@ input, select, textarea {
   padding: 10px 15px;
   margin-top: 5px;
   margin-bottom: 5px;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgb(230, 230, 230);
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 10px;
-  border: .5px solid #D3D3D3;
+  border: 0.5px solid #D3D3D3;
+  opacity: 0.8;
+  color: #a9a9a9;
 }
 
 .static-status:hover {
@@ -461,57 +465,44 @@ input, select, textarea {
 }
 
 
-.accordion {
-  gap: 15px; 
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-/* Accordion Item Styles */
-.accordion-item {
-  margin-bottom: 10px;
-  border: none; 
+.card {
+  border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-}
-
-.accordion-item:hover {
-  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
-}
-
-/* Header Styles */
-.custom-accordion-header {
-  color: white;
-  font-weight: bold;
-  font-size: 1.25rem; 
-  display: flex;
-  align-items: center;
-  justify-content: space-between; 
+  margin-bottom: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+  transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease;
   cursor: pointer;
-  border-radius: 8px;
-  transition: background-color 0.3s ease, padding 0.2s;
 }
 
-
-
-.custom-accordion-header:hover {
-  padding: 10px;
+.card.active {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Slightly more shadow on open */
 }
 
-/* Accordion Body Styles */
-.custom-accordion-body {
-  background-color: #f8f9fa;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.05);
-  transition: max-height 0.5s ease-out, padding 0.3s ease-out;
+.card-header {
+  background-color: #f4f4f4;
+  padding: 15px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Accordion Collapse Motion */
-.accordion-collapse {
-  transition: max-height 0.5s ease-out;
+.card-body {
+  max-height: 0;
+  padding: 0 15px; /* Collapsed padding */
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, padding 0.3s ease-in-out;
+}
+
+.card.active .card-body {
+  max-height: 300px; /* Adjust based on expected content size */
+  padding: 15px;
+}
+
+.card:hover {
+  scale: 1.01;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -661,4 +652,11 @@ input, select, textarea {
     flex-direction: column;
   }
 
+  }
+
+  @media screen and (max-width: 610px) {
+    .icon-div {
+      display: flex;
+      flex-direction: column;
+    }
   }
