@@ -195,9 +195,11 @@ function TicketList() {
                                     }}>
                                         <FaTrash />
                                     </button>
-                                    <button className="icon" onClick={() => openArchiveModal(ticket)}>
-                                        <FaArchive />
-                                    </button>
+                                    {user.role === "admin" && (
+                                        <button className="icon" onClick={() => openArchiveModal(ticket)}>
+                                            <FaArchive />
+                                        </button>
+                                    )}
                                 </div>
                             </li>
                         ))}
@@ -214,7 +216,7 @@ function TicketList() {
                 }}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit Ticket</Modal.Title>
+                    <Modal.Title><h3 className="m-0">Edit Ticket</h3></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <TicketForm
@@ -241,7 +243,7 @@ function TicketList() {
                 onHide={() => setShowDeleteModal(false)}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Confirm Deletion</Modal.Title>
+                    <Modal.Title><h3 className="m-0">Confirm Deletion</h3></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     Are you sure you want to delete "{ticketToDelete ? ticketToDelete.title : ''}"?
@@ -262,18 +264,17 @@ function TicketList() {
             {/* Archive Modal */}
             <Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Archive Ticket</Modal.Title>
+                    <Modal.Title><h3 className="m-0">Archive Ticket</h3></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="archiveNotes">
-                            <Form.Label>Notes</Form.Label>
-                            <Form.Control
+                            <Form.Control className="input-box"
                                 as="textarea"
                                 rows={3}
                                 value={archiveNotes}
                                 onChange={(e) => setArchiveNotes(e.target.value)}
-                                placeholder="Enter notes for archiving"
+                                placeholder="Notes for archiving"
                             />
                         </Form.Group>
                     </Form>
@@ -282,8 +283,8 @@ function TicketList() {
                     <Button variant="btn" onClick={() => setShowArchiveModal(false)}>
                         Cancel
                     </Button>
-                    <Button variant="btn-important" onClick={handleArchiveConfirm}>
-                        Confirm Archive
+                    <Button className="btn-important" onClick={handleArchiveConfirm}>
+                        Archive
                     </Button>
                 </Modal.Footer>
             </Modal>
