@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
                     logout();
                 }
             } else {
-                console.log("Token is not valid or has expired.");
                 logout();
             }
         };

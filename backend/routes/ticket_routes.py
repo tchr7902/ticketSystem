@@ -151,8 +151,12 @@ def archive_ticket(ticket_id):
 @tickets_bp.route('/users/<int:user_id>/archived', methods=['GET'])
 @jwt_required()
 def get_archived_tickets(user_id):
+    user = get_jwt_identity()
     cursor = get_db().cursor()
-    cursor.execute("SELECT * FROM archived_tickets WHERE user_id = %s", (user_id,))
+    if user['role'] == 'admin':
+        cursor.execute('SELECT * FROM archived_tickets')
+    else:
+        cursor.execute('SELECT * FROM archived_tickets WHERE user_id = %s', (user_id,))
     tickets = cursor.fetchall()
     cursor.close()
 

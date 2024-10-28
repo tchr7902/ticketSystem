@@ -264,7 +264,7 @@ function TicketList() {
             {/* Archive Modal */}
             <Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title><h3 className="m-0">Archive Ticket</h3></Modal.Title>
+                    <Modal.Title><h3 className="m-0">Archive "{ticketToArchive ? ticketToArchive.title : ''}"?</h3></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>

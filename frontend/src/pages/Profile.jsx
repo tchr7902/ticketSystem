@@ -45,7 +45,13 @@ const ProfilePage = () => {
     const stores = [
         { store_id: 1, store_name: "Headquarters" },
         { store_id: 2, store_name: "Warehouse" },
-        // Add other stores here...
+        { store_id: 3, store_name: "American Fork" },
+        { store_id: 4, store_name: "Spanish Fork" },
+        { store_id: 5, store_name: "Orem" },
+        { store_id: 6, store_name: "Riverdale" },
+        { store_id: 7, store_name: "Sandy" },
+        { store_id: 8, store_name: "Park City" },
+        { store_id: 9, store_name: "Layton" },
     ];
 
     const getStoreName = (store_id) => {
@@ -121,36 +127,38 @@ const ProfilePage = () => {
             </div>
 
             <Modal show={showArchivedModal} onHide={() => setShowArchivedModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title><h3>Archived Tickets</h3></Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {loading ? (
-                        <p>Loading...</p>
-                    ) : archivedTickets.length > 0 ? (
-                        archivedTickets.map((ticket, index) => {
-                            const [ticketId, userId, storeId, title, description, status, updatedAt, notes, createdAt, priority] = ticket;
-                            return (
-                                <CollapsibleCard
-                                    key={ticketId}
-                                    title={title}
-                                    description={description}
-                                    status={status}
-                                    priority={priority}
-                                    createdAt={createdAt}
-                                    updatedAt={updatedAt}
-                                    notes={notes}
-                                />
-                            );
-                        })
-                    ) : (
-                        <p>No archived tickets found.</p>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowArchivedModal(false)}>Close</Button>
-                </Modal.Footer>
-            </Modal>
+        <Modal.Header closeButton>
+            <Modal.Title><h3>Archived Tickets</h3></Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+            {loading ? (
+                <p>Loading...</p>
+            ) : archivedTickets.length > 0 ? (
+                archivedTickets.map((ticket, index) => {
+                    console.log(archivedTickets);
+                    const [ticketId, userId, storeId, title, description, status, updatedAt, notes, createdAt, priority] = ticket;
+                    return (
+                        <CollapsibleCard
+                            key={ticketId}
+                            title={title}
+                            description={description}
+                            status={status}
+                            priority={priority}
+                            createdAt={createdAt}
+                            updatedAt={updatedAt}
+                            notes={notes}
+                        />
+                    );
+                })
+            ) : (
+                <p>No archived tickets found.</p>
+            )}
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowArchivedModal(false)}>Close</Button>
+        </Modal.Footer>
+    </Modal>
+
 
             {error && <p className="text-danger">{error}</p>}
         </div>
