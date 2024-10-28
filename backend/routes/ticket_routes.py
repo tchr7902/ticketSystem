@@ -36,8 +36,8 @@ def create_ticket():
 
     cursor = get_db().cursor()
     cursor.execute(
-        "INSERT INTO tickets (title, description, severity, user_id, status) VALUES (%s, %s, %s, %s, %s)",
-        (data['title'], data['description'], data['severity'], user['id'], status)
+        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method) VALUES (%s, %s, %s, %s, %s, %s)",
+        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'])
     )
     get_db().commit()
     cursor.close()

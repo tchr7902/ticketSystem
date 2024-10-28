@@ -57,6 +57,7 @@ const CollapsibleCard = ({ user_id, title, description, status, priority, create
 
 const ProfilePage = () => {
     const { user, logout, getArchivedTickets } = useContext(AuthContext);
+    console.log(user)
     const navigate = useNavigate();
 
     const [tickets, setTickets] = useState({ open: 0, inProgress: 0, closed: 0 });
@@ -87,7 +88,9 @@ const ProfilePage = () => {
         navigate('/users/login');
     };
 
-    const backButton = () => navigate('/tickets');
+    const backButton = () => {
+        navigate('/tickets');
+    }
 
     useEffect(() => {
         const fetchUserTickets = async () => {
@@ -134,6 +137,7 @@ const ProfilePage = () => {
                 <img className="responsive-icon" src={user_logo} alt="user icon" />
                 <h1>Hello, {user.first_name}!</h1>
                 <p>{user.email}</p>
+                <p>{user.phone_number}</p>
                 <p>{getStoreName(user.store_id)}</p>
                 <p>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</p>
             </div>

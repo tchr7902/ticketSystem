@@ -10,6 +10,7 @@ import '../styles/App.css';
 function LoginPage() {
     const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("");
+    const [phone_number, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [first_name, setFirstName] = useState("");
@@ -48,7 +49,7 @@ function LoginPage() {
             let loginResponse;
             if (isRegister) {
                 // Register the user
-                await registerUser(email, password, first_name, last_name, store_id);
+                await registerUser(email, password, first_name, last_name, phone_number, store_id);
                 console.log('Registration successful');
     
                 // Log in the user after registration
@@ -148,6 +149,16 @@ function LoginPage() {
                                     required
                                 />
                             </div>
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Phone Number"
+                                    value={phone_number}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    required
+                                    />
+                                </div>
                             <div className="mb-3">
                                 <select
                                     className="form-control"

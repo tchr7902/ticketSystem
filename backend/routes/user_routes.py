@@ -17,9 +17,10 @@ def register():
     store_id = data.get('store_id')
     first_name = data.get('first_name')
     last_name = data.get('last_name')
+    phone_number = data.get('phone_number')
 
     # Ensure all required fields are present
-    if not all([email, password, first_name, last_name, store_id]):
+    if not all([email, password, first_name, last_name, store_id, phone_number]):
         return jsonify({"error": "All fields are required"}), 400
 
     # Ensure email is a valid Good Earth Markets address
@@ -34,8 +35,8 @@ def register():
             return jsonify({"error": "Account already registered with this email."}), 400
 
         hashed_password = generate_password_hash(password)
-        cursor.execute("INSERT INTO users (email, password, store_id, first_name, last_name) VALUES (%s, %s, %s, %s, %s)", 
-                       (email, hashed_password, store_id, first_name, last_name))
+        cursor.execute("INSERT INTO users (email, password, store_id, first_name, last_name, phone_number) VALUES (%s, %s, %s, %s, %s, %s)", 
+                       (email, hashed_password, store_id, first_name, last_name, phone_number))
         db.commit()
         return jsonify({"message": "User registered successfully"}), 201
     except Exception as e:
@@ -108,7 +109,7 @@ def get_current_user():
 
     else:
         # Otherwise, fetch user details
-        cursor.execute("SELECT id, first_name, email, store_id FROM users WHERE id = %s", (user_identity['id'],))
+        cursor.execute("SELECT id, first_name, email, store_id, phone_number FROM users WHERE id = %s", (user_identity['id'],))
         user = cursor.fetchone()
 
         if user:
@@ -116,6 +117,7 @@ def get_current_user():
                 'id': user['id'],
                 'first_name': user['first_name'],
                 'email': user['email'],
+                'phone_number': user['phone_number'],
                 'store_id': user['store_id'],
                 'role': 'user'
             }), 200
