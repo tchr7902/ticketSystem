@@ -249,7 +249,7 @@ input, select, textarea {
 /* Button Styles */
 .btn {
   background-color: white;
-  color: #7FAC6E; /* Brand green text */
+  color: #7FAC6E;
   border-radius: 30px;
   border: 2px solid #7FAC6E;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px, rgba(0, 0, 0, 0.1) 0px 4px 8px;
@@ -470,13 +470,13 @@ input, select, textarea {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 10px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
-  transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
   cursor: pointer;
 }
 
 .card.active {
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Slightly more shadow on open */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
@@ -488,20 +488,23 @@ input, select, textarea {
   align-items: center;
 }
 
+
 .card-body {
   max-height: 0;
-  padding: 0 15px; /* Collapsed padding */
+  padding: 0 15px;
   overflow: hidden;
   transition: max-height 0.5s ease-in-out, padding 0.3s ease-in-out;
 }
 
 .card.active .card-body {
-  max-height: 300px; /* Adjust based on expected content size */
+  max-height: 1000px;
+  height: auto;
   padding: 15px;
+  overflow: hidden;
 }
 
 .card:hover {
-  scale: 1.01;
+  scale: 1.005;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 

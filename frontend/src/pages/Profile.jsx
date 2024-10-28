@@ -8,8 +8,30 @@ import '../styles/App.css';
 import logo from '../images/gem_logo.png';
 import user_logo from '../images/user_icon.png';
 
-// CollapsibleCard Component
-const CollapsibleCard = ({ title, description, status, priority, createdAt, updatedAt, notes }) => {
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = localDate.toLocaleDateString('en-US', options); // e.g., 
+
+    let hours = localDate.getHours();
+    const minutes = localDate.getMinutes();
+
+    const ampm = hours <= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; 
+
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return `${formattedDate} at ${hours}:${formattedMinutes} ${ampm}`;
+};
+
+
+
+const CollapsibleCard = ({ user_id, title, description, status, priority, created_at, archived_at, notes }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -20,11 +42,12 @@ const CollapsibleCard = ({ title, description, status, priority, createdAt, upda
             </div>
             {isOpen && (
                 <div className="card-body">
+                    <p><strong>User ID:</strong> {user_id}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Status:</strong> {status}</p>
                     <p><strong>Priority:</strong> {priority}</p>
-                    <p><strong>Created At:</strong> {new Date(createdAt).toLocaleString()}</p>
-                    <p><strong>Updated At:</strong> {new Date(updatedAt).toLocaleString()}</p>
+                    <p><strong>Created:</strong> {formatDate(created_at)}</p>
+                    <p><strong>Archived:</strong> {formatDate(archived_at)}</p>
                     <p><strong>Notes:</strong> {notes}</p>
                 </div>
             )}
@@ -135,17 +158,17 @@ const ProfilePage = () => {
                 <p>Loading...</p>
             ) : archivedTickets.length > 0 ? (
                 archivedTickets.map((ticket, index) => {
-                    console.log(archivedTickets);
-                    const [ticketId, userId, storeId, title, description, status, updatedAt, notes, createdAt, priority] = ticket;
+                    const [archivedTicketId, originalTicketId, user_id, title, description, status, archived_at, notes, created_at,  priority] = ticket;
                     return (
                         <CollapsibleCard
-                            key={ticketId}
+                            key={archivedTicketId}
+                            user_id={user_id}
                             title={title}
                             description={description}
                             status={status}
                             priority={priority}
-                            createdAt={createdAt}
-                            updatedAt={updatedAt}
+                            created_at={created_at}
+                            archived_at={archived_at}
                             notes={notes}
                         />
                     );
