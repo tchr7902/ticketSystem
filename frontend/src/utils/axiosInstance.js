@@ -2,14 +2,14 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000', // Your API base URL
+    baseURL: 'https://ticketsystem-s4r5.onrender.com',
 });
 
 // Interceptor to add the token to every request
 axiosInstance.interceptors.request.use((config) => {
-    const token = sessionStorage.getItem('token'); // Get the token from session storage
+    const token = sessionStorage.getItem('token');
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`; // Include the token in the headers
+        config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 }, (error) => {
