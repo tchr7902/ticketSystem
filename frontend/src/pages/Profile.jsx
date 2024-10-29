@@ -11,15 +11,17 @@ import user_logo from '../images/user_icon.png';
 const formatDate = (dateString) => {
     const date = new Date(dateString);
 
-    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    const timezoneOffset = date.getTimezoneOffset() * -60000;
+
+    const localDate = new Date(date.getTime() - timezoneOffset);
 
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = localDate.toLocaleDateString('en-US', options); // e.g., 
+    const formattedDate = localDate.toLocaleDateString('en-US', options);
 
     let hours = localDate.getHours();
     const minutes = localDate.getMinutes();
 
-    const ampm = hours <= 12 ? 'PM' : 'AM';
+    const ampm = hours < 12 ? 'AM' : 'PM'; 
 
     hours = hours % 12;
     hours = hours ? hours : 12; 
@@ -30,8 +32,7 @@ const formatDate = (dateString) => {
 };
 
 
-
-const CollapsibleCard = ({ user_id, contact_method, title, description, status, priority, created_at, archived_at, notes }) => {
+const CollapsibleCard = ({ name, contact_method, title, description, status, priority, created_at, archived_at, notes }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -42,7 +43,7 @@ const CollapsibleCard = ({ user_id, contact_method, title, description, status, 
             </div>
             {isOpen && (
                 <div className="card-body">
-                    <p><strong>User ID:</strong> {user_id}</p>
+                    <p><strong>Submitted By:</strong> {name}</p>
                     <p><strong>Contact Method:</strong> {contact_method}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Status:</strong> {status}</p>
@@ -58,7 +59,6 @@ const CollapsibleCard = ({ user_id, contact_method, title, description, status, 
 
 const ProfilePage = () => {
     const { user, logout, getArchivedTickets } = useContext(AuthContext);
-    console.log(user)
     const navigate = useNavigate();
 
     const [tickets, setTickets] = useState({ open: 0, inProgress: 0, closed: 0 });
@@ -137,10 +137,10 @@ const ProfilePage = () => {
             <div className="my-info">
                 <img className="responsive-icon" src={user_logo} alt="user icon" />
                 <h1>Hello, {user.first_name}!</h1>
-                <p>{user.email}</p>
-                <p>{user.phone_number}</p>
-                <p>{getStoreName(user.store_id)}</p>
-                <p>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</p>
+                <p className="p-profile">{user.email}</p>
+                <p className="p-profile">{user.phone_number}</p>
+                <p className="p-profile">{getStoreName(user.store_id)}</p>
+                <p className="p-profile">{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</p>
             </div>
             <div className="my-tickets">
                 {user.role === "user" && (
@@ -167,11 +167,11 @@ const ProfilePage = () => {
                 <p>Loading...</p>
             ) : archivedTickets.length > 0 ? (
                 archivedTickets.map((ticket, index) => {
-                    const [archivedTicketId, originalTicketId, user_id, title, description, status, archived_at, notes, created_at,  priority, contact_method] = ticket;
+                    const [archivedTicketId, originalTicketId, user_id, title, description, status, archived_at, notes, created_at,  priority, contact_method, name] = ticket;
                     return (
                         <CollapsibleCard
                             key={archivedTicketId}
-                            user_id={user_id}
+                            name={name}
                             contact_method={contact_method}
                             title={title}
                             description={description}

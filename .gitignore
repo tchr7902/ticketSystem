@@ -27,6 +27,7 @@ share/python-wheels/
 MANIFEST
 package-lock.json
 node_modules
+ticket-system-440115-82f0b27fa42a
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

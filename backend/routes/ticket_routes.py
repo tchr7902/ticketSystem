@@ -1,8 +1,16 @@
 from flask import Blueprint, request, jsonify, g
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from chat import send_google_chat_message
 
 tickets_bp = Blueprint('tickets', __name__)
+
+def get_user_name(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT first_name, last_name FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return f"{user['first_name']} {user['last_name']}" if user else None
 
 def get_db():
     if 'db' not in g:
@@ -34,13 +42,26 @@ def create_ticket():
 
     status = data.get('status') if data.get('status') else 'Open'
 
+    name = get_user_name(user['id'])
+
     cursor = get_db().cursor()
     cursor.execute(
-        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method) VALUES (%s, %s, %s, %s, %s, %s)",
-        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'])
+        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'], name)
     )
     get_db().commit()
     cursor.close()
+
+    message_data = {
+        'title': data['title'],
+        'description': data['description'],
+        'severity': data['severity'],
+        'name': name,  # Include the user's name
+        'contact_method': data['contact_method']
+    }
+
+    send_google_chat_message(message_data)
+
     return jsonify({"message": "Ticket created successfully!"}), 201
 
 # Update Ticket (Only the owner or admin can update)
@@ -121,8 +142,8 @@ def archive_ticket(ticket_id):
     try:
         cursor.execute("""
             INSERT INTO archived_tickets 
-            (original_ticket_id, user_id, title, description, created_at, severity, status, notes, contact_method)
-            SELECT id, user_id, title, description, created_at, severity, status, %s, contact_method
+            (original_ticket_id, user_id, title, description, created_at, severity, status, notes, contact_method, name)
+            SELECT id, user_id, title, description, created_at, severity, status, %s, contact_method, name
             FROM tickets
             WHERE id = %s
         """, (notes, ticket_id))
