@@ -7,5 +7,3 @@ requests
 Werkzeug
 mysql-connector-python
 mysql
-dnspython
-pymongo

@@ -17,7 +17,7 @@ jwt_key = os.getenv('JWT_KEY')
 app = Flask(__name__)
 
 # Enable CORS for the app with specific origins
-CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+CORS(app, supports_credentials=True, origins=["https://ticketsystem-1.onrender.com"])
 
 # Configure the JWT secret key before initializing JWTManager
 app.config['JWT_SECRET_KEY'] = jwt_key
