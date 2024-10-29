@@ -7,6 +7,7 @@ import os
 load_dotenv('../../.env')
 
 dbHost = os.getenv('DB_HOST')
+dbPort = os.getenv('DB_PORT', '3306')
 dbUser = os.getenv('DB_USER')
 dbPass = os.getenv('DB_PASS')
 dbName = os.getenv('DB_NAME')
@@ -15,6 +16,7 @@ def connect_to_db():
     try:
         connection = mysql.connector.connect(
             host=dbHost,
+            port=int(dbPort),
             user=dbUser,
             password=dbPass,
             database=dbName
