@@ -43,6 +43,5 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
