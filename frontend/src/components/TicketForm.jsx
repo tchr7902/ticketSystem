@@ -47,7 +47,7 @@ function TicketForm({ selectedTicket, onSave }) {
                     <input
                         type="text"
                         className="form-control input-box"
-                        placeholder="Title"
+                        placeholder="Issue"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         required
