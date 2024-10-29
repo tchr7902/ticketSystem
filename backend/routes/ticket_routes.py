@@ -56,7 +56,7 @@ def create_ticket():
         'title': data['title'],
         'description': data['description'],
         'severity': data['severity'],
-        'name': name,  # Include the user's name
+        'name': name,
         'contact_method': data['contact_method']
     }
 
