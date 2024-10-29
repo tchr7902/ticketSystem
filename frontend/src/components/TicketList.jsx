@@ -147,19 +147,20 @@ function TicketList() {
 
     return (
         <div className="container mt-5 pb-5 main-div">
-            <div className="new-ticket">
+            {user.role === "user" && (
+                <div className="new-ticket">
                 <h2 className="text-center mb-2">
-                    {user.role === "admin" ? "All Tickets" : "Create a New Ticket"}
+                    {user.role === "admin" ? "Create a New Ticket" : "Create a New Ticket"}
                 </h2>
                 <TicketForm selectedTicket={null} onSave={handleSave} />
-            </div>
-
+            </div>                          
+            )}
             <div className="mt-4">
                 {tickets.length === 0 ? (
-                    <p className="text-center">No tickets available.</p>
+                    <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "No Tickets Available."}</p>
                 ) : (
                     <ul className="list-group">
-                        <h3 className="d-flex justify-content-center">My Tickets</h3>
+                        <h3 className="d-flex justify-content-center">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
                         {tickets.map((ticket) => (
                             <li key={ticket.id}>
                                 <div style={{ display: 'flex', alignItems: 'center', width: '75%' }}>

@@ -31,7 +31,7 @@ const formatDate = (dateString) => {
 
 
 
-const CollapsibleCard = ({ user_id, title, description, status, priority, created_at, archived_at, notes }) => {
+const CollapsibleCard = ({ user_id, contact_method, title, description, status, priority, created_at, archived_at, notes }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -43,6 +43,7 @@ const CollapsibleCard = ({ user_id, title, description, status, priority, create
             {isOpen && (
                 <div className="card-body">
                     <p><strong>User ID:</strong> {user_id}</p>
+                    <p><strong>Contact Method:</strong> {contact_method}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Status:</strong> {status}</p>
                     <p><strong>Priority:</strong> {priority}</p>
@@ -142,12 +143,16 @@ const ProfilePage = () => {
                 <p>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</p>
             </div>
             <div className="my-tickets">
+                {user.role === "user" && (
+                <div>
                 <h3>My Ticket Status</h3>
                 <div className="ticket-status-numbers">
                     <p><strong>Open: </strong>{tickets.open}</p>
                     <p><strong>In Progress: </strong>{tickets.inProgress}</p>
                     <p><strong>Closed: </strong>{tickets.closed}</p>
                 </div>
+                </div>
+                )}
                 <Button variant="secondary" className="mt-3" onClick={() => setShowArchivedModal(true)}>
                     View Archived Tickets
                 </Button>
@@ -162,11 +167,12 @@ const ProfilePage = () => {
                 <p>Loading...</p>
             ) : archivedTickets.length > 0 ? (
                 archivedTickets.map((ticket, index) => {
-                    const [archivedTicketId, originalTicketId, user_id, title, description, status, archived_at, notes, created_at,  priority] = ticket;
+                    const [archivedTicketId, originalTicketId, user_id, title, description, status, archived_at, notes, created_at,  priority, contact_method] = ticket;
                     return (
                         <CollapsibleCard
                             key={archivedTicketId}
                             user_id={user_id}
+                            contact_method={contact_method}
                             title={title}
                             description={description}
                             status={status}

@@ -351,8 +351,8 @@ input, select, textarea {
 }
 
 .change:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
-  scale: 1.01;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  scale: 1.004;
 }
 
 /* My Info Styles */

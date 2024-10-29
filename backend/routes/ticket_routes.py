@@ -121,8 +121,8 @@ def archive_ticket(ticket_id):
     try:
         cursor.execute("""
             INSERT INTO archived_tickets 
-            (original_ticket_id, user_id, title, description, created_at, severity, status, notes)
-            SELECT id, user_id, title, description, created_at, severity, status, %s
+            (original_ticket_id, user_id, title, description, created_at, severity, status, notes, contact_method)
+            SELECT id, user_id, title, description, created_at, severity, status, %s, contact_method
             FROM tickets
             WHERE id = %s
         """, (notes, ticket_id))
