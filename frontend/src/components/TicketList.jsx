@@ -247,7 +247,7 @@ function TicketList() {
                     <Modal.Title><h3 className="m-0">Confirm Deletion</h3></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Are you sure you want to delete "{ticketToDelete ? ticketToDelete.title : ''}"?
+                    Are you sure you want to delete "{ticketToDelete ? ticketToDelete.title : ''}"? This cannot be undone!
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
