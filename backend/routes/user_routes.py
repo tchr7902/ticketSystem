@@ -27,6 +27,7 @@ def register():
     if not email.endswith("@goodearthmarkets.com"):
         return jsonify({"error": "Invalid email domain"}), 400
 
+    db = connect_to_db()
     cursor = db.cursor()
     try:
         # Check for existing email
@@ -44,47 +45,99 @@ def register():
         return jsonify({"error": "Internal server error"}), 500
     finally:
         cursor.close()
+        db.close()
+
+# Register a new admin (only accessible to existing admins)
+@user_bp.route('/admin/register', methods=['POST'])
+@jwt_required()
+def register_admin():
+    # Get the JWT identity to verify the role
+    identity = get_jwt_identity()
+    
+    if identity['role'] != 'admin':
+        return jsonify({"error": "Unauthorized. Only admins can register new admins."}), 403
+
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+
+    # Ensure all required fields are provided
+    if not all([email, password, first_name, last_name]):
+        return jsonify({"error": "All fields are required"}), 400
+
+    # Ensure email is a valid Good Earth Markets address
+    if not email.endswith("@goodearthmarkets.com"):
+        return jsonify({"error": "Invalid email domain"}), 400
+
+    cursor = db.cursor()
+    try:
+        # Check if the admin email already exists
+        cursor.execute("SELECT * FROM admin WHERE email = %s", (email,))
+        if cursor.fetchone():
+            return jsonify({"error": "Admin account already exists with this email."}), 400
+
+        # Hash the password and insert the new admin
+        hashed_password = generate_password_hash(password)
+        cursor.execute(
+            "INSERT INTO admin (email, password, first_name, last_name) VALUES (%s, %s, %s, %s)", 
+            (email, hashed_password, first_name, last_name)
+        )
+        db.commit()
+        return jsonify({"message": "Admin registered successfully"}), 201
+
+    except Exception as e:
+        logging.error(f"Database error: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+    finally:
+        cursor.close()
+
 
 # Login route for users and admins
 @user_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
-    email = data['email']
-    password = data['password']
+    email = data.get('email')
+    password = data.get('password')
+
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
 
     cursor = db.cursor(dictionary=True)
 
-    # Check if the user exists
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    user = cursor.fetchone()
+    try:
+        # Check if the email exists in either the users or admin table
+        cursor.execute("""
+            SELECT id, email, password, 'user' AS role FROM users WHERE email = %s
+            UNION ALL
+            SELECT id, email, password, 'admin' AS role FROM admin WHERE email = %s
+        """, (email, email))
+        
+        account = cursor.fetchone()
 
-    if user and check_password_hash(user['password'], password):
-        access_token = create_access_token(identity={"id": user['id'], "role": "user"})
-        return jsonify({
-            'access_token': access_token,
-            'user': {
-                'id': user['id'],
-                'email': user['email'],
-                'role': 'user',
-            }
-        }), 200
+        if account and check_password_hash(account['password'], password):
+            # Create JWT token with user/admin role
+            access_token = create_access_token(identity={"id": account['id'], "role": account['role']})
+            return jsonify({
+                'access_token': access_token,
+                'user': {
+                    'id': account['id'],
+                    'email': account['email'],
+                    'role': account['role'],
+                }
+            }), 200
 
-    # Check if the email belongs to an admin
-    cursor.execute("SELECT * FROM admin WHERE email = %s", (email,))
-    admin = cursor.fetchone()
+        # If no account found or password mismatch
+        return jsonify({"error": "Invalid email or password"}), 401
 
-    if admin and check_password_hash(admin['password'], password):
-        access_token = create_access_token(identity={"id": admin['id'], "role": "admin"})
-        return jsonify({
-            'access_token': access_token,
-            'user': {
-                'id': admin['id'],
-                'email': admin['email'],
-                'role': 'admin',
-            }
-        }), 200
+    except Exception as e:
+        logging.error(f"Login error: {e}")
+        return jsonify({"error": "Internal server error"}), 500
 
-    return jsonify({"error": "Invalid email or password"}), 401
+    finally:
+        cursor.close()
 
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()

@@ -66,9 +66,9 @@ function LoginPage() {
     
             // Redirect based on user role
             if (user.role === 'admin') {
-                navigate('/tickets'); // Redirect admin to all tickets
+                navigate('/tickets');
             } else {
-                navigate('/tickets'); // Regular user route
+                navigate('/tickets');
             }
         } catch (err) {
             console.error("Auth error:", err);

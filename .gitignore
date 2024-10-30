@@ -31,6 +31,9 @@ ticket-system-440115-82f0b27fa42a
 ticket-system-440115-82f0b27fa42a.json:1
 C:\Users\IT-Assistant\Desktop\Projects\ticketSystem\ticket-system-440115-82f0b27fa42a.json
 ticket-system-440115-82f0b27fa42a.json
+./ca-certificate.crt
+ca-certificate.crt
+ca-certificate.b64
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
