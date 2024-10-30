@@ -12,7 +12,6 @@ def connect_to_db():
     cert_file_path = None 
     try:
         ssl_ca_content = os.getenv('SSL_CERT')
-        print(ssl_ca_content)
         if ssl_ca_content:
             ssl_ca_content = base64.b64decode(ssl_ca_content)
 
