@@ -232,7 +232,7 @@ function TicketPage() {
                     </Modal.Body>
                     <Modal.Footer className="d-flex justify-content-end px-4">
                         <Button
-                            variant="secondary"
+                            variant="btn-2"
                             onClick={() => {
                                 setChatWindowOpen(false);
                             }}

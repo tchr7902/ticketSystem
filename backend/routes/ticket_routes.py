@@ -60,7 +60,7 @@ def create_ticket():
         'contact_method': data['contact_method']
     }
 
-    # send_google_chat_message(message_data)
+    send_google_chat_message(message_data)
 
     return jsonify({"message": "Ticket created successfully!"}), 201
 

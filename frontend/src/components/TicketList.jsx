@@ -181,7 +181,7 @@ function TicketList() {
                                         {ticket.status}
                                     </Tooltip>
 
-                                    <strong className="hide-text">{ticket.title}</strong> - 
+                                    <strong className="hide-text">{ticket.title} -</strong>
                                     <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
                                     {ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1)}
                                     </span>
