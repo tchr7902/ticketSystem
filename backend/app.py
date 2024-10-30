@@ -46,18 +46,6 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-# Serve static files
-@app.route('/<path:path>', methods=['GET'])
-def static_proxy(path):
-    try:
-        return send_from_directory(app.static_folder, path)
-    except Exception as e:
-        print(f"Error serving file: {path}, error: {e}")
-        return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
-
+# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
