@@ -15,8 +15,9 @@ const App = () => {
             <Route path="/" element={token ? <Navigate to="/tickets" /> : <Navigate to="/users/login" />} />
             <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/users/login" />} />
             <Route path="/users/login" element={<LoginPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/users/login" />} />
+            <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/users/login" />} />
+            <Route path="*" element={<Navigate to="/users/login" />} />
         </Routes>
     );
 };
