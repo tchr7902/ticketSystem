@@ -9,21 +9,7 @@ import { AuthProvider, useAuth } from './utils/authContext';
 
 const App = () => {
     const { token } = useAuth();
-    const location = useLocation();
-
-    useEffect(() => {
-        if(token) {
-            sessionStorage.setItem('lastPath', location.pathname);
-        }
-    }, [location, token]);
-
-    const getRedirectPath = () => {
-        if (token) {
-            return sessionStorage.getItem('lastPath') || '/tickets';
-        }
-        return '/users/login';
-    };
-
+    
     return (
         <Routes>
             <Route path="/" element={token ? <Navigate to="/tickets" /> : <Navigate to="/users/login" />} />
