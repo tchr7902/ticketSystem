@@ -226,15 +226,15 @@ function TicketList() {
                     />
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-between">
-                    <Button
-                        variant="btn"
+                    <button
+                        className="btn-2"
                         onClick={() => {
                             setShowEditModal(false);
                             setSelectedTicket(null);
                         }}
                     >
                         Cancel
-                    </Button>
+                    </button>
                 </Modal.Footer>
             </Modal>
 
@@ -250,15 +250,15 @@ function TicketList() {
                     Are you sure you want to delete "{ticketToDelete ? ticketToDelete.title : ''}"? This cannot be undone!
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        variant="btn"
+                    <button
+                        className="btn-2"
                         onClick={() => setShowDeleteModal(false)}
                     >
                         Cancel
-                    </Button>
-                    <Button className="btn-important" onClick={handleDelete}>
+                    </button>
+                    <button className="btn-important" onClick={handleDelete}>
                         Delete
-                    </Button>
+                    </button>
                 </Modal.Footer>
             </Modal>
 
@@ -281,12 +281,12 @@ function TicketList() {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="btn" onClick={() => setShowArchiveModal(false)}>
+                    <button className="btn-important" onClick={() => setShowArchiveModal(false)}>
                         Cancel
-                    </Button>
-                    <Button className="btn-important" onClick={handleArchiveConfirm}>
+                    </button>
+                    <button className="btn-important" onClick={handleArchiveConfirm}>
                         Archive
-                    </Button>
+                    </button>
                 </Modal.Footer>
             </Modal>
         </div>

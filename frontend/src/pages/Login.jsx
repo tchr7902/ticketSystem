@@ -178,7 +178,7 @@ function LoginPage() {
                     )}
                     <button 
                         type="submit" 
-                        className="btn w-100 mb-3" 
+                        className="btn-login w-100 mb-3" 
                         disabled={loading}
                     >
                         {loading ? "Loading..." : (isRegister ? "Register" : "Login")}

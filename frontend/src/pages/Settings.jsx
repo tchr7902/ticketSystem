@@ -108,7 +108,7 @@ const SettingsPage = () => {
                 transition={Bounce}
             />
             <nav className="profile-navbar">
-                <button className="btn btn-outline-secondary mt-3" onClick={backButton}>
+                <button className="btn-2" onClick={backButton}>
                     Back
                 </button>
                 <img
@@ -116,13 +116,13 @@ const SettingsPage = () => {
                     alt="Logo"
                     style={{ width: '375px', height: '86px', marginRight: '30px' }}
                 />
-                <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>
+                <button className="btn-important" onClick={handleLogout}>
                     Logout
                 </button>
             </nav>
             <nav className="backup-profile-navbar">
-            <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
-            <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
+            <button className="btn-2" onClick={backButton}>Back</button>
+            <button className="btn-important" onClick={handleLogout}>Logout</button>
             </nav>
             <div className="d-flex justify-content-center">
                 <img 
@@ -167,7 +167,7 @@ const SettingsPage = () => {
                                 required
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn-2">
                             Update Email
                         </button>
                     </form>
@@ -208,7 +208,7 @@ const SettingsPage = () => {
                                 required
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn-2">
                             Change Password
                         </button>
                     </form>

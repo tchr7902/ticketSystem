@@ -42,21 +42,22 @@ function TicketForm({ selectedTicket, onSave }) {
 
     return (
         <form onSubmit={handleSubmit} className="mb-4">
-            <div className="d-flex flex-column align-items-center">
-                <div className="col-md-8 col-lg-9">
+            <div className="form-box d-flex flex-column align-items-center">
+                <div className="type-div">
                     <input
                         type="text"
                         className="form-control input-box"
                         placeholder="Issue"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        maxLength={20}
                         required
                     />
                 </div>
             </div>
             
-            <div className="d-flex flex-column align-items-center">
-                <div className="col-md-8 col-lg-9">
+            <div className="form-box d-flex flex-column align-items-center">
+                <div className="type-div">
                     <textarea
                         className="form-control input-box"
                         placeholder="Description"
@@ -68,10 +69,10 @@ function TicketForm({ selectedTicket, onSave }) {
                 </div>
             </div>
 
-            <div className="d-flex flex-column align-items-center">
-                <div className="col-md-8 col-lg-6">
+            <div className="input-form-box d-flex flex-column align-items-center">
+                <div className="input-div">
                     <select 
-                        className="form-select select-box" 
+                        className="form-select form-select-boxes select-box" 
                         value={severity} 
                         onChange={(e) => setSeverity(e.target.value)}
                         required
@@ -84,10 +85,10 @@ function TicketForm({ selectedTicket, onSave }) {
                 </div>
             </div>
 
-            <div className="d-flex flex-column align-items-center">
-                <div className="col-md-8 col-lg-6 contact">
+            <div className="input-form-box d-flex flex-column align-items-center">
+                <div className="input-div">
                     <select 
-                        className="form-select select-box" 
+                        className="form-select form-select-boxes select-box" 
                         value={contactMethod} 
                         onChange={(e) => setContactMethod(e.target.value)}
                         required
@@ -110,11 +111,11 @@ function TicketForm({ selectedTicket, onSave }) {
                 </div>
             </div>
 
-            <div className="d-flex flex-column align-items-center">
+            <div className="input-form-box d-flex flex-column align-items-center">
                 {user?.role === 'admin' && (
                     <div className="col-md-8 col-lg-4">
                         <select 
-                            className="form-select select-box" 
+                            className="form-select form-select-boxes select-box" 
                             value={status} 
                             onChange={(e) => setStatus(e.target.value)}
                             required
@@ -127,10 +128,10 @@ function TicketForm({ selectedTicket, onSave }) {
                     </div>
                 )}
                 {user?.role !== 'admin' && (
-                    <div className="col-md-8 col-lg-4">
+                    <div className="input-form-box col-md-8 col-lg-4">
                         <input
                             type="text"
-                            className="form-control static-status"
+                            className="form-control form-select-boxes static-status"
                             value="Status - Open"
                             readOnly
                         />

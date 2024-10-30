@@ -126,12 +126,12 @@ const ProfilePage = () => {
     return (
         <div className="container mt-5">
             <nav className="profile-navbar">
-                <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
+                <button className="btn-2 mt-3" onClick={backButton}>Back</button>
                 <img src={logo} alt="Logo" style={{ width: '375px', height: '86px', marginRight: '30px' }} />
-                <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
+                <button className="btn-important mt-3" onClick={handleLogout}>Logout</button>
             </nav>
             <nav className="backup-profile-navbar">
-            <button className="btn btn-outline-secondary mt-3" onClick={backButton}>Back</button>
+            <button className="btn-2 mt-3" onClick={backButton}>Back</button>
             <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
             </nav>
             <div className="my-info">
@@ -153,9 +153,9 @@ const ProfilePage = () => {
                 </div>
                 </div>
                 )}
-                <Button variant="secondary" className="mt-3" onClick={() => setShowArchivedModal(true)}>
+                <button className="btn-2 mt-3" onClick={() => setShowArchivedModal(true)}>
                     View Archived Tickets
-                </Button>
+                </button>
             </div>
 
             <Modal show={showArchivedModal} onHide={() => setShowArchivedModal(false)}>
@@ -188,7 +188,7 @@ const ProfilePage = () => {
             )}
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowArchivedModal(false)}>Close</Button>
+            <button className="btn-2" onClick={() => setShowArchivedModal(false)}>Close</button>
         </Modal.Footer>
     </Modal>
 

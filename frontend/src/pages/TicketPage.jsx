@@ -85,35 +85,48 @@ function TicketPage() {
         <div className="vh-100">
             {/* Navbar with Header */}
             <nav className="custom-navbar">
-                <div className="container-fluid d-flex justify-content-between align-items-center">
-                    <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
-                        <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
-                        <h2>IT Support Hub</h2>
-                    </a>
-                    <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
-                        <img 
-                            className="responsive-icon" 
-                            src={user_logo} 
-                            alt="user icon" 
-                            onClick={handleUserIconClick} 
-                        />
-                        {dropdownOpen && (
-                            <div className="dropdown-menu show position-absolute" style={{ right: 0, top: '60px' }}>
-                                <button className="dropdown-item" onClick={handleProfileClick}>
-                                    Profile
-                                </button>
-                                <button className="dropdown-item" onClick={handleSettingsClick}>
-                                    Settings
-                                </button>
-                                <div className="dropdown-divider"></div>
-                                <button className="dropdown-item text-danger" onClick={handleLogout}>
-                                    Logout
-                                </button>
-                            </div>
-                        )}
+        <div className="container-fluid d-flex justify-content-between align-items-center">
+            <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
+                <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
+                <h2>IT Support Hub</h2>
+            </a>
+
+            {/* User Icon and Dropdown */}
+            <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
+                <img 
+                    className="responsive-icon" 
+                    src={user_logo} 
+                    alt="user icon" 
+                    onClick={handleUserIconClick} 
+                    style={{ cursor: 'pointer' }}
+                />
+                
+                {dropdownOpen && (
+                    <div 
+                        className="dropdown-menu show" 
+                        style={{
+                            position: 'absolute', 
+                            right: 0, 
+                            top: '100%', // Directly below the icon
+                            marginTop: '5px', // Add space between icon and dropdown
+                            zIndex: 1050, // Ensure it stays on top
+                        }}
+                    >
+                        <button className="dropdown-item" onClick={handleProfileClick}>
+                            Profile
+                        </button>
+                        <button className="dropdown-item" onClick={handleSettingsClick}>
+                            Settings
+                        </button>
+                        <div className="dropdown-divider"></div>
+                        <button className="dropdown-item text-danger" onClick={handleLogout}>
+                            Logout
+                        </button>
                     </div>
-                </div>
-            </nav>
+                )}
+            </div>
+        </div>
+    </nav>
 
             <nav className="backup-navbar">
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
@@ -125,7 +138,16 @@ function TicketPage() {
                         onClick={handleBackupUserIconClick}
                     />
                     {backupDropdownOpen && (
-                        <div className="dropdown-menu show position-absolute" style={{ right: '20px', top: '80px' }}>
+                            <div 
+                                className="dropdown-menu show" 
+                                style={{
+                                    position: 'absolute', 
+                                    right: 0, 
+                                    top: '100%', // Directly below the icon
+                                    marginTop: '5px', // Add space between icon and dropdown
+                                    zIndex: 1050, // Ensure it stays on top
+                                }}
+                            >
                             <button className="dropdown-item" onClick={handleProfileClick}>
                                 Profile
                             </button>
