@@ -9,6 +9,20 @@ import { AuthProvider, useAuth } from './utils/authContext';
 
 const App = () => {
     const { token } = useAuth();
+    const location = useLocation();
+
+    useEffect(() => {
+        if(token) {
+            sessionStorage.setItem('lastPath', location.pathname);
+        }
+    }, [location, token]);
+
+    const getRedirectPath = () => {
+        if (token) {
+            return sessionStorage.getItem('lastPath') || '/tickets';
+        }
+        return '/users/login';
+    };
 
     return (
         <Routes>
@@ -17,7 +31,7 @@ const App = () => {
             <Route path="/users/login" element={<LoginPage />} />
             <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/users/login" />} />
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/users/login" />} />
-
+            <Route path="*" element={<Navigate to="/users/login" />} />
         </Routes>
     );
 };
