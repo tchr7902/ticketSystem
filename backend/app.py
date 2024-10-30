@@ -48,7 +48,7 @@ def close_db(exception):
 # Serve static files and the React app
 @app.route('/')
 def serve():
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, '../frontend/public/index.html')
 
 @app.route('/<path:path>')
 def static_proxy(path):
@@ -56,7 +56,7 @@ def static_proxy(path):
 
 @app.errorhandler(404)
 def not_found(e):
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, '../frontend/public/index.html')
 
 # Run the Flask app
 if __name__ == '__main__':

@@ -9,19 +9,18 @@ import tempfile
 load_dotenv('../../.env')
 
 def connect_to_db():
-    cert_file_path = None  # Initialize cert_file_path to None
+    cert_file_path = None 
     try:
-        # Decode the base64 certificate
         ssl_ca_content = os.getenv('SSL_CERT')
+        print(ssl_ca_content)
         if ssl_ca_content:
             ssl_ca_content = base64.b64decode(ssl_ca_content)
 
-            # Create a temporary file for the certificate
             with tempfile.NamedTemporaryFile(delete=False, suffix='.crt') as cert_file:
                 cert_file.write(ssl_ca_content)
-                cert_file_path = cert_file.name  # Path to the temporary file
+                cert_file_path = cert_file.name
 
-        # Check if cert_file_path is still None before connecting
+
         if cert_file_path is None:
             raise ValueError("SSL certificate could not be created. Check your SSL_CERT environment variable.")
 
@@ -33,7 +32,7 @@ def connect_to_db():
             database=os.getenv('DB_NAME'),
             port=25060,
             ssl_disabled=False,
-            ssl_ca=cert_file_path  # Use the temporary file path here
+            ssl_ca=cert_file_path 
         )
         
         if connection.is_connected():
@@ -47,6 +46,5 @@ def connect_to_db():
         print(f"An error occurred: {ex}")
         return None
     finally:
-        # Optional: Cleanup
         if cert_file_path and os.path.exists(cert_file_path):
-            os.remove(cert_file_path)  # Remove the temporary certificate file
+            os.remove(cert_file_path)
