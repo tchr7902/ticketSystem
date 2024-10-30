@@ -30,16 +30,18 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     const login = (token, userData) => {
-        const expirationTime = new Date().getTime() + 12 * 60 * 60 * 1000;
+        const expirationTime = new Date().getTime() + 2 * 60 * 60 * 1000;
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('tokenExpiration', expirationTime);
         setToken(token);
         setUser(userData);
+        sessionStorage.setItem('lastPath', '/tickets');
     };
 
     const logout = () => {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('tokenExpiration');
+        sessionStorage.removeItem('lastPath');
         setToken(null);
         setUser(null);
         navigate("/users/login");
