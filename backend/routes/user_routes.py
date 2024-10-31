@@ -4,15 +4,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
 import logging
 
-db = connect_to_db()
-
 user_bp = Blueprint('user_bp', __name__)
+db = connect_to_db()
 
 # Register a new user
 @user_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
-    print(data)
     email = data.get('email')
     password = data.get('password')
     store_id = data.get('store_id')
@@ -73,6 +71,7 @@ def register_admin():
     if not email.endswith("@goodearthmarkets.com"):
         return jsonify({"error": "Invalid email domain"}), 400
 
+    db = connect_to_db()
     cursor = db.cursor()
     try:
         # Check if the admin email already exists
@@ -107,6 +106,7 @@ def login():
     if not email or not password:
         return jsonify({"error": "Email and password are required"}), 400
 
+    db = connect_to_db()
     cursor = db.cursor(dictionary=True)
 
     try:
@@ -145,6 +145,7 @@ def login():
 @jwt_required()
 def get_current_user():
     user_identity = get_jwt_identity()  # Get user identity and role from the token
+    db = connect_to_db()
     cursor = db.cursor(dictionary=True)
 
     if user_identity['role'] == 'admin':
@@ -189,6 +190,7 @@ def change_password():
     current_password = data.get('currentPassword')
     new_password = data.get('newPassword')
 
+    db = connect_to_db()
     cursor = db.cursor(dictionary=True)
 
     # Determine if user is admin or user
@@ -229,6 +231,7 @@ def change_email():
     if not current_email or not new_email:
         return jsonify({"error": "Current email and new email must be provided."}), 400
 
+    db = connect_to_db()
     cursor = db.cursor(dictionary=True)
 
     try:

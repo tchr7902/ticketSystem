@@ -50,33 +50,52 @@ function LoginPage() {
             if (isRegister) {
                 // Register the user
                 await registerUser(email, password, first_name, last_name, phone_number, store_id);
-                console.log('Registration successful');
     
-                // Log in the user after registration
-                loginResponse = await loginUser(email, password);
+                // Introduce a delay before attempting login
+                setTimeout(async () => {
+                    // Log in the user after registration
+                    try {
+                        loginResponse = await loginUser(email, password);
+                        const { access_token, user } = loginResponse;
+    
+                        // Save access token and user info in context
+                        login(access_token, user);
+    
+                        // Redirect based on user role
+                        if (user.role === 'admin') {
+                            navigate('/tickets');
+                        } else {
+                            navigate('/tickets');
+                        }
+                    } catch (err) {
+                        console.error("Login error:", err);
+                        setError("Login failed after registration. Please try again.");
+                    }
+                    setLoading(false);
+                }, 500); // 500ms delay
+    
             } else {
                 // Log in existing user
                 loginResponse = await loginUser(email, password);
-            }
+                const { access_token, user } = loginResponse;
     
-            const { access_token, user } = loginResponse;
+                // Save access token and user info in context
+                login(access_token, user);
     
-            // Save access token and user info in context
-            login(access_token, user);
-    
-            // Redirect based on user role
-            if (user.role === 'admin') {
-                navigate('/tickets');
-            } else {
-                navigate('/tickets');
+                // Redirect based on user role
+                if (user.role === 'admin') {
+                    navigate('/tickets');
+                } else {
+                    navigate('/tickets');
+                }
             }
         } catch (err) {
             console.error("Auth error:", err);
             setError("Login/registration failed. Please try again.");
-        } finally {
             setLoading(false);
         }
     };
+    
     
 
     return (
@@ -156,7 +175,7 @@ function LoginPage() {
                                     placeholder="Phone Number"
                                     value={phone_number}
                                     onChange={(e) => setPhoneNumber(e.target.value)}
-                                    maxLength={10}
+                                    maxLength={14}
                                     required
                                     />
                                 </div>
