@@ -156,6 +156,7 @@ function LoginPage() {
                                     placeholder="Phone Number"
                                     value={phone_number}
                                     onChange={(e) => setPhoneNumber(e.target.value)}
+                                    maxLength={10}
                                     required
                                     />
                                 </div>

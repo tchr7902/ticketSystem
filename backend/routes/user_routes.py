@@ -12,6 +12,7 @@ user_bp = Blueprint('user_bp', __name__)
 @user_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
+    print(data)
     email = data.get('email')
     password = data.get('password')
     store_id = data.get('store_id')

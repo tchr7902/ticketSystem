@@ -168,7 +168,7 @@ function AdminRegister() {
                         </>
                     <button 
                         type="submit" 
-                        className="btn-login w-100 mb-3" 
+                        className="btn-2 w-100 mb-3" 
                         disabled={loading}
                     >
                         {"Register"}
