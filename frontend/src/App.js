@@ -23,13 +23,12 @@ const App = () => {
 
     return (
         <Routes>
-            <Route path="/" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/users/login" />} />
+            <Route path="*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/users/login" />} />
             <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/users/login" />} />
             <Route path="/users/login" element={<LoginPage />} />
             <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/users/login" />} />
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/users/login" />} />
             <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/users/login" />} />
-            <Route path="*" element={<Navigate to="/users/login" />} />
         </Routes>
     );
 };
