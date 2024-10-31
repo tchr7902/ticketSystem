@@ -10,6 +10,22 @@ import { AuthProvider, useAuth } from './utils/authContext';
 
 const App = () => {
     const { token } = useAuth();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (token) {
+            sessionStorage.setItem('currentPath', location.pathname);
+        }
+    }, [location, token]);
+
+    useEffect(() => {
+        const currentPath = sessionStorage.getItem('currentPath');
+        if (token && currentPath) {
+            window.location.href = currentPath; 
+        }
+    }, [token]);
+
+    
     
     return (
         <Routes>

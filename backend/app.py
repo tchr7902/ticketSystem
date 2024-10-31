@@ -55,7 +55,7 @@ def serve():
 def not_found(e):
     return send_from_directory(app.static_folder, 'index.html')
 
-@app.route('/<path:path>')
+@app.route('/<path:path>', methods=['GET'])
 def static_proxy(path):
     return send_from_directory(app.static_folder, path)
 

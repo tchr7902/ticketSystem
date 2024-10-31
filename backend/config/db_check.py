@@ -6,9 +6,12 @@ import logging
 import requests
 import sys
 
-desktop_path = os.path.join(os.path.expanduser("~"), "Desktop", "db_check.log")
-logging.basicConfig(filename=desktop_path, level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    filename='db_check.log',
+    level=logging.INFO, 
+    filemode='a',       
+    format='%(asctime)s - %(levelname)s - %(message)s' 
+)
 
 def check_db_connection():
     connection = connect_to_db()
