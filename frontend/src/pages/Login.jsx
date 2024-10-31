@@ -21,7 +21,6 @@ function LoginPage() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-
     const stores = [
         { store_id: 1, store_name: "Headquarters" },
         { store_id: 2, store_name: "Warehouse" },
@@ -48,6 +47,21 @@ function LoginPage() {
         try {
             let loginResponse;
             if (isRegister) {
+                if (password.length < 8) {
+                    setError("Password must be at least 8 characters long.");
+                    setLoading(false);
+                    return;
+                }
+                if (!/[A-Z]/.test(password)) {
+                    setError("Password must contain at least one uppercase letter.");
+                    setLoading(false);
+                    return;
+                }
+                if (!/[!@#$%^&*]/.test(password)) {
+                    setError("Password must contain at least one special character.");
+                    setLoading(false);
+                    return;
+                }
                 // Register the user
                 await registerUser(email, password, first_name, last_name, phone_number, store_id);
     
@@ -172,7 +186,7 @@ function LoginPage() {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Phone Number"
+                                    placeholder="(000) 000-0000"
                                     value={phone_number}
                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                     maxLength={14}
@@ -181,7 +195,7 @@ function LoginPage() {
                                 </div>
                             <div className="mb-3">
                                 <select
-                                    className="form-control"
+                                    className="form-select"
                                     value={store_id}
                                     onChange={(e) => setStoreId(e.target.value)}
                                     required

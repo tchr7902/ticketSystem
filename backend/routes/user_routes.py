@@ -7,6 +7,15 @@ import logging
 user_bp = Blueprint('user_bp', __name__)
 db = connect_to_db()
 
+def validate_password(password):
+    if len(password) < 8:
+        return "Password must be at least 8 characters long."
+    if not any(char.isupper() for char in password):
+        return "Password must contain at least one uppercase letter."
+    if not any(char in "!@#$%^&*" for char in password):
+        return "Password must contain at least one special character."
+    return None
+
 # Register a new user
 @user_bp.route('/register', methods=['POST'])
 def register():
@@ -17,6 +26,10 @@ def register():
     first_name = data.get('first_name')
     last_name = data.get('last_name')
     phone_number = data.get('phone_number')
+
+    password_error = validate_password(password)
+    if password_error:
+        return jsonify({"error": password_error}), 400
 
     # Ensure all required fields are present
     if not all([email, password, first_name, last_name, store_id, phone_number]):
@@ -62,6 +75,10 @@ def register_admin():
     first_name = data.get('first_name')
     last_name = data.get('last_name')
     store_id = data.get('store_id')
+
+    password_error = validate_password(password)
+    if password_error:
+        return jsonify({"error": password_error}), 400
 
     # Ensure all required fields are provided
     if not all([email, password, first_name, last_name, store_id]):
