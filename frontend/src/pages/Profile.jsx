@@ -6,6 +6,7 @@ import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
+import logo2 from '../images/gem-singlelogo.png';
 import user_logo from '../images/user_icon.png';
 
 const formatDate = (dateString) => {
@@ -127,15 +128,15 @@ const ProfilePage = () => {
         <div className="container mt-5">
             <nav className="profile-navbar">
                 <button className="btn-2 mt-3" onClick={backButton}>Back</button>
-                <img src={logo} alt="Logo" style={{ width: '375px', height: '86px', marginRight: '30px' }} />
+                <img src={logo} alt="Logo" style={{ width: '375px', height: '86px' }} />
                 <button className="btn-important mt-3" onClick={handleLogout}>Logout</button>
             </nav>
             <nav className="backup-profile-navbar">
             <button className="btn-2 mt-3" onClick={backButton}>Back</button>
+            <img className="profile-icon" src={user_logo} alt="user icon" />
             <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
             </nav>
             <div className="my-info">
-                <img className="responsive-icon" src={user_logo} alt="user icon" />
                 <h1>Hello, {user.first_name}!</h1>
                 <p className="p-profile">{user.email}</p>
                 <p className="p-profile">{user.phone_number}</p>

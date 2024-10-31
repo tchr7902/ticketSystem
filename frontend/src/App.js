@@ -4,6 +4,7 @@ import LoginPage from "./pages/Login";
 import TicketPage from "./pages/TicketPage"; 
 import ProfilePage from "./pages/Profile"
 import SettingsPage from './pages/Settings';
+import AdminRegister from './pages/AdminRegister';
 import { AuthProvider, useAuth } from './utils/authContext';
 
 
@@ -17,6 +18,7 @@ const App = () => {
             <Route path="/users/login" element={<LoginPage />} />
             <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/users/login" />} />
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/users/login" />} />
+            <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/users/login" />} />
             <Route path="*" element={<Navigate to="/users/login" />} />
         </Routes>
     );

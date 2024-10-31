@@ -41,6 +41,10 @@ function TicketPage() {
         navigate("/settings");
     };
 
+    const handleAdminClick = () => {
+        navigate("/admin/registration");
+    };
+
     const handleChatClick = () => {
         setChatWindowOpen(true);
     };
@@ -94,7 +98,7 @@ function TicketPage() {
             {/* User Icon and Dropdown */}
             <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
                 <img 
-                    className="responsive-icon" 
+                    className="home-page-icon" 
                     src={user_logo} 
                     alt="user icon" 
                     onClick={handleUserIconClick} 
@@ -107,9 +111,9 @@ function TicketPage() {
                         style={{
                             position: 'absolute', 
                             right: 0, 
-                            top: '100%', // Directly below the icon
-                            marginTop: '5px', // Add space between icon and dropdown
-                            zIndex: 1050, // Ensure it stays on top
+                            top: '100%',
+                            marginTop: '5px',
+                            zIndex: 1050,
                         }}
                     >
                         <button className="dropdown-item" onClick={handleProfileClick}>
@@ -118,6 +122,11 @@ function TicketPage() {
                         <button className="dropdown-item" onClick={handleSettingsClick}>
                             Settings
                         </button>
+                        {user.role === "admin" && (
+                        <button className="dropdown-item" onClick={handleAdminClick}>
+                            + Admin
+                        </button>
+                        )}
                         <div className="dropdown-divider"></div>
                         <button className="dropdown-item text-danger" onClick={handleLogout}>
                             Logout
@@ -132,7 +141,7 @@ function TicketPage() {
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
                 <div ref={backupDropdownRef} className="position-relative">
                     <img
-                        className="responsive-icon"
+                        className="home-page-icon"
                         src={user_logo}
                         alt="user icon"
                         onClick={handleBackupUserIconClick}
@@ -143,9 +152,9 @@ function TicketPage() {
                                 style={{
                                     position: 'absolute', 
                                     right: 0, 
-                                    top: '100%', // Directly below the icon
-                                    marginTop: '5px', // Add space between icon and dropdown
-                                    zIndex: 1050, // Ensure it stays on top
+                                    top: '100%',
+                                    marginTop: '5px',
+                                    zIndex: 1050,
                                 }}
                             >
                             <button className="dropdown-item" onClick={handleProfileClick}>
@@ -154,6 +163,11 @@ function TicketPage() {
                             <button className="dropdown-item" onClick={handleSettingsClick}>
                                 Settings
                             </button>
+                            {user.role == "admin" && (
+                            <button className="dropdown-item" onClick={handleAdminClick}>
+                                + Admin
+                            </button>
+                            )}
                             <div className="dropdown-divider"></div>
                             <button className="dropdown-item text-danger" onClick={handleLogout}>
                                 Logout

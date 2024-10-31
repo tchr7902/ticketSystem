@@ -5,6 +5,7 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
+import logo2 from '../images/gem-singlelogo.png'
 import settings_icon from '../images/settings_icon.png';
 
 const SettingsPage = () => {
@@ -107,30 +108,24 @@ const SettingsPage = () => {
                 theme="light"
                 transition={Bounce}
             />
-            <nav className="profile-navbar">
+            <nav className="settings-navbar">
                 <button className="btn-2" onClick={backButton}>
                     Back
                 </button>
                 <img
                     src={logo}
                     alt="Logo"
-                    style={{ width: '375px', height: '86px', marginRight: '30px' }}
+                    style={{ width: '375px', height: '86px'}}
                 />
                 <button className="btn-important" onClick={handleLogout}>
                     Logout
                 </button>
             </nav>
-            <nav className="backup-profile-navbar">
+            <nav className="backup-settings-navbar">
             <button className="btn-2" onClick={backButton}>Back</button>
+            <img className="responsive-settings-icon" src={settings_icon} alt="user icon" />
             <button className="btn-important" onClick={handleLogout}>Logout</button>
             </nav>
-            <div className="d-flex justify-content-center">
-                <img 
-                    className="responsive-icon" 
-                    src={settings_icon} 
-                    alt="user icon" 
-                />
-            </div>
             <div className="change-div">
                 <div className="col-md-6 change">
                     <h3>Change Email</h3>

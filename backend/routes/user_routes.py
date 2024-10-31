@@ -62,9 +62,10 @@ def register_admin():
     password = data.get('password')
     first_name = data.get('first_name')
     last_name = data.get('last_name')
+    store_id = data.get('store_id')
 
     # Ensure all required fields are provided
-    if not all([email, password, first_name, last_name]):
+    if not all([email, password, first_name, last_name, store_id]):
         return jsonify({"error": "All fields are required"}), 400
 
     # Ensure email is a valid Good Earth Markets address
@@ -81,8 +82,8 @@ def register_admin():
         # Hash the password and insert the new admin
         hashed_password = generate_password_hash(password)
         cursor.execute(
-            "INSERT INTO admin (email, password, first_name, last_name) VALUES (%s, %s, %s, %s)", 
-            (email, hashed_password, first_name, last_name)
+            "INSERT INTO admin (email, password, first_name, last_name, store_id) VALUES (%s, %s, %s, %s, %s)", 
+            (email, hashed_password, first_name, last_name, store_id)
         )
         db.commit()
         return jsonify({"message": "Admin registered successfully"}), 201

@@ -216,6 +216,29 @@ img {
   display: none;
 }
 
+.settings-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 30px;
+}
+
+.backup-settings-navbar {
+  display: none;
+}
+
+.register-navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 30px;
+}
+
+.backup-register-navbar {
+  display: none;
+}
+
 /* Form Styles */
 form input, form textarea, form select {
   display: block;
@@ -375,6 +398,12 @@ input, select, textarea {
   transform: scale(1.09);
 }
 
+.register-icon {
+  height: 61px;
+  width: 61px;
+  margin-top: 20px;
+}
+
 /* List Group Styles */
 .list-group-item {
   display: flex;
@@ -449,15 +478,34 @@ input, select, textarea {
 }
 
 /* Responsive Icon Styles */
-.responsive-icon {
-  width: 61px;
-  height: 61px;
+.home-page-icon {
+  width: 71px;
+  height: 71px;
   cursor: pointer;
   background-color: transparent;
 }
 
-.responsive-icon:hover {
+.home-page:hover {
   transform: scale(1.07);
+}
+
+.profile-icon {
+  margin-top: 10px;
+  width: 71px;
+  height: 71px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.profile-icon:hover {
+  transform: scale(1.07);
+}
+
+.responsive-settings-icon {
+  margin-top: 7px;
+  width: 51px;
+  height: 51px;
+  cursor: pointer;
 }
 
 .responsive-chat-icon {
@@ -576,6 +624,19 @@ input, select, textarea {
   cursor: pointer;
 }
 
+.register-admin-card {
+  border: 1px solid #ddd;
+  background-color: rgba(255, 255, 255, .7);
+  border-radius: 8px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  margin-top: 40px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
+  cursor: pointer;
+
+}
+
 .form-select-boxes {
   max-width: 225px;
 }
@@ -651,9 +712,22 @@ input, select, textarea {
     border: .5px solid #D3D3D3;
   }
 
-  .responsive-icon {
-      width: 51px;
-      height: 51px;
+  .register-navbar {
+    display: none;
+  }
+
+  .backup-register-navbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 30px;
+  }
+
+  .home-page-icon {
+      margin-top: 7px;
+      width: 61px;
+      height: 61px;
       cursor: pointer;
   }
 
@@ -761,7 +835,7 @@ input, select, textarea {
   }
 }
 
-@media screen and (max-width: 775px) {
+@media screen and (max-width: 650px) {
   .profile-navbar {
     display: none;
   }
@@ -770,7 +844,18 @@ input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding-bottom: 30px;
+    padding-bottom: 5px;
+  }
+
+  .settings-navbar {
+    display: none;
+  }
+
+  .backup-settings-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 5px;
   }
 
   .change-div {

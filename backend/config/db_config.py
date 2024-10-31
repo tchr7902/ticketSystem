@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import base64
 import tempfile
+import logging
 
 # Load environment variables
 load_dotenv('../../.env')
