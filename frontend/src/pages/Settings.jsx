@@ -90,7 +90,16 @@ const SettingsPage = () => {
     };
 
     if (!user) {
-        return <p className="text-center text-danger mt-5">No user logged in.</p>;
+        return (
+            <div className="loader-wrapper">
+                <div className="lds-ellipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        );
     }
 
     return (
