@@ -46,11 +46,6 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-# Serve static files and the React app
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
-
 @app.errorhandler(404)
 def not_found(e):
     return send_from_directory(app.static_folder, 'index.html')
