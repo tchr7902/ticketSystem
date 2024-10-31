@@ -122,7 +122,16 @@ const ProfilePage = () => {
         if (showArchivedModal) fetchArchivedTickets();
     }, [showArchivedModal, fetchArchivedTickets]);
 
-    if (!user) return <p className="text-center text-danger mt-5">No user logged in.</p>;
+    if (!user) return (
+        <div className="loader-wrapper">
+            <div className="lds-ellipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    );
 
     return (
         <div className="container mt-5">
