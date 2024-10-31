@@ -252,6 +252,11 @@ input, select, textarea {
   font-family: inherit;
 }
 
+.form-control:focus {
+  border-color: #7FAC6E !important;
+  box-shadow: none !important;
+}
+
 .type-div {
   width: 80%;
 }

@@ -245,14 +245,14 @@ function TicketPage() {
                         </div>
                     </Modal.Body>
                     <Modal.Footer className="d-flex justify-content-end px-4">
-                        <Button
-                            variant="btn-2"
+                        <button
+                            className="btn-2"
                             onClick={() => {
                                 setChatWindowOpen(false);
                             }}
                         >
                             Close
-                        </Button>
+                        </button>
                     </Modal.Footer>
                 </Modal>
         </div>
