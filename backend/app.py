@@ -46,14 +46,6 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-@app.errorhandler(404)
-def not_found(e):
-    return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/<path:path>', methods=['GET'])
-def static_proxy(path):
-    return send_from_directory(app.static_folder, path)
-
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
