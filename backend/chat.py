@@ -86,30 +86,44 @@ def create_named_space(display_name, description=None, guidelines=None):
 
 # Function to add members to a space
 def add_members_to_space(space_id, owner_email):
-    # List of emails to be added, including the ticketbot
-    emails = ['ticketbot@goodearthmarkets.com', owner_email]
-    
-    # Use the ticketbot's email for impersonation
-    creds = get_service_account_credentials('ticketbot@goodearthmarkets.com')  
+    email = 'ticketbot@goodearthmarkets.com'  
+    creds = get_service_account_credentials(email) 
     service = build('chat', 'v1', credentials=creds)
 
-    for email in emails:
-        member_details = {
-            "member": {
-                "type": "USER",  # Specify the member type as USER
-                "email": email   # Directly assign the email here
+    member_details_bot = {
+        "member": {
+            "BOT": {
+                "email": email 
             }
         }
-        try:
-            # Using the correct API call for adding members
-            service.spaces().members().create(
-                parent=space_id,
-                body=member_details
-            ).execute()
-            print(f'Member {email} added to space {space_id}')
-        except Exception as e:
-            print(f'Failed to add member {email} to space: {e}')
-
+    }
+    
+    try:
+        service.spaces().members().create(
+            parent=space_id,
+            body=member_details_bot
+        ).execute()
+        print(f'Member {email} added to space {space_id}')
+    except Exception as e:
+        print(f'Failed to add member {email} to space: {e}')
+    
+    # Now, add the ticket owner
+    member_details_owner = {
+        "member": {
+            "HUMAN": {
+                "email": owner_email
+            }
+        }
+    }
+    
+    try:
+        service.spaces().members().create(
+            parent=space_id,
+            body=member_details_owner
+        ).execute()
+        print(f'Member {owner_email} added to space {space_id}')
+    except Exception as e:
+        print(f'Failed to add member {owner_email} to space: {e}')
 
 
 # Function to send a message to a space
