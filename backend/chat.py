@@ -96,7 +96,6 @@ def add_members_to_space(space_id, owner_email):
     for email in emails:
         member_details = {
             "member": {
-                "type": "USER",  # Keep the 'USER' type if required by your use case
                 "email": email
             }
         }
