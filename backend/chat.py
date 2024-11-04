@@ -90,10 +90,10 @@ def add_members_to_space(space_id, owner_email):
     creds = get_service_account_credentials(email) 
     service = build('chat', 'v1', credentials=creds)
 
+    # Member details for the bot
     member_details_bot = {
         "member": {
-            "type": "BOT",
-            "email": email
+            "name": "users/app"
         }
     }
     
@@ -102,15 +102,14 @@ def add_members_to_space(space_id, owner_email):
             parent=space_id,
             body=member_details_bot
         ).execute()
-        print(f'Member {email} added to space {space_id}')
+        print(f'Bot added to space {space_id}')
     except Exception as e:
-        print(f'Failed to add member {email} to space: {e}')
+        print(f'Failed to add bot to space: {e}')
     
-    # Now, add the ticket owner
+    # Member details for the ticket owner
     member_details_owner = {
         "member": {
-            "type": "HUMAN",
-            "email": owner_email
+            "name": f"users/{owner_email}"
         }
     }
     
@@ -122,6 +121,7 @@ def add_members_to_space(space_id, owner_email):
         print(f'Member {owner_email} added to space {space_id}')
     except Exception as e:
         print(f'Failed to add member {owner_email} to space: {e}')
+
 
 
 # Function to send a message to a space
