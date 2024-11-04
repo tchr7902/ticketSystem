@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from chat import send_direct_message 
+from chat import create_named_space, add_members_to_space, send_message
 
 tickets_bp = Blueprint('tickets', __name__)
 
@@ -96,14 +96,23 @@ def update_ticket(ticket_id):
         (data['title'], data['description'], data['severity'], data['status'], ticket_id)
     )
 
-    # Now send the chat notification directly
-    message_text = f"Hello {ticket['email']}! Your ticket '{ticket['name']}' has been updated to '{ticket['status']}'."
-    send_direct_message(ticket['email'], message_text)  # Send direct message to the ticket owner
+    # Create a named space for the ticket notification
+    space_name = f"Ticket Update for {ticket['name']}"  # Example space name
+    space_info = create_named_space(space_name)
+
+    if space_info:
+        space_id = space_info.get('name')  # Get the space ID from the response
+
+        # Add the ticket owner to the space
+        add_members_to_space(space_id, [ticket['email']])  # Ensure the email is in a list
+
+        # Now send the chat notification
+        message_text = f"Hello {ticket['email']}! Your ticket '{ticket['name']}' has been updated to '{ticket['status']}'."
+        send_message(space_id, message_text)  # Send message to the space
 
     get_db().commit()
     cursor.close()
     return jsonify({"message": "Ticket updated successfully!"}), 200
-
 
 # Delete Ticket (Only the owner or admin can delete)
 @tickets_bp.route('/<int:ticket_id>', methods=['DELETE'])
