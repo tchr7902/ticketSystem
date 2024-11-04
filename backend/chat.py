@@ -63,7 +63,8 @@ def get_service_account_credentials(user_email):
 
 # Create a space and add members
 def create_named_space(user_email, display_name, space_type="SPACE", description=None, guidelines=None):
-    creds = get_service_account_credentials(user_email)  # Get service account credentials with impersonation
+    # Get service account credentials with impersonation
+    creds = get_service_account_credentials(user_email)  
     service = build('chat', 'v1', credentials=creds)
 
     space_details = {
