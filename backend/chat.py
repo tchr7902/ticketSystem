@@ -85,7 +85,7 @@ def create_named_space(user_email, display_name, space_type="SPACE", description
         return None
 
 # Function to add a single member to a space
-def add_member_to_space(space_id, email):
+def add_members_to_space(space_id, email):
     service_account_email = 'ticketbot@goodearthmarkets.com'
     creds = get_service_account_credentials(service_account_email) 
     service = build('chat', 'v1', credentials=creds)
