@@ -84,16 +84,16 @@ def create_named_space(display_name, description=None, guidelines=None):
         print(f'Failed to create space: {e}')
         return None
 
-# Function to add a single member to a space
-def add_members_to_space(space_id, email):
-    service_account_email = 'ticketbot@goodearthmarkets.com'
-    creds = get_service_account_credentials(service_account_email)
+# Function to add members to a space
+def add_members_to_space(space_id, owner_email):
+    email = 'ticketbot@goodearthmarkets.com'  
+    creds = get_service_account_credentials(email) 
     service = build('chat', 'v1', credentials=creds)
 
-    member_details = {
+    member_details_bot = {
         "member": {
             "user": {
-                "email": email  # Specify the user being added
+                "email": email 
             }
         }
     }
@@ -101,11 +101,30 @@ def add_members_to_space(space_id, email):
     try:
         service.spaces().members().create(
             parent=space_id,
-            body=member_details
+            body=member_details_bot
         ).execute()
         print(f'Member {email} added to space {space_id}')
     except Exception as e:
         print(f'Failed to add member {email} to space: {e}')
+    
+    # Now, add the ticket owner
+    member_details_owner = {
+        "member": {
+            "user": {
+                "email": owner_email
+            }
+        }
+    }
+    
+    try:
+        service.spaces().members().create(
+            parent=space_id,
+            body=member_details_owner
+        ).execute()
+        print(f'Member {owner_email} added to space {space_id}')
+    except Exception as e:
+        print(f'Failed to add member {owner_email} to space: {e}')
+
 
 # Function to send a message to a space
 def send_message(space_id, text):
