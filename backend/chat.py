@@ -51,7 +51,8 @@ def get_service_account_credentials():
     service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT'))
     creds = service_account.Credentials.from_service_account_info(
         service_account_info,
-        scopes=SCOPES
+        scopes=SCOPES,
+        subject="ticketbot@goodearthmarkets.com"
     )
     return creds
 
