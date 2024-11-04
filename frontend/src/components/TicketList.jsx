@@ -192,6 +192,7 @@ function TicketList() {
                                     <button className="icon" onClick={() => handleEdit(ticket)}>
                                         <FaEdit />
                                     </button>
+                                    
                                     <button className="icon" onClick={() => {
                                         setTicketToDelete(ticket);
                                         setShowDeleteModal(true);
