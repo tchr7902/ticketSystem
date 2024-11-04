@@ -4,6 +4,7 @@ import os
 from google.oauth2 import service_account
 from google.auth.transport.requests import Request
 import uuid
+import json
 
 load_dotenv('../../.env')
 
@@ -35,8 +36,9 @@ def send_google_chat_message(space_id, ticket):
 # Retrieve access token
 def get_access_token():
     try:
+        service_account_info = json.loads(os.environ.get('GOOGLE_SERVICE_ACCOUNT_KEY'))
         credentials = service_account.Credentials.from_service_account_file(
-            './ticket-system-440115-bc18f1061e66.json',
+            service_account_info,
             scopes=['https://www.googleapis.com/auth/chat.spaces']
         )
         credentials.refresh(Request())
