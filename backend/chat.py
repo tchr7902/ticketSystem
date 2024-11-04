@@ -38,6 +38,12 @@ SCOPES = [
     'https://www.googleapis.com/auth/chat.messages'
 ]
 
+SPACE_TYPE = {
+    "SPACE": "SPACE",
+    "GROUP_CHAT": "GROUP_CHAT",
+    "DIRECT_MESSAGE": "DIRECT_MESSAGE"
+}
+
 # Load service account credentials from the JSON key file
 def get_service_account_credentials():
     service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT'))
@@ -47,21 +53,25 @@ def get_service_account_credentials():
     )
     return creds
 
-def create_named_space(space_name):
-    """Create a space with a specific name."""
-    creds = get_service_account_credentials()
-    service = build('chat', 'v1', credentials=creds)
+def create_named_space(display_name, space_type="SPACE", description=None, guidelines=None):
+    creds = get_service_account_credentials()  # Get service account credentials
+    service = build('chat', 'v1', credentials=creds)  # Build the service
 
-    space_info = {
-        'displayName': space_name
+    space_details = {
+        "displayName": display_name,
+        "spaceType": space_type,
+        "spaceDetails": {
+            "description": description,
+            "guidelines": guidelines
+        } if description or guidelines else {}
     }
 
     try:
-        result = service.spaces().create(body=space_info).execute()
+        result = service.spaces().create(body=space_details).execute()
         print(f'Space created: {result}')
-        return result
+        return result  # Return the result containing space information
     except Exception as e:
-        print(f'Failed to create space {space_name}: {e}')
+        print(f'Failed to create space: {e}')
         return None
 
 def add_members_to_space(space_id, members):
