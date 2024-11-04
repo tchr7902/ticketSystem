@@ -85,12 +85,13 @@ def find_user_space(owner_email):
 # Function to create a new space specifically for the user if none exists
 def create_user_space(owner_email, description=None, guidelines=None):
     existing_space = find_user_space(owner_email)
+    email = 'ticketbot@goodearthmarkets.com'
     
     if existing_space:
         return existing_space  # Use the existing space if found
 
     # Create a new space for this user if one doesn't exist
-    creds = get_service_account_credentials(owner_email)
+    creds = get_service_account_credentials(email)
     service = build('chat', 'v1', credentials=creds)
 
     space_details = {
@@ -109,6 +110,7 @@ def create_user_space(owner_email, description=None, guidelines=None):
     except Exception as e:
         print(f"Failed to create space for user: {e}")
         return None
+    
 
 # Function to add members to a space
 def add_members_to_space(space_id, owner_email):
