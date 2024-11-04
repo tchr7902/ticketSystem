@@ -5,6 +5,9 @@ from google.auth.transport.requests import Request
 import json
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 
 
 load_dotenv('../../.env')
@@ -44,6 +47,32 @@ SPACE_TYPE = {
     "DIRECT_MESSAGE": "DIRECT_MESSAGE"
 }
 
+TOKEN_FILE = 'token.json'
+
+def authenticate_user():
+    creds = None
+    
+    # Check if the token file already exists
+    if os.path.exists(TOKEN_FILE):
+        # Load existing credentials
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+    
+    # If no valid credentials are available, start the OAuth flow
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())  # Refresh the token if expired
+        else:
+            # Load OAuth 2.0 Client ID and Client Secret
+            client_secret_info = json.loads(os.getenv('OAUTH_CREDENTIALS'))
+            flow = InstalledAppFlow.from_client_secrets_info(client_secret_info, SCOPES)
+            creds = flow.run_local_server(port=0)  # Start a local server for user authorization
+
+        # Save the credentials for future use
+        with open(TOKEN_FILE, 'w') as token_file:
+            token_file.write(creds.to_json())
+    
+    return creds
+
 # Load service account credentials from the JSON key file
 def get_service_account_credentials():
     service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT'))
@@ -54,7 +83,8 @@ def get_service_account_credentials():
     return creds
 
 def create_named_space(display_name, space_type="SPACE", description=None, guidelines=None):
-    creds = get_service_account_credentials()  # Get service account credentials
+    # Get persisted or refreshed credentials from authenticate_user
+    creds = authenticate_user()
     service = build('chat', 'v1', credentials=creds)  # Build the service
 
     space_details = {
