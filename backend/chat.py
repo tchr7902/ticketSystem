@@ -35,10 +35,6 @@ def send_google_chat_message(space_id, ticket):
         print('Failed to send message.')
 
 
-client_secrets_json = os.getenv('OAUTH_CREDENTIALS')
-
-client_secrets = json.loads(client_secrets_json)
-
 # Define the scope for the Chat API
 SCOPES = [
     'https://www.googleapis.com/auth/chat.spaces.create',
@@ -46,32 +42,24 @@ SCOPES = [
     'https://www.googleapis.com/auth/chat.messages.send'
 ]
 
-def authenticate():
-    creds = None
-    
-    # Check if token.json exists to load existing credentials
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-
-    # If there are no valid credentials, let the user authenticate
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            # Load the client secrets from environment variables
-            client_secrets = json.loads(os.environ['OAUTH_CREDENTIALS'])
-            flow = InstalledAppFlow.from_client_config(client_secrets, SCOPES)
-            creds = flow.run_console()  # Use the console to get the authorization code
-
-            # Save the credentials for the next run
-            with open('token.json', 'w') as token:
-                token.write(creds.to_json())
-
+# Load service account credentials from the JSON key file
+def get_service_account_credentials():
+    service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT'))
+    creds = service_account.Credentials.from_service_account_info(
+        service_account_info,
+        scopes=SCOPES
+    )
     return creds
 
+# Impersonate a user
+def impersonate_user(bot_email):
+    bot_email='ticketbot@goodearthmarkets.com'
+    creds = get_service_account_credentials()
+    delegated_creds = creds.with_subject(bot_email)  # Impersonate the specified user
+    return delegated_creds
 
-def create_named_space(display_name):
-    creds = authenticate()  # Authenticate and get user credentials
+def create_named_space(display_name, user_email):
+    creds = impersonate_user()  # Authenticate and impersonate the user
     service = build('chat', 'v1', credentials=creds)  # Build the service
 
     space_info = {
@@ -84,10 +72,11 @@ def create_named_space(display_name):
     return result
 
 def add_members_to_space(space_id, members):
-    creds = authenticate()
-    service = build('chat', 'v1', credentials=creds)
-
+    # Assuming members is a list of emails
     for member in members:
+        creds = impersonate_user(member)  # Impersonate the member user
+        service = build('chat', 'v1', credentials=creds)
+
         member_info = {
             'member': {
                 'user': {
@@ -101,8 +90,8 @@ def add_members_to_space(space_id, members):
         ).execute()
         print(f'Member added: {result}')
 
-def send_message(space_id, message_text):
-    creds = authenticate()
+def send_message(space_id, message_text, user_email):
+    creds = impersonate_user(user_email)  # Impersonate the user
     service = build('chat', 'v1', credentials=creds)
 
     message = {

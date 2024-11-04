@@ -98,16 +98,17 @@ def update_ticket(ticket_id):
 
     # Create a named space for the ticket notification
     space_name = f"Ticket Update for {ticket['name']}"  # Example space name
-    space_info = create_named_space(space_name)
+    space_info = create_named_space(space_name, ticket['email'])  # Pass the ticket owner's email
 
     if space_info:
         space_id = space_info.get('name')  # Get the space ID from the response
 
         # Add the ticket owner to the space
-        add_members_to_space(space_id, ticket['email'])
+        add_members_to_space(space_id, [ticket['email']])  # Ensure the email is in a list
 
         # Now send the chat notification
-        send_message(space_id, ticket)
+        message_text = f"Hello {ticket['email']}! Your ticket '{ticket['name']}' has been updated to '{ticket['status']}'."
+        send_message(space_id, message_text, ticket['email'])  # Pass the ticket owner's email
 
     get_db().commit()
     cursor.close()

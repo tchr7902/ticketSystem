@@ -41,7 +41,10 @@ token.pickle
 .pickle
 ./backend/token.pickle
 token.json
-
+ticket-system-440115-6316f519bba3.json
+C:\Users\IT-Assistant\Desktop\Projects\ticketSystem\backend\ticket-system-440115-6316f519bba3.json
+./backend\ticket-system-440115-6316f519bba3.json
+./backend/ticket-system-440115-6316f519bba3.json
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
