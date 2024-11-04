@@ -98,7 +98,7 @@ def update_ticket(ticket_id):
 
     # Create a named space for the ticket notification
     space_name = f"Ticket Update for {ticket['name']}"  # Example space name
-    space_info = create_named_space(space_name, ticket['email'])  # Pass the ticket owner's email
+    space_info = create_named_space(space_name)
 
     if space_info:
         space_id = space_info.get('name')  # Get the space ID from the response
