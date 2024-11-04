@@ -93,6 +93,7 @@ def add_members_to_space(space_id, owner_email):
     # Member details for the bot
     member_details_bot = {
         "member": {
+            "type": "BOT",
             "name": "users/app"
         }
     }
@@ -109,6 +110,7 @@ def add_members_to_space(space_id, owner_email):
     # Member details for the ticket owner
     member_details_owner = {
         "member": {
+            "type": "HUMAN",
             "name": f"users/{owner_email}"
         }
     }
