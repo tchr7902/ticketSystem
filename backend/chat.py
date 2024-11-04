@@ -47,7 +47,7 @@ SCOPES = [
 
 def authenticate():
     flow = InstalledAppFlow.from_client_config(client_secrets, SCOPES)
-    creds = flow.run_local_server(port=0)
+    creds = flow.run_console()  # This will output a URL to visit and ask for an authorization code
     return creds
 
 def create_named_space(display_name):
