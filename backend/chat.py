@@ -52,7 +52,7 @@ def get_service_account_credentials():
     creds = service_account.Credentials.from_service_account_info(
         service_account_info,
         scopes=SCOPES,
-        subject="ticketbot@goodearthmarkets.com"
+        subject="trevor.c@goodearthmarkets.com"
     )
     return creds
 
