@@ -46,6 +46,8 @@ function LoginPage() {
     
         try {
             let loginResponse;
+    
+            // Registration-specific validations
             if (isRegister) {
                 if (password.length < 8) {
                     setError("Password must be at least 8 characters long.");
@@ -62,56 +64,63 @@ function LoginPage() {
                     setLoading(false);
                     return;
                 }
-                // Register the user
-                await registerUser(email, password, first_name, last_name, phone_number, store_id);
     
-                // Introduce a delay before attempting login
-                setTimeout(async () => {
-                    // Log in the user after registration
-                    try {
-                        loginResponse = await loginUser(email, password);
-                        const { access_token, user } = loginResponse;
+                // Attempt to register the user
+                try {
+                    await registerUser(email, password, first_name, last_name, phone_number, store_id);
     
-                        // Save access token and user info in context
-                        login(access_token, user);
+                    // Delay before login attempt
+                    setTimeout(async () => {
+                        try {
+                            loginResponse = await loginUser(email, password);
+                            const { access_token, user } = loginResponse;
     
-                        // Redirect based on user role
-                        if (user.role === 'admin') {
-                            navigate('/tickets');
-                        } else {
-                            navigate('/tickets');
+                            // Save access token and user info in context
+                            login(access_token, user);
+    
+                            // Redirect based on user role
+                            navigate(user.role === 'admin' ? '/tickets' : '/tickets');
+                        } catch (loginError) {
+                            console.error("Login error after registration:", loginError);
+                            const backendMessage = loginError.response?.data?.error || "Login failed after registration. Please check your credentials and try again.";
+                            setError(backendMessage);
                         }
-                    } catch (err) {
-                        console.error("Login error:", err);
-                        setError("Login failed after registration. Please try again.");
-                    }
+                        setLoading(false);
+                    }, 500); // Delay to prevent immediate login after registration
+    
+                } catch (registrationError) {
+                    console.error("Registration error:", registrationError);
+                    const backendMessage = registrationError.response?.data?.error || "An error occurred during registration. Please try again.";
+                    setError(backendMessage);
                     setLoading(false);
-                }, 500); // 500ms delay
+                }
     
             } else {
-                // Log in existing user
-                loginResponse = await loginUser(email, password);
-                const { access_token, user } = loginResponse;
+                // Existing user login
+                try {
+                    loginResponse = await loginUser(email, password);
+                    const { access_token, user } = loginResponse;
     
-                // Save access token and user info in context
-                login(access_token, user);
+                    // Save access token and user info in context
+                    login(access_token, user);
     
-                // Redirect based on user role
-                if (user.role === 'admin') {
-                    navigate('/tickets');
-                } else {
-                    navigate('/tickets');
+                    // Redirect based on user role
+                    navigate(user.role === 'admin' ? '/tickets' : '/tickets');
+                } catch (loginError) {
+                    console.error("Login error:", loginError);
+                    const backendMessage = loginError.response?.data?.error || "Invalid email or password. Please try again.";
+                    setError(backendMessage);
+                    setLoading(false);
                 }
             }
-        } catch (err) {
-            console.error("Auth error:", err);
-            setError("Login/registration failed. Please try again.");
+        } catch (generalError) {
+            console.error("Unexpected error:", generalError);
+            setError("An unexpected error occurred. Please try again later.");
             setLoading(false);
         }
     };
     
     
-
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
             <img className="img-1" 

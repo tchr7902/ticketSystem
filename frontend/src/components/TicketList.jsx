@@ -68,6 +68,7 @@ function TicketList() {
     };
 
     const handleSave = async (ticketData) => {
+        setLoading(true);
         try {
             if (selectedTicket) {
                 await updateTicket(selectedTicket.id, ticketData);
@@ -82,6 +83,7 @@ function TicketList() {
             console.error("Error while saving ticket:", error);
             setTimeout(() => toast.error("Error saving ticket. Please try again."), 100);
         } finally {
+            setLoading(false);
             setShowEditModal(false);
         }
     };

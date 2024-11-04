@@ -136,20 +136,24 @@ def login():
         
         account = cursor.fetchone()
 
-        if account and check_password_hash(account['password'], password):
-            # Create JWT token with user/admin role
-            access_token = create_access_token(identity={"id": account['id'], "role": account['role']})
-            return jsonify({
-                'access_token': access_token,
-                'user': {
-                    'id': account['id'],
-                    'email': account['email'],
-                    'role': account['role'],
-                }
-            }), 200
+        # If no account found
+        if not account:
+            return jsonify({"error": "No user registered with that email."}), 404
 
-        # If no account found or password mismatch
-        return jsonify({"error": "Invalid email or password"}), 401
+        # Check if the password is correct
+        if not check_password_hash(account['password'], password):
+            return jsonify({"error": "Incorrect password."}), 401
+
+        # If both email and password are correct
+        access_token = create_access_token(identity={"id": account['id'], "role": account['role']})
+        return jsonify({
+            'access_token': access_token,
+            'user': {
+                'id': account['id'],
+                'email': account['email'],
+                'role': account['role'],
+            }
+        }), 200
 
     except Exception as e:
         logging.error(f"Login error: {e}")
@@ -157,6 +161,7 @@ def login():
 
     finally:
         cursor.close()
+
 
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
