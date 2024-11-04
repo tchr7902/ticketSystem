@@ -3,6 +3,7 @@ from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from chat import create_named_space, add_members_to_space, send_message
 
+
 tickets_bp = Blueprint('tickets', __name__)
 
 def get_user_name(user_id):

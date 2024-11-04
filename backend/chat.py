@@ -1,13 +1,10 @@
-import requests
 from dotenv import load_dotenv
 import os
 from google.oauth2 import service_account
 from google.auth.transport.requests import Request
-import uuid
 import json
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from google.oauth2.credentials import Credentials
+from google.oauth2 import service_account
 
 
 load_dotenv('../../.env')
@@ -50,28 +47,26 @@ def get_service_account_credentials():
     )
     return creds
 
-def send_direct_message(user_email, message_text):
-    creds = get_service_account_credentials()  # Get service account credentials
-    service = build('chat', 'v1', credentials=creds)  # Build the service
+def create_named_space(space_name):
+    """Create a space with a specific name."""
+    creds = get_service_account_credentials()
+    service = build('chat', 'v1', credentials=creds)
 
-    message = {
-        'text': message_text
+    space_info = {
+        'displayName': space_name
     }
 
-    # Assuming there's a direct space with the user, you would need to handle that context
-    # You might need to retrieve or create a direct messaging space if it doesn't exist
-    space_name = f'spaces/{user_email}'  # Placeholder, might need a valid space ID
     try:
-        result = service.spaces().messages().create(
-            parent=space_name,  # Send message to the user
-            body=message
-        ).execute()
-        print(f'Message sent to {user_email}: {result}')
+        result = service.spaces().create(body=space_info).execute()
+        print(f'Space created: {result}')
+        return result
     except Exception as e:
-        print(f'Failed to send message to {user_email}: {e}')
+        print(f'Failed to create space {space_name}: {e}')
+        return None
 
 def add_members_to_space(space_id, members):
-    creds = get_service_account_credentials()  # No need to impersonate for adding members
+    """Add members to a specified space."""
+    creds = get_service_account_credentials() 
     service = build('chat', 'v1', credentials=creds)
 
     for member in members:
@@ -92,7 +87,8 @@ def add_members_to_space(space_id, members):
             print(f'Failed to add member {member}: {e}')
 
 def send_message(space_id, message_text):
-    creds = get_service_account_credentials()  # No impersonation needed here
+    """Send a message to a specified space."""
+    creds = get_service_account_credentials()
     service = build('chat', 'v1', credentials=creds)
 
     message = {
@@ -101,7 +97,7 @@ def send_message(space_id, message_text):
 
     try:
         result = service.spaces().messages().create(
-            parent=f'spaces/{space_id}',  # Use the correct space ID
+            parent=f'spaces/{space_id}',
             body=message
         ).execute()
         print(f'Message sent to space {space_id}: {result}')
