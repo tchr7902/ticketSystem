@@ -40,6 +40,7 @@ ticket-system-440115-bc18f1061e66.json
 token.pickle
 .pickle
 ./backend/token.pickle
+token.json
 
 
 # PyInstaller

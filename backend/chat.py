@@ -7,6 +7,7 @@ import uuid
 import json
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
 
 
 load_dotenv('../../.env')
@@ -46,18 +47,26 @@ SCOPES = [
 ]
 
 def authenticate():
-    flow = InstalledAppFlow.from_client_config(client_secrets, SCOPES)
+    creds = None
     
-    # Generate the authorization URL
-    auth_url, _ = flow.authorization_url(prompt='consent')
-    print(f'Please go to this URL: {auth_url}')
-    
-    # Ask the user to enter the authorization code
-    code = input('Enter the authorization code: ')
-    
-    # Exchange the authorization code for credentials
-    creds = flow.fetch_token(code=code)
-    
+    # Check if token.json exists to load existing credentials
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+
+    # If there are no valid credentials, let the user authenticate
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            # Load the client secrets from environment variables
+            client_secrets = json.loads(os.environ['GOOGLE_CLIENT_SECRETS'])
+            flow = InstalledAppFlow.from_client_config(client_secrets, SCOPES)
+            creds = flow.run_console()  # Use the console to get the authorization code
+
+            # Save the credentials for the next run
+            with open('token.json', 'w') as token:
+                token.write(creds.to_json())
+
     return creds
 
 
