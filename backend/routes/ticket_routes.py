@@ -98,7 +98,7 @@ def update_ticket(ticket_id):
 
     # Create a named space for the ticket notification
     space_name = f"Ticket Update for {ticket['name']}"
-    space_info = create_named_space(user['email'], space_name)
+    space_info = create_named_space(space_name, [ticket['email']])
 
     if space_info:
         space_id = space_info.get('name')
@@ -107,7 +107,7 @@ def update_ticket(ticket_id):
         add_members_to_space(space_id, [ticket['email']])
 
         # Send the chat notification
-        message_text = f"Hello {ticket['email']}! Your ticket '{ticket['name']}' has been updated to '{ticket['status']}'."
+        message_text = f"Hello {ticket['name']}! Your ticket '{ticket['title']}' has been updated to '{ticket['status']}'."
         send_message(space_id, message_text)
 
     get_db().commit()
