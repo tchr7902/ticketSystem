@@ -52,13 +52,13 @@ def get_service_account_credentials():
     return creds
 
 # Impersonate a user
-def impersonate_user(bot_email):
+def impersonate_user():
     bot_email='ticketbot@goodearthmarkets.com'
     creds = get_service_account_credentials()
     delegated_creds = creds.with_subject(bot_email)  # Impersonate the specified user
     return delegated_creds
 
-def create_named_space(display_name, user_email):
+def create_named_space(display_name):
     creds = impersonate_user()  # Authenticate and impersonate the user
     service = build('chat', 'v1', credentials=creds)  # Build the service
 
