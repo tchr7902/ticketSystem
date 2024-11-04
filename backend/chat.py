@@ -89,17 +89,19 @@ def add_members_to_space(space_id, owner_email):
     # List of emails to be added, including the ticketbot
     emails = ['ticketbot@goodearthmarkets.com', owner_email]
     
-    # Use the first email for impersonation
-    creds = get_service_account_credentials(emails[0])  
+    # Use the ticketbot's email for impersonation
+    creds = get_service_account_credentials('ticketbot@goodearthmarkets.com')  
     service = build('chat', 'v1', credentials=creds)
 
     for email in emails:
         member_details = {
             "member": {
-                "email": email
+                "type": "USER",  # Specify the member type as USER
+                "email": email   # Directly assign the email here
             }
         }
         try:
+            # Using the correct API call for adding members
             service.spaces().members().create(
                 parent=space_id,
                 body=member_details
@@ -107,6 +109,7 @@ def add_members_to_space(space_id, owner_email):
             print(f'Member {email} added to space {space_id}')
         except Exception as e:
             print(f'Failed to add member {email} to space: {e}')
+
 
 
 # Function to send a message to a space

@@ -91,6 +91,7 @@ def update_ticket(ticket_id):
     if ticket['user_id'] != user['id'] and user['role'] != 'admin':
         return jsonify({"error": "Unauthorized access."}), 403
 
+    # Update the ticket in the database
     cursor.execute(
         "UPDATE tickets SET title = %s, description = %s, severity = %s, status = %s WHERE id = %s",
         (data['title'], data['description'], data['severity'], data['status'], ticket_id)
@@ -98,21 +99,28 @@ def update_ticket(ticket_id):
 
     # Create a named space for the ticket notification
     space_name = f"Ticket Update for {ticket['title']}"
-    space_info = create_named_space(space_name)  # Pass the user's email here
+    space_info = create_named_space(space_name)  # Ensure this function returns the right space info
 
     if space_info:
         space_id = space_info.get('name')
 
-        # Add the ticket owner to the space
-        add_members_to_space(space_id, ticket['email'])
+        # Add the ticket owner and the ticketbot to the space
+        try:
+            add_members_to_space(space_id, ticket['email'])  # Add ticket owner
+        except Exception as e:
+            return jsonify({"error": f"Failed to add members to the space: {str(e)}"}), 500
 
         # Send the chat notification
         message_text = f"Hello {ticket['name']}! Your ticket '{ticket['title']}' has been updated to '{ticket['status']}'."
-        send_message(space_id, message_text)
+        try:
+            send_message(space_id, message_text)
+        except Exception as e:
+            return jsonify({"error": f"Failed to send message: {str(e)}"}), 500
 
     get_db().commit()
     cursor.close()
     return jsonify({"message": "Ticket updated successfully!"}), 200
+
 
 # Delete Ticket (Only the owner or admin can delete)
 @tickets_bp.route('/<int:ticket_id>', methods=['DELETE'])
