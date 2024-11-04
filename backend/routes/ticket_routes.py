@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from chat import create_named_space, add_members_to_space, send_message
+from chat import create_user_space, add_members_to_space, send_message
 
 
 tickets_bp = Blueprint('tickets', __name__)
@@ -97,8 +97,7 @@ def update_ticket(ticket_id):
     )
 
     # Create a named space for the ticket notification
-    space_name = f"Ticket Update for {ticket['title']}"
-    space_info = create_named_space(space_name)  # Pass the user's email here
+    space_info = create_user_space(ticket['email'])
 
     if space_info:
         space_id = space_info.get('name')

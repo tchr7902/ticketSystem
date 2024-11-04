@@ -61,14 +61,40 @@ def get_service_account_credentials(user_email):
     )
     return creds
 
-# Function to create a named space
-def create_named_space(display_name, description=None, guidelines=None):
-    service_account_email = 'ticketbot@goodearthmarkets.com'
-    creds = get_service_account_credentials(service_account_email)
+# Function to list spaces for the user and check if a unique space already exists
+def find_user_space(owner_email):
+    creds = get_service_account_credentials(owner_email)
+    service = build('chat', 'v1', credentials=creds)
+
+    try:
+        # List spaces for the user
+        response = service.spaces().list().execute()
+        spaces = response.get('spaces', [])
+        
+        # Look for a space named specifically for this user's IT Ticket updates
+        for space in spaces:
+            if space.get("displayName") == "IT Ticket Updates":
+                print(f"Existing user space found: {space['name']}")
+                return space  # Return the existing space
+        print("No existing space found for this user.")
+        return None
+    except Exception as e:
+        print(f"Failed to list spaces: {e}")
+        return None
+
+# Function to create a new space specifically for the user if none exists
+def create_user_space(owner_email, description=None, guidelines=None):
+    existing_space = find_user_space(owner_email)
+    
+    if existing_space:
+        return existing_space  # Use the existing space if found
+
+    # Create a new space for this user if one doesn't exist
+    creds = get_service_account_credentials(owner_email)
     service = build('chat', 'v1', credentials=creds)
 
     space_details = {
-        "displayName": display_name,
+        "displayName": "IT Ticket Updates",
         "spaceType": "SPACE",
         "spaceDetails": {
             "description": description,
@@ -78,10 +104,10 @@ def create_named_space(display_name, description=None, guidelines=None):
 
     try:
         result = service.spaces().create(body=space_details).execute()
-        print(f'Space created: {result}')
+        print(f"Space created for user: {result}")
         return result
     except Exception as e:
-        print(f'Failed to create space: {e}')
+        print(f"Failed to create space for user: {e}")
         return None
 
 # Function to add members to a space
