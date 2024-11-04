@@ -47,8 +47,19 @@ SCOPES = [
 
 def authenticate():
     flow = InstalledAppFlow.from_client_config(client_secrets, SCOPES)
-    creds = flow.run_console()  # This will output a URL to visit and ask for an authorization code
+    
+    # Generate the authorization URL
+    auth_url, _ = flow.authorization_url(prompt='consent')
+    print(f'Please go to this URL: {auth_url}')
+    
+    # Ask the user to enter the authorization code
+    code = input('Enter the authorization code: ')
+    
+    # Exchange the authorization code for credentials
+    creds = flow.fetch_token(code=code)
+    
     return creds
+
 
 def create_named_space(display_name):
     creds = authenticate()  # Authenticate and get user credentials
