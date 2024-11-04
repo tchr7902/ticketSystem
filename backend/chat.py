@@ -59,7 +59,7 @@ def authenticate():
             creds.refresh(Request())
         else:
             # Load the client secrets from environment variables
-            client_secrets = json.loads(os.environ['GOOGLE_CLIENT_SECRETS'])
+            client_secrets = json.loads(os.environ['OAUTH_CREDENTIALS'])
             flow = InstalledAppFlow.from_client_config(client_secrets, SCOPES)
             creds = flow.run_console()  # Use the console to get the authorization code
 
