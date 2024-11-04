@@ -86,44 +86,29 @@ def create_named_space(display_name, description=None, guidelines=None):
 
 # Function to add members to a space
 def add_members_to_space(space_id, owner_email):
-    email = 'ticketbot@goodearthmarkets.com'  
-    creds = get_service_account_credentials(email) 
+    email = 'ticketbot@goodearthmarkets.com'  # Impersonating the same account
+    creds = get_service_account_credentials(email)  # Get credentials for the impersonated account
     service = build('chat', 'v1', credentials=creds)
 
-    member_details_bot = {
-        "member": {
-            "user": {
-                "email": email 
+    # Create a list of member emails to add, including the ticketbot
+    members_to_add = [email, owner_email]
+
+    for member_email in members_to_add:
+        member_details = {
+            "member": {
+                "email": member_email  # Use just the email directly
             }
         }
-    }
-    
-    try:
-        service.spaces().members().create(
-            parent=space_id,
-            body=member_details_bot
-        ).execute()
-        print(f'Member {email} added to space {space_id}')
-    except Exception as e:
-        print(f'Failed to add member {email} to space: {e}')
-    
-    # Now, add the ticket owner
-    member_details_owner = {
-        "member": {
-            "user": {
-                "email": owner_email
-            }
-        }
-    }
-    
-    try:
-        service.spaces().members().create(
-            parent=space_id,
-            body=member_details_owner
-        ).execute()
-        print(f'Member {owner_email} added to space {space_id}')
-    except Exception as e:
-        print(f'Failed to add member {owner_email} to space: {e}')
+        
+        try:
+            service.spaces().members().create(
+                parent=space_id,
+                body=member_details
+            ).execute()
+            print(f'Member {member_email} added to space {space_id}')
+        except Exception as e:
+            print(f'Failed to add member {member_email} to space: {e}')
+
 
 
 # Function to send a message to a space
