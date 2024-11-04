@@ -3,33 +3,16 @@ import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
 import { getUserTickets } from '../utils/api';
 import { Modal, Button } from 'react-bootstrap';
+import { format, zonedTimeToUtc } from 'date-fns-tz';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
-import logo2 from '../images/gem-singlelogo.png';
 import user_logo from '../images/user_icon.png';
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
-
-    const timezoneOffset = date.getTimezoneOffset() * -60000;
-
-    const localDate = new Date(date.getTime() - timezoneOffset);
-
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = localDate.toLocaleDateString('en-US', options);
-
-    let hours = localDate.getHours();
-    const minutes = localDate.getMinutes();
-
-    const ampm = hours < 12 ? 'AM' : 'PM'; 
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; 
-
-    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-
-    return `${formattedDate} at ${hours}:${formattedMinutes} ${ampm}`;
+    const timeZone = 'America/Denver';
+    return format(date, "MMMM dd, yyyy 'at' h:mm a", { timeZone });
 };
 
 

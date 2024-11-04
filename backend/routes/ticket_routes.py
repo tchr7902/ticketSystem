@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
+from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message, send_create_message
 
 
 tickets_bp = Blueprint('tickets', __name__)
@@ -69,7 +69,25 @@ def create_ticket():
         'contact_method': data['contact_method']
     }
 
-    send_google_chat_message(message_data)
+    # send_google_chat_message(message_data)
+
+    space_info = create_user_space(email)
+
+    if space_info:
+        space_id = space_info.get('name')
+
+        # Add the ticket owner to the space
+        add_members_to_space(space_id, email)
+
+        # Send the chat notification
+        message_text = (
+            f"Hello {name}!\n\n"
+            f"Thank you for submitting your IT ticket: {data['title']}\n\n"
+            f"The IT Team has received your request and will start addressing it as soon as possible.\n\n"
+            f"If we have any questions, we'll reach out to you using the contact method you provided: {data['contact_method']}\n\n"
+            "If your issue is critical and disrupts normal operations, please don't hesitate to contact an IT member directly. You'll receive updates on your ticket status in this chat. Thank you!"
+        )
+        send_message(space_id, message_text)
 
     return jsonify({"message": "Ticket created successfully!"}), 201
 

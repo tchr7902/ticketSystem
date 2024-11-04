@@ -169,6 +169,25 @@ def send_message(space_id, text):
             parent=space_id,
             body=message
         ).execute()
-        print(f'Message sent to space {space_id}: {text}')
+        print(f'Message sent successfully.')
+    except Exception as e:
+        print(f'Failed to send message to space: {e}')
+
+# Function to send a message to a space
+def send_create_message(space_id, text):
+    service_account_email = 'ticketbot@goodearthmarkets.com'
+    creds = get_service_account_credentials(service_account_email)
+    service = build('chat', 'v1', credentials=creds)
+
+    message = {
+        "text": text
+    }
+    
+    try:
+        service.spaces().messages().create(
+            parent=space_id,
+            body=message
+        ).execute()
+        print(f'Sent message successfully.')
     except Exception as e:
         print(f'Failed to send message to space: {e}')

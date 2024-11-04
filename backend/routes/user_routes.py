@@ -142,7 +142,7 @@ def login():
 
         # Check if the password is correct
         if not check_password_hash(account['password'], password):
-            return jsonify({"error": "Incorrect password."}), 401
+            return jsonify({"error": "Password is incorrect."}), 401
 
         # If both email and password are correct
         access_token = create_access_token(identity={"id": account['id'], "role": account['role']})

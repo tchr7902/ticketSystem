@@ -283,7 +283,7 @@ function TicketList() {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className="btn-important" onClick={() => setShowArchiveModal(false)}>
+                    <button className="btn-2" onClick={() => setShowArchiveModal(false)}>
                         Cancel
                     </button>
                     <button className="btn-important" onClick={handleArchiveConfirm}>
