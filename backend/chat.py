@@ -37,9 +37,8 @@ def send_google_chat_message(space_id, ticket):
 
 # Define the scope for the Chat API
 SCOPES = [
-    'https://www.googleapis.com/auth/chat.spaces.create',
-    'https://www.googleapis.com/auth/chat.spaces.members',
-    'https://www.googleapis.com/auth/chat.messages.send'
+    'https://www.googleapis.com/auth/chat.spaces',
+    'https://www.googleapis.com/auth/chat.messages'
 ]
 
 # Load service account credentials from the JSON key file
@@ -51,55 +50,17 @@ def get_service_account_credentials():
     )
     return creds
 
-# Impersonate a user
-def impersonate_user():
-    bot_email='ticketbot@goodearthmarkets.com'
-    creds = get_service_account_credentials()
-    delegated_creds = creds.with_subject(bot_email)  # Impersonate the specified user
-    return delegated_creds
-
-def create_named_space(display_name):
-    creds = impersonate_user()  # Authenticate and impersonate the user
+def send_direct_message(user_email, message_text):
+    creds = get_service_account_credentials()  # Get service account credentials
     service = build('chat', 'v1', credentials=creds)  # Build the service
-
-    space_info = {
-        'spaceType': 'SPACE',
-        'displayName': display_name
-    }
-    
-    result = service.spaces().create(body=space_info).execute()  # Create the space
-    print(f'Space created: {result}')
-    return result
-
-def add_members_to_space(space_id, members):
-    # Assuming members is a list of emails
-    for member in members:
-        creds = impersonate_user(member)  # Impersonate the member user
-        service = build('chat', 'v1', credentials=creds)
-
-        member_info = {
-            'member': {
-                'user': {
-                    'email': member
-                }
-            }
-        }
-        result = service.spaces().members().create(
-            parent=f'spaces/{space_id}',
-            body=member_info
-        ).execute()
-        print(f'Member added: {result}')
-
-def send_message(space_id, message_text, user_email):
-    creds = impersonate_user(user_email)  # Impersonate the user
-    service = build('chat', 'v1', credentials=creds)
 
     message = {
         'text': message_text
     }
 
+    # Send a direct message to the user
     result = service.spaces().messages().create(
-        parent=f'spaces/{space_id}',
+        parent=f'spaces/{user_email}',  # Direct message space for the user
         body=message
     ).execute()
-    print(f'Message sent: {result}')
+    print(f'Message sent to {user_email}: {result}')
