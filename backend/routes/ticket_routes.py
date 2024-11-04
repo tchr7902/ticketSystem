@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from chat import create_user_space, add_members_to_space, send_message
+from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
 
 
 tickets_bp = Blueprint('tickets', __name__)
@@ -69,7 +69,7 @@ def create_ticket():
         'contact_method': data['contact_method']
     }
 
-    # send_google_chat_message(message_data)
+    send_google_chat_message(message_data)
 
     return jsonify({"message": "Ticket created successfully!"}), 201
 
@@ -96,22 +96,25 @@ def update_ticket(ticket_id):
         (data['title'], data['description'], data['severity'], data['status'], ticket_id)
     )
 
-    # Create a named space for the ticket notification
-    space_info = create_user_space(ticket['email'])
+    # Only proceed with space creation and notifications if the user is an admin
+    if user['role'] == 'admin':
+        # Create a named space for the ticket notification
+        space_info = create_user_space(ticket['email'])
 
-    if space_info:
-        space_id = space_info.get('name')
+        if space_info:
+            space_id = space_info.get('name')
 
-        # Add the ticket owner to the space
-        add_members_to_space(space_id, ticket['email'])
+            # Add the ticket owner to the space
+            add_members_to_space(space_id, ticket['email'])
 
-        # Send the chat notification
-        message_text = f"Hello {ticket['name']}! Your ticket '{ticket['title']}' has been updated to '{data['status']}'."
-        send_message(space_id, message_text)
+            # Send the chat notification
+            message_text = f"Hello {ticket['name']}! Your ticket '{ticket['title']}' has been updated to '{data['status']}'."
+            send_message(space_id, message_text)
 
     get_db().commit()
     cursor.close()
     return jsonify({"message": "Ticket updated successfully!"}), 200
+
 
 # Delete Ticket (Only the owner or admin can delete)
 @tickets_bp.route('/<int:ticket_id>', methods=['DELETE'])

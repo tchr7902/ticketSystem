@@ -6,9 +6,9 @@ function TicketForm({ selectedTicket, onSave }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [severity, setSeverity] = useState("");
-    const [status, setStatus] = useState("Open");  // Default to 'Open' if creating a new ticket
-    const [contactMethod, setContactMethod] = useState(""); // State for contact method
-    const { user } = useAuth();  // Get user context
+    const [status, setStatus] = useState("Open");
+    const [contactMethod, setContactMethod] = useState(""); 
+    const { user } = useAuth(); 
 
     // Populate form with ticket data if editing an existing ticket
     useEffect(() => {
@@ -17,7 +17,7 @@ function TicketForm({ selectedTicket, onSave }) {
             setDescription(selectedTicket.description);
             setSeverity(selectedTicket.severity);
             setStatus(selectedTicket.status);
-            setContactMethod(selectedTicket.contact_method || ""); // Set contact method correctly
+            setContactMethod(selectedTicket.contact_method || "");
         } else {
             // Clear form if no ticket is selected (creating a new one)
             setTitle("");
@@ -37,7 +37,7 @@ function TicketForm({ selectedTicket, onSave }) {
             status, 
             contact_method: contactMethod 
         };
-        onSave(ticketData); // Call the save function with ticket data
+        onSave(ticketData);
     };
 
     return (
@@ -105,6 +105,7 @@ function TicketForm({ selectedTicket, onSave }) {
                             <>
                                 <option value={user?.email}>{user?.email}</option>
                                 <option value={user?.phone_number}>{user?.phone_number}</option>
+                                <option value="Store">Store</option>
                             </>
                         )}
                     </select>
@@ -132,7 +133,7 @@ function TicketForm({ selectedTicket, onSave }) {
                         <input
                             type="text"
                             className="form-control form-select-boxes static-status"
-                            value="Status - Open"
+                            value={`${status}`}
                             readOnly
                         />
                     </div>
