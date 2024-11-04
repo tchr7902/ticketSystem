@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from chat import send_google_chat_message
+from chat import create_named_space, add_members_to_space, send_message
 
 tickets_bp = Blueprint('tickets', __name__)
 
@@ -11,6 +11,13 @@ def get_user_name(user_id):
     user = cursor.fetchone()
     cursor.close()
     return f"{user['first_name']} {user['last_name']}" if user else None
+
+def get_user_email(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT email FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return user['email'] if user else None
 
 def get_db():
     if 'db' not in g:
@@ -43,11 +50,12 @@ def create_ticket():
     status = data.get('status') if data.get('status') else 'Open'
 
     name = get_user_name(user['id'])
+    email = get_user_email(user['id'])
 
     cursor = get_db().cursor()
     cursor.execute(
-        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'], name)
+        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'], name, email)
     )
     get_db().commit()
     cursor.close()
@@ -60,11 +68,12 @@ def create_ticket():
         'contact_method': data['contact_method']
     }
 
-    send_google_chat_message(message_data)
+    # send_google_chat_message(message_data)
 
     return jsonify({"message": "Ticket created successfully!"}), 201
 
-# Update Ticket (Only the owner or admin can update)
+
+# Update Ticket Route
 @tickets_bp.route('/<int:ticket_id>', methods=['PUT'])
 @jwt_required()
 def update_ticket(ticket_id):
@@ -86,9 +95,24 @@ def update_ticket(ticket_id):
         "UPDATE tickets SET title = %s, description = %s, severity = %s, status = %s WHERE id = %s",
         (data['title'], data['description'], data['severity'], data['status'], ticket_id)
     )
+
+    # Create a named space for the ticket notification
+    space_name = f"Ticket Update for {ticket['name']}"  # Example space name
+    space_info = create_named_space(space_name)
+
+    if space_info:
+        space_id = space_info.get('name')  # Get the space ID from the response
+
+        # Add the ticket owner to the space
+        add_members_to_space(space_id, ticket['email'])
+
+        # Now send the chat notification
+        send_message(space_id, ticket)
+
     get_db().commit()
     cursor.close()
     return jsonify({"message": "Ticket updated successfully!"}), 200
+
 
 # Delete Ticket (Only the owner or admin can delete)
 @tickets_bp.route('/<int:ticket_id>', methods=['DELETE'])
@@ -113,6 +137,7 @@ def delete_ticket(ticket_id):
     return jsonify({"message": "Ticket deleted successfully."}), 204
 
 
+# Get User Tickets
 @tickets_bp.route('/user/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user_tickets(user_id):
@@ -131,6 +156,7 @@ def get_user_tickets(user_id):
     return jsonify(results), 200
 
 
+# Archive Ticket
 @tickets_bp.route('/<int:ticket_id>/archive', methods=['POST'])
 @jwt_required()
 def archive_ticket(ticket_id):
@@ -167,8 +193,7 @@ def archive_ticket(ticket_id):
     return jsonify({"message": "Ticket archived successfully."}), 200
 
 
-
-
+# Get Archived Tickets
 @tickets_bp.route('/users/<int:user_id>/archived', methods=['GET'])
 @jwt_required()
 def get_archived_tickets(user_id):
@@ -182,3 +207,10 @@ def get_archived_tickets(user_id):
     cursor.close()
 
     return jsonify(tickets), 200
+
+
+# Chat API
+@tickets_bp.route('/api/google-chat', methods=['POST'])
+def handle_chat_event():
+    data = request.get_json()
+    return jsonify({"text": "Message received!"})

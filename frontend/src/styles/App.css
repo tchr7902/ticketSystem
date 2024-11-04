@@ -260,6 +260,11 @@ input, select, textarea {
   box-shadow: none !important;
 }
 
+.form-select:focus {
+  border-color: #7FAC6E !important;
+  box-shadow: none !important;
+}
+
 .type-div {
   width: 80%;
 }
