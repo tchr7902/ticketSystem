@@ -104,7 +104,7 @@ def update_ticket(ticket_id):
         space_id = space_info.get('name')
 
         # Add the ticket owner to the space
-        add_members_to_space(space_id, [ticket['email']])
+        add_members_to_space(space_id, ticket['email'])
 
         # Send the chat notification
         message_text = f"Hello {ticket['name']}! Your ticket '{ticket['title']}' has been updated to '{ticket['status']}'."
