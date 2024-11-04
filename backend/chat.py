@@ -61,15 +61,15 @@ def get_service_account_credentials(user_email):
     )
     return creds
 
-# Create a space and add members
-def create_named_space(user_email, display_name, space_type="SPACE", description=None, guidelines=None):
-    # Get service account credentials with impersonation
-    creds = get_service_account_credentials(user_email)  
+# Function to create a named space
+def create_named_space(display_name, description=None, guidelines=None):
+    service_account_email = 'ticketbot@goodearthmarkets.com'
+    creds = get_service_account_credentials(service_account_email)
     service = build('chat', 'v1', credentials=creds)
 
     space_details = {
         "displayName": display_name,
-        "spaceType": space_type,
+        "spaceType": "SPACE",
         "spaceDetails": {
             "description": description,
             "guidelines": guidelines
@@ -79,7 +79,7 @@ def create_named_space(user_email, display_name, space_type="SPACE", description
     try:
         result = service.spaces().create(body=space_details).execute()
         print(f'Space created: {result}')
-        return result  # Return the result containing space information
+        return result
     except Exception as e:
         print(f'Failed to create space: {e}')
         return None
@@ -87,15 +87,17 @@ def create_named_space(user_email, display_name, space_type="SPACE", description
 # Function to add a single member to a space
 def add_members_to_space(space_id, email):
     service_account_email = 'ticketbot@goodearthmarkets.com'
-    creds = get_service_account_credentials(service_account_email) 
+    creds = get_service_account_credentials(service_account_email)
     service = build('chat', 'v1', credentials=creds)
 
     member_details = {
         "member": {
-            "type": "USER",
-            "email": email
+            "user": {
+                "email": email  # Specify the user being added
+            }
         }
     }
+    
     try:
         service.spaces().members().create(
             parent=space_id,
@@ -107,13 +109,14 @@ def add_members_to_space(space_id, email):
 
 # Function to send a message to a space
 def send_message(space_id, text):
-    email = 'ticketbot@goodearthmarkets.com'
-    creds = get_service_account_credentials(email) 
+    service_account_email = 'ticketbot@goodearthmarkets.com'
+    creds = get_service_account_credentials(service_account_email)
     service = build('chat', 'v1', credentials=creds)
 
     message = {
         "text": text
     }
+    
     try:
         service.spaces().messages().create(
             parent=space_id,
