@@ -55,6 +55,7 @@ def get_service_account_credentials():
     )
     return creds
 
+# Create a space and add members
 def create_named_space(display_name, space_type="SPACE", description=None, guidelines=None):
     creds = get_service_account_credentials()  # Get service account credentials
     service = build('chat', 'v1', credentials=creds)  # Build the service
@@ -75,3 +76,41 @@ def create_named_space(display_name, space_type="SPACE", description=None, guide
     except Exception as e:
         print(f'Failed to create space: {e}')
         return None
+
+# Function to add members to a space
+def add_members_to_space(space_id, emails):
+    creds = get_service_account_credentials()
+    service = build('chat', 'v1', credentials=creds)
+    
+    for email in emails:
+        member_details = {
+            "member": {
+                "type": "USER",
+                "email": email
+            }
+        }
+        try:
+            service.spaces().members().create(
+                parent=space_id,
+                body=member_details
+            ).execute()
+            print(f'Member {email} added to space {space_id}')
+        except Exception as e:
+            print(f'Failed to add member {email} to space: {e}')
+
+# Function to send a message to a space
+def send_message(space_id, text):
+    creds = get_service_account_credentials()
+    service = build('chat', 'v1', credentials=creds)
+    
+    message = {
+        "text": text
+    }
+    try:
+        service.spaces().messages().create(
+            parent=space_id,
+            body=message
+        ).execute()
+        print(f'Message sent to space {space_id}: {text}')
+    except Exception as e:
+        print(f'Failed to send message to space: {e}')

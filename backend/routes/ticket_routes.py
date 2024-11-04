@@ -82,7 +82,6 @@ def update_ticket(ticket_id):
     data = request.json
 
     cursor = get_db().cursor(dictionary=True)
-
     cursor.execute("SELECT * FROM tickets WHERE id = %s", (ticket_id,))
     ticket = cursor.fetchone()
 
@@ -98,18 +97,18 @@ def update_ticket(ticket_id):
     )
 
     # Create a named space for the ticket notification
-    space_name = f"Ticket Update for {ticket['name']}"  # Example space name
+    space_name = f"Ticket Update for {ticket['name']}"
     space_info = create_named_space(space_name)
 
     if space_info:
-        space_id = space_info.get('name')  # Get the space ID from the response
+        space_id = space_info.get('name')
 
         # Add the ticket owner to the space
-        add_members_to_space(space_id, [ticket['email']])  # Ensure the email is in a list
+        add_members_to_space(space_id, [ticket['email']])
 
-        # Now send the chat notification
+        # Send the chat notification
         message_text = f"Hello {ticket['email']}! Your ticket '{ticket['name']}' has been updated to '{ticket['status']}'."
-        send_message(space_id, message_text)  # Send message to the space
+        send_message(space_id, message_text)
 
     get_db().commit()
     cursor.close()
