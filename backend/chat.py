@@ -86,29 +86,28 @@ def create_named_space(display_name, description=None, guidelines=None):
 
 # Function to add members to a space
 def add_members_to_space(space_id, owner_email):
-    email = 'ticketbot@goodearthmarkets.com'  # Impersonating the same account
-    creds = get_service_account_credentials(email)  # Get credentials for the impersonated account
+    # List of emails to be added, including the ticketbot
+    emails = ['ticketbot@goodearthmarkets.com', owner_email]
+    
+    # Use the first email for impersonation
+    creds = get_service_account_credentials(emails[0])  
     service = build('chat', 'v1', credentials=creds)
 
-    # Create a list of member emails to add, including the ticketbot
-    members_to_add = [email, owner_email]
-
-    for member_email in members_to_add:
+    for email in emails:
         member_details = {
             "member": {
-                "email": member_email  # Use just the email directly
+                "type": "USER",  # Keep the 'USER' type if required by your use case
+                "email": email
             }
         }
-        
         try:
             service.spaces().members().create(
                 parent=space_id,
                 body=member_details
             ).execute()
-            print(f'Member {member_email} added to space {space_id}')
+            print(f'Member {email} added to space {space_id}')
         except Exception as e:
-            print(f'Failed to add member {member_email} to space: {e}')
-
+            print(f'Failed to add member {email} to space: {e}')
 
 
 # Function to send a message to a space
