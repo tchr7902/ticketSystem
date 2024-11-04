@@ -38,7 +38,11 @@ def send_google_chat_message(space_id, ticket):
 # Define the scope for the Chat API
 SCOPES = [
     'https://www.googleapis.com/auth/chat.app.spaces',
-    'https://www.googleapis.com/auth/chat.messages'
+    'https://www.googleapis.com/auth/chat.messages',
+    'https://www.googleapis.com/auth/chat.spaces',
+    'https://www.googleapis.com/auth/chat.memberships',
+    'https://www.googleapis.com/auth/chat.admin.spaces',
+    'https://www.googleapis.com/auth/chat.spaces.create'
 ]
 
 SPACE_TYPE = {
@@ -47,19 +51,20 @@ SPACE_TYPE = {
     "DIRECT_MESSAGE": "DIRECT_MESSAGE"
 }
 
-def get_service_account_credentials():
+# Function to get service account credentials with user impersonation
+def get_service_account_credentials(user_email):
     service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT'))
     creds = service_account.Credentials.from_service_account_info(
         service_account_info,
         scopes=SCOPES,
-        subject="trevor.c@goodearthmarkets.com"
+        subject=user_email  # Impersonate the user
     )
     return creds
 
 # Create a space and add members
-def create_named_space(display_name, space_type="SPACE", description=None, guidelines=None):
-    creds = get_service_account_credentials()  # Get service account credentials
-    service = build('chat', 'v1', credentials=creds)  # Build the service
+def create_named_space(user_email, display_name, space_type="SPACE", description=None, guidelines=None):
+    creds = get_service_account_credentials(user_email)  # Get service account credentials with impersonation
+    service = build('chat', 'v1', credentials=creds)
 
     space_details = {
         "displayName": display_name,
@@ -80,9 +85,9 @@ def create_named_space(display_name, space_type="SPACE", description=None, guide
 
 # Function to add members to a space
 def add_members_to_space(space_id, emails):
-    creds = get_service_account_credentials()
+    creds = get_service_account_credentials(emails[0])  # Use the first email for impersonation
     service = build('chat', 'v1', credentials=creds)
-    
+
     for email in emails:
         member_details = {
             "member": {
@@ -101,9 +106,9 @@ def add_members_to_space(space_id, emails):
 
 # Function to send a message to a space
 def send_message(space_id, text):
-    creds = get_service_account_credentials()
+    creds = get_service_account_credentials()  # You can still get creds for a specific user if needed
     service = build('chat', 'v1', credentials=creds)
-    
+
     message = {
         "text": text
     }
