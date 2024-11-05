@@ -1,12 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
+import { FaCog } from 'react-icons/fa'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
-import logo2 from '../images/gem-singlelogo.png'
-import settings_icon from '../images/settings_icon.png';
 
 const SettingsPage = () => {
     const { user, logout, changePassword, changeEmail } = useContext(AuthContext);
@@ -132,7 +131,7 @@ const SettingsPage = () => {
             </nav>
             <nav className="backup-settings-navbar">
             <button className="btn-2" onClick={backButton}>Back</button>
-            <img className="responsive-settings-icon" src={settings_icon} alt="user icon" />
+            <FaCog className="responsive-settings-icon"/>
             <button className="btn-important" onClick={handleLogout}>Logout</button>
             </nav>
             <div className="change-div">

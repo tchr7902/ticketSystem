@@ -45,8 +45,7 @@ li {
 }
 
 li:hover {
-  transform: scale(1.003);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .13);
 }
 
 .hide-text {
@@ -163,7 +162,6 @@ img {
   background-color: rgba(255, 255, 255, 1);
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 10px;
-  transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
   border: .5px solid #D3D3D3;
 }
 
@@ -320,7 +318,7 @@ input, select, textarea {
 
 .btn-important:hover {
   box-shadow: rgba(78, 113, 65,.35) 0 -25px 18px -14px inset,rgba(78, 113, 65,.25) 0 1px 2px,rgba(78, 113, 65,.25) 0 2px 4px,rgba(78, 113, 65,.25) 0 4px 8px,rgba(78, 113, 65,.25) 0 8px 16px,rgba(78, 113, 65,.25) 0 16px 32px;
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .btn-important:active {
@@ -359,9 +357,6 @@ input, select, textarea {
   box-shadow: none;
 }
 
-
-
-
 .btn-2 {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 30px;
@@ -387,7 +382,7 @@ input, select, textarea {
 .btn-2:hover {
   box-shadow: rgba(78, 113, 65,.25) 0 1px 2px,rgba(78, 113, 65,.25) 0 2px 4px,rgba(78, 113, 65,.25) 0 4px 8px,rgba(78, 113, 65,.25) 0 8px 16px,rgba(78, 113, 65,.25) 0 16px 32px;
   border-color: #7FAC6E;
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .btn-2:active {
@@ -395,11 +390,6 @@ input, select, textarea {
   border-color: #7FAC6E;
   box-shadow: none;
 }
-
-
-
-
-
 
 .icon {
   color: #1C1C1C;
@@ -412,9 +402,9 @@ input, select, textarea {
 }
 
 .register-icon {
-  height: 61px;
-  width: 61px;
-  margin-top: 20px;
+  width: 45px;
+  height: 45px;
+  margin-top: 10px;
 }
 
 /* List Group Styles */
@@ -444,14 +434,13 @@ input, select, textarea {
   padding: 20px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px;
+  box-shadow: rgba(211, 211, 211, .6) 0px 2px 10px;
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
   border: .5px solid #D3D3D3;
 }
 
 .change:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
-  scale: 1.004;
 }
 
 /* My Info Styles */
@@ -460,11 +449,12 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: auto;
   p {
     margin: 0;
   }
   h4 {
-    margin: 5px;
+    margin: 0;
   }
 }
 
@@ -493,8 +483,9 @@ input, select, textarea {
 
 /* Responsive Icon Styles */
 .home-page-icon {
-  width: 71px;
-  height: 71px;
+  color: #1c1c1c;
+  width: 51px;
+  height: 51px;
   cursor: pointer;
   background-color: transparent;
 }
@@ -503,14 +494,18 @@ input, select, textarea {
   transform: scale(1.07);
 }
 
+.home-page-icon:active {
+  transform: scale(.95);
+}
+
 .home-page:hover {
   transform: scale(1.07);
 }
 
 .profile-icon {
   margin-top: 10px;
-  width: 71px;
-  height: 71px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   background-color: transparent;
 }
@@ -521,8 +516,8 @@ input, select, textarea {
 
 .responsive-settings-icon {
   margin-top: 7px;
-  width: 51px;
-  height: 51px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
 }
 
@@ -534,6 +529,10 @@ input, select, textarea {
 
 .responsive-chat-icon:hover {
   transform: scale(1.07);
+}
+
+.responsive-chat-icon:active {
+  transform: scale(.95);
 }
 
 .badge-outline {
@@ -648,11 +647,10 @@ input, select, textarea {
   border-radius: 8px;
   overflow-y: auto;
   margin-bottom: 20px;
-  margin-top: 40px;
+  margin-top: 1.5rem;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
   cursor: pointer;
-
 }
 
 .register-card:hover {
@@ -750,16 +748,9 @@ input, select, textarea {
     padding-bottom: 30px;
   }
 
-  .home-page-icon {
-      margin-top: 7px;
-      width: 61px;
-      height: 61px;
-      cursor: pointer;
-  }
-
   .responsive-chat-icon {
-    width: 31px;
-    height: 31px;
+    width: 41px;
+    height: 41px;
     cursor: pointer;
 }
 
@@ -771,6 +762,13 @@ input, select, textarea {
 
   h2 {
       font-size: 1.5rem;
+  }
+
+  .home-page-icon {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    background-color: transparent;
   }
 
 }

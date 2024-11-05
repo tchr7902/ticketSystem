@@ -2,10 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { fetchTickets, deleteTicket, createTicket, updateTicket, archiveTicket } from "../utils/api.js";
 import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
-import { Modal, Button, Form } from 'react-bootstrap';
-import { FaEdit, FaTrash, FaArchive } from 'react-icons/fa';
-import { ToastContainer, toast, Bounce } from 'react-toastify';
-import { Tooltip, TooltipProvider } from 'react-tooltip';
+import { Modal, Form } from 'react-bootstrap';
+import { FaTrashAlt, FaArchive, FaPencilAlt  } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
 
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/App.css';
@@ -190,14 +190,14 @@ function TicketList() {
                                 </div>
                                 <div className="icon-div">
                                     <button className="icon" onClick={() => handleEdit(ticket)}>
-                                        <FaEdit />
+                                        <FaPencilAlt />
                                     </button>
                                     
                                     <button className="icon" onClick={() => {
                                         setTicketToDelete(ticket);
                                         setShowDeleteModal(true);
                                     }}>
-                                        <FaTrash />
+                                        <FaTrashAlt />
                                     </button>
                                     {user.role === "admin" && (
                                         <button className="icon" onClick={() => openArchiveModal(ticket)}>

@@ -2,12 +2,13 @@ import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
 import { getUserTickets } from '../utils/api';
-import { Modal, Button } from 'react-bootstrap';
-import { format, zonedTimeToUtc } from 'date-fns-tz';
+import { Modal } from 'react-bootstrap';
+import { FaUser } from 'react-icons/fa';
+import { format } from 'date-fns-tz';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
-import user_logo from '../images/user_icon.png';
+
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -125,7 +126,7 @@ const ProfilePage = () => {
             </nav>
             <nav className="backup-profile-navbar">
             <button className="btn-2 mt-3" onClick={backButton}>Back</button>
-            <img className="profile-icon" src={user_logo} alt="user icon" />
+            <FaUser className="profile-icon" />
             <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
             </nav>
             <div className="my-info">

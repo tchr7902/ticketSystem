@@ -5,7 +5,7 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../images/gem_logo.png';
-import register_icon from '../images/register_icon.png';
+import { FaUserPlus } from 'react-icons/fa';
 import '../styles/App.css';
 
 function AdminRegister() {
@@ -91,7 +91,7 @@ function AdminRegister() {
             </nav>
             <nav className="backup-register-navbar">
                 <button className="btn-2 mt-3" onClick={backButton}>Back</button>
-                <img className="register-icon" src={register_icon} alt="register icon" />
+                <FaUserPlus className="register-icon" />
                 <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
             </nav>
             <div className="register-admin-card p-4" style={{ maxWidth: '400px', width: '100%' }}>

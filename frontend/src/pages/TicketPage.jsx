@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
-import user_logo from '../images/user_icon.png';
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { ToastContainer, Bounce } from 'react-toastify';
+import { FaBars } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 function TicketPage() {
     const { user, logout } = useContext(AuthContext);
@@ -20,11 +20,11 @@ function TicketPage() {
     const backupDropdownRef = useRef(null);
     const navigate = useNavigate();
 
-    const handleUserIconClick = () => {
+    const handleMenuIconClick = () => {
         setDropdownOpen((prevState) => !prevState);
     };
 
-    const handleBackupUserIconClick = () => {
+    const handleBackupMenuIconClick = () => {
         setBackupDropdownOpen((prevState) => !prevState);
     };
     
@@ -95,14 +95,11 @@ function TicketPage() {
                 <h2>IT Support Hub</h2>
             </a>
 
-            {/* User Icon and Dropdown */}
+            {/* Menu Icon and Dropdown */}
             <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
-                <img 
+                <FaBars 
                     className="home-page-icon" 
-                    src={user_logo} 
-                    alt="user icon" 
-                    onClick={handleUserIconClick} 
-                    style={{ cursor: 'pointer' }}
+                    onClick={handleMenuIconClick} 
                 />
                 
                 {dropdownOpen && (
@@ -140,11 +137,9 @@ function TicketPage() {
             <nav className="backup-navbar">
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
                 <div ref={backupDropdownRef} className="position-relative">
-                    <img
+                    <FaBars
                         className="home-page-icon"
-                        src={user_logo}
-                        alt="user icon"
-                        onClick={handleBackupUserIconClick}
+                        onClick={handleBackupMenuIconClick}
                     />
                     {backupDropdownOpen && (
                             <div 
