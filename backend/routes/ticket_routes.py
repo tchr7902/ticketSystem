@@ -127,7 +127,7 @@ def update_ticket(ticket_id):
             add_members_to_space(space_id, ticket['email'])
 
             # Send the chat notification
-            message_text = f"Hello {ticket['name']}! Your ticket '{ticket['title']}' has been updated to '{data['status']}'."
+            message_text = f"📢 Hello *{ticket['name']}!*\n\nThe status of your ticket: *{ticket['title']}* has been updated to: *{data['status']}*."
             send_message(space_id, message_text)
 
     get_db().commit()
