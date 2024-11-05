@@ -55,6 +55,7 @@ li:hover {
   display: inline-block; 
   max-width: 70%;   
   vertical-align: middle; 
+
 }
 
 
@@ -149,6 +150,12 @@ img {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
+}
+
+.icon-div {
+  display: flex;
+  flex-direction: row;
+  margin-left: 0px;
 }
 
 .page-div {
@@ -638,7 +645,6 @@ input, select, textarea {
   margin-bottom: 10px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
-  cursor: pointer;
 }
 
 .register-admin-card {
@@ -650,7 +656,6 @@ input, select, textarea {
   margin-top: 1.5rem;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
-  cursor: pointer;
 }
 
 .register-card:hover {
@@ -898,13 +903,6 @@ input, select, textarea {
     flex-direction: column;
   }
 
-  }
-
-  @media screen and (max-width: 400px) {
-    .icon-div {
-      display: flex;
-      flex-direction: row;
-    }
   }
 
   @media screen and (max-width: 550px) {

@@ -66,7 +66,7 @@ const SettingsPage = () => {
 
             setTimeout(() => toast.success('Email updated successfully!'), 100);
         } catch (err) {
-            setTimeout(() => toast.error('Failed to update email.'), 100);
+            setTimeout(() => toast.error(err.message), 100); 
         }
     };
 
@@ -76,6 +76,22 @@ const SettingsPage = () => {
             setTimeout(() => toast.error('Passwords do not match.'), 100);
             return;
         }
+
+        if (newPassword.length < 8) {
+            setError("Password must be at least 8 characters long.");
+            return;
+        }
+
+        if (!/[A-Z]/.test(newPassword)) {
+            setError("Password must contain at least one uppercase letter.");
+            return;
+        }
+        
+        if (!/[!@#$%^&*]/.test(newPassword)) {
+            setError("Password must contain at least one special character.");
+            return;
+        }
+
         try {
             await changePassword(currentPassword, newPassword);
             setTimeout(() => toast.success('Password changed successfully!'), 100);

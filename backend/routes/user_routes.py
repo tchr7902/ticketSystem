@@ -271,6 +271,11 @@ def change_email():
             # Verify the current email
             if user['email'] != current_email:
                 return jsonify({"error": "Current email is incorrect."}), 401
+            
+            # Check for existing email
+            cursor.execute("SELECT * FROM users WHERE email = %s", (new_email,))
+            if cursor.fetchone():
+                return jsonify({"error": "Account already registered with this email."}), 400
 
             # Validate new email format
             if '@goodearthmarkets.com' not in new_email:
