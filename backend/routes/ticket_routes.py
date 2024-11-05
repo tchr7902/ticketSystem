@@ -81,12 +81,12 @@ def create_ticket():
 
         # Send the chat notification
         message_text = (
-            f"🔔 Hello *{name}!*\n\n"
+            f"🔔 *Hello {name}!*\n\n"
             f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
-            f"The IT Team has received your request and will start addressing it as soon as possible.\n\n"
-            f"If we have any questions, we'll reach out to you using the contact method you provided:\n*{data['contact_method']}*\n\n"
-            f"If your issue is *critical* and disrupts normal operations, please don't hesitate to contact an IT member directly. "
-            f"You'll receive updates on your ticket status in this chat. Thank you!"
+            f"We've received your request and will begin addressing it as soon as possible.\n\n"
+            f"If we have any questions, we will reach out to you using the contact method you provided:\n*{data['contact_method']}*\n\n"
+            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
+            f"You'll receive updates on your ticket status here in this chat. Thank you!"
         )
         send_message(space_id, message_text)
 
@@ -127,7 +127,11 @@ def update_ticket(ticket_id):
             add_members_to_space(space_id, ticket['email'])
 
             # Send the chat notification
-            message_text = f"📢 Hello *{ticket['name']}!*\n\nThe status of your ticket: *{ticket['title']}* has been updated to: *{data['status']}*."
+            message_text = (
+                f"📢 *Hello {ticket['name']}!*\n\n"
+                f"The status of your ticket: *{ticket['title']}* has been updated to: *{data['status']}*.\n\n"
+                f"Thank you for your patience, and feel free to reach out to an IT Member if you have any questions!"
+            )
             send_message(space_id, message_text)
 
     get_db().commit()
