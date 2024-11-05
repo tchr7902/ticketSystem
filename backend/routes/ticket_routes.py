@@ -81,11 +81,12 @@ def create_ticket():
 
         # Send the chat notification
         message_text = (
-            f"Hello {name}!\n\n"
-            f"Thank you for submitting your IT ticket: {data['title']}\n\n"
+            f"🔔 Hello *{name}!*\n\n"
+            f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
             f"The IT Team has received your request and will start addressing it as soon as possible.\n\n"
-            f"If we have any questions, we'll reach out to you using the contact method you provided:\n{data['contact_method']}\n\n"
-            "If your issue is critical and disrupts normal operations, please don't hesitate to contact an IT member directly. You'll receive updates on your ticket status in this chat. Thank you!"
+            f"If we have any questions, we'll reach out to you using the contact method you provided:\n*{data['contact_method']}*\n\n"
+            f"If your issue is *critical* and disrupts normal operations, please don't hesitate to contact an IT member directly. "
+            f"You'll receive updates on your ticket status in this chat. Thank you!"
         )
         send_message(space_id, message_text)
 
