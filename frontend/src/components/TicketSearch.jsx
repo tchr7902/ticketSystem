@@ -39,8 +39,8 @@ function TicketSearch() {
     const [keywords, setKeywords] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [searchResults, setSearchResults] = useState([]); // State to hold search results
-    const [showResultsModal, setShowResultsModal] = useState(false); // State to manage modal visibility
+    const [searchResults, setSearchResults] = useState([]); 
+    const [showResultsModal, setShowResultsModal] = useState(false); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,13 +48,13 @@ function TicketSearch() {
         setError(null);
 
         try {
-            const data = await searchTickets(keywords); // Call the searchTickets function
-            setSearchResults(data); // Update the search results state
-            setShowResultsModal(true); // Show the modal after fetching results
+            const data = await searchTickets(keywords); 
+            setSearchResults(data);
+            setShowResultsModal(true);
         } catch (err) {
-            setError(err.message); // Set error if any
+            setError(err.message);
         } finally {
-            setLoading(false); // Always set loading to false after request
+            setLoading(false);
         }
     };
 
@@ -79,19 +79,18 @@ function TicketSearch() {
                                 type="text"
                                 className="form-control input-box"
                                 placeholder="Keywords"
-                                value={keywords} // Bind the input value to the keywords state
-                                onChange={(e) => setKeywords(e.target.value)} // Update keywords state on input change
-                                required // Make the input required
+                                value={keywords}
+                                onChange={(e) => setKeywords(e.target.value)}
+                                required 
                             />
                         </div>
                     </div>
 
-                    {error && <div className="text-danger">{error}</div>} {/* Error message */}
-
-                    <div className="d-flex justify-content-center">
+                    <div className="d-flex justify-content-center flex-column align-items-center">
                         <div>
                             <button type="submit" className="btn-important ticket-save">Search</button>
                         </div>
+                        {error && <div className="text-danger mt-4">{error}</div>} {/* Error message */}
                     </div>
                 </form>
             )}
@@ -129,7 +128,7 @@ function TicketSearch() {
                             );
                         })
                     ) : (
-                        !loading && <p>No tickets found matching your search.</p>
+                        !loading && <p className="mt-4 ml-5">No tickets found matching your search.</p>
                     )}
                 </Modal.Body>
                 <Modal.Footer>

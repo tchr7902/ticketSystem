@@ -5,29 +5,70 @@ const USER_URL = "/users";
 
 // Ticket-related functions
 export const fetchTickets = async () => {
-    const response = await axiosInstance.get(BASE_URL); 
-    return response.data;
+    try {
+        const response = await axiosInstance.get(BASE_URL); 
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error fetching tickets:', error);
+        throw error;
+    }
 };
+    
 
 export const createTicket = async (ticket) => {
-    const response = await axiosInstance.post(BASE_URL, ticket); 
-    return response.data; 
+    try {
+        const response = await axiosInstance.post(BASE_URL, ticket); 
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error creating ticket:', error);
+        throw error;
+    }
 };
 
 export const updateTicket = async (id, updates) => {
-    const response = await axiosInstance.put(`${BASE_URL}/${id}`, updates); 
-    return response.data; 
+    try {
+        const response = await axiosInstance.put(`${BASE_URL}/${id}`, updates); 
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error updating ticket:', error);
+        throw error;
+    }
 };
 
 export const deleteTicket = async (id) => {
-    await axiosInstance.delete(`${BASE_URL}/${id}`); 
+    try {
+        await axiosInstance.delete(`${BASE_URL}/${id}`);
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error deleting ticket:', error);
+        throw error;
+    }
 };
 
 export const searchTickets = async (keywords) => {
-    const response = await axiosInstance.get(`${BASE_URL}/search`, {
-        params: { keywords }
-    });
-    return response.data;
+    try {
+        const response = await axiosInstance.get(`${BASE_URL}/search`, {
+            params: { keywords }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error searching tickets:', error);
+        throw error;
+    }
 };
 
 // User-related functions
@@ -47,34 +88,66 @@ export const registerAdmin = async (email, password, first_name, last_name, stor
 };
 
 export const fetchUser = async (token) => {
-    const response = await axiosInstance.get(`${USER_URL}/me`, {
-        headers: {
-            Authorization: `Bearer ${token}`, 
-        },
-    });
-    return response.data;
+    try {
+        const response = await axiosInstance.get(`${USER_URL}/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`, 
+            },
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error fetching user:', error);
+        throw error;
+    }
 };
 
 export const changeUserPassword = async (email, currentPassword, newPassword) => {
-    const response = await axiosInstance.post(`${USER_URL}/change-password`, {
-        email,
-        currentPassword,
-        newPassword,
-    });
-    return response.data;
+    try {
+        const response = await axiosInstance.post(`${USER_URL}/change-password`, {
+            email,
+            currentPassword,
+            newPassword,
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error changing password:', error);
+        throw error;
+    }
 };
 
 export const changeUserEmail = async (currentEmail, newEmail) => {
-    const response = await axiosInstance.post(`${USER_URL}/change-email`, {
-        currentEmail,
-        newEmail
-    });
-    return response.data;
+    try {
+        const response = await axiosInstance.post(`${USER_URL}/change-email`, {
+            currentEmail,
+            newEmail
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error changing email:', error);
+        throw error;
+    }
 };
 
 export const getUserTickets = async (user_id) => {
-    const response = await axiosInstance.get(`${BASE_URL}/user/${user_id}`);
-    return response.data;
+    try {
+        const response = await axiosInstance.get(`${BASE_URL}/user/${user_id}`);
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
+        console.error('Error fetching tickets:', error);
+        throw error;
+    }
 };
 
 export const archiveTicket = async (ticketId, notes) => {
@@ -90,6 +163,9 @@ export const archiveTicket = async (ticketId, notes) => {
         );
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
         console.error('Error archiving ticket:', error);
         throw error;
     }
@@ -100,6 +176,9 @@ export const fetchArchivedTickets = async (userId) => {
         const response = await axiosInstance.get(`${BASE_URL}/users/${userId}/archived`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 401) {
+            logout();
+        }
         console.error('Error fetching archived tickets:', error);
         throw error;
     }

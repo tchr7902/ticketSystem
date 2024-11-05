@@ -176,7 +176,6 @@ def get_user_tickets(user_id):
     return jsonify(results), 200
 
 
-# Search Tickets
 @tickets_bp.route('/search', methods=['GET'])
 @jwt_required()
 def search_tickets():
@@ -191,13 +190,60 @@ def search_tickets():
 
         if user['role'] == 'admin':
             cursor.execute(
-                "SELECT * FROM tickets WHERE title LIKE %s OR description LIKE %s", 
-                ('%' + search_term + '%', '%' + search_term + '%')  # This uses single quotes in the SQL
+                """
+                SELECT * FROM tickets 
+                WHERE 
+                    id LIKE %s OR 
+                    title LIKE %s OR 
+                    description LIKE %s OR 
+                    created_at LIKE %s OR 
+                    severity LIKE %s OR 
+                    status LIKE %s OR 
+                    contact_method LIKE %s OR 
+                    name LIKE %s OR 
+                    email LIKE %s
+                """, 
+                (
+                    '%' + search_term + '%',  # for id
+                    '%' + search_term + '%',  # for title
+                    '%' + search_term + '%',  # for description
+                    '%' + search_term + '%',  # for created_at
+                    '%' + search_term + '%',  # for severity
+                    '%' + search_term + '%',  # for status
+                    '%' + search_term + '%',  # for contact_method
+                    '%' + search_term + '%',  # for name
+                    '%' + search_term + '%',  # for email
+                )
             )
         else:
             cursor.execute(
-                "SELECT * FROM tickets WHERE user_id = %s AND (title LIKE %s OR description LIKE %s)", 
-                (user['id'], '%' + search_term + '%', '%' + search_term + '%')  # Also uses single quotes in the SQL
+                """
+                SELECT * FROM tickets 
+                WHERE 
+                    user_id = %s AND (
+                    id LIKE %s OR 
+                    title LIKE %s OR 
+                    description LIKE %s OR 
+                    created_at LIKE %s OR 
+                    severity LIKE %s OR 
+                    status LIKE %s OR 
+                    contact_method LIKE %s OR 
+                    name LIKE %s OR 
+                    email LIKE %s
+                )
+                """, 
+                (
+                    user['id'],
+                    '%' + search_term + '%',  # for id
+                    '%' + search_term + '%',  # for title
+                    '%' + search_term + '%',  # for description
+                    '%' + search_term + '%',  # for created_at
+                    '%' + search_term + '%',  # for severity
+                    '%' + search_term + '%',  # for status
+                    '%' + search_term + '%',  # for contact_method
+                    '%' + search_term + '%',  # for name
+                    '%' + search_term + '%',  # for email
+                )
             )
 
         tickets = cursor.fetchall() 
@@ -206,6 +252,7 @@ def search_tickets():
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
+
 
 
 # Archive Ticket

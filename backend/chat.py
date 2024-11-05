@@ -1,38 +1,38 @@
 from dotenv import load_dotenv
 import os
 from google.oauth2 import service_account
-from google.auth.transport.requests import Request
 import json
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
+import requests
 
 
+# Load environment variables from the .env file
 load_dotenv('../../.env')
 
 # Google Chat API URL
-chat_url = "https://chat.googleapis.com/v1/spaces"
+chatURL = os.getenv('CHATURL')
 
-def send_google_chat_message(space_id, ticket):
+def send_google_chat_message(ticket):
+    webhook_url = chatURL
+
     message = {
         'text': (
-            f"🚨 *Ticket Created!*\n\n"
+            f"🚨 *New Ticket Created!*\n\n"
             f"*Title:* {ticket['title']}\n"
             f"*Description:* {ticket['description']}\n"
             f"*Severity:* {ticket['severity']}\n"
             f"*Submitted By:* {ticket['name']}\n"
-            f"*Status:* {ticket['status']}\n"
+            f"*Contact Method:* {ticket['contact_method']}\n"
         )
     }
 
-    response = send_message(space_id, message)
+    response = requests.post(webhook_url, json=message)
 
-    if response:
+    if response.status_code == 200:
         print('Message sent successfully!')
     else:
-        print('Failed to send message.')
+        print(f'Failed to send message: {response.content}')
 
 
 # Define the scope for the Chat API
