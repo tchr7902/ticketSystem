@@ -835,6 +835,12 @@ input, select, textarea {
   left: 56px;
   animation: lds-ellipsis3 0.6s infinite;
 }
+
+.icon-div {
+  display: flex;
+  flex-direction: row;
+}
+
 @keyframes lds-ellipsis1 {
   0% {
     transform: scale(0);
@@ -867,6 +873,12 @@ input, select, textarea {
 
   .img-2 {
       display: block;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .icon-div {
+    flex-direction: column;
   }
 }
 
