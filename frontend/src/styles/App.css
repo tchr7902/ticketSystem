@@ -42,6 +42,7 @@ li {
   box-shadow: rgba(211, 211, 211, .6) 0px 2px 10px;
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
   border: .5px solid #D3D3D3;
+  overflow: auto;
 }
 
 li:hover {
@@ -150,6 +151,12 @@ img {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
+}
+
+.icon-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .page-div {
@@ -835,12 +842,6 @@ input, select, textarea {
   left: 56px;
   animation: lds-ellipsis3 0.6s infinite;
 }
-
-.icon-div {
-  display: flex;
-  flex-direction: row;
-}
-
 @keyframes lds-ellipsis1 {
   0% {
     transform: scale(0);
@@ -873,12 +874,6 @@ input, select, textarea {
 
   .img-2 {
       display: block;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .icon-div {
-    flex-direction: column;
   }
 }
 

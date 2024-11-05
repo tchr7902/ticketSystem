@@ -168,13 +168,13 @@ function TicketList() {
             )}
             <div className="mt-4">
                 {tickets.length === 0 ? (
-                    <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "No Tickets Available."}</p>
+                    <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "You don't have any tickets yet."}</p>
                 ) : (
                     <ul className="list-group">
                         <h3 className="d-flex justify-content-center">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
                         {tickets.map((ticket) => (
                             <li key={ticket.id}>
-                                <div style={{ display: 'flex', alignItems: 'center', width: '75%' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                                     <span
                                         style={{
                                             width: '10px',
