@@ -152,12 +152,6 @@ img {
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
 }
 
-.icon-div {
-  display: flex;
-  flex-direction: row;
-  margin-left: 0px;
-}
-
 .page-div {
   padding-bottom: 80px;
   padding-top: 0px;
@@ -742,7 +736,7 @@ input, select, textarea {
     justify-content: space-around;
     padding: 30px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, .09);
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, .9);
     border: .5px solid #D3D3D3;
   }
 
