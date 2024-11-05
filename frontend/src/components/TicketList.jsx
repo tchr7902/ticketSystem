@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { fetchTickets, deleteTicket, createTicket, updateTicket, archiveTicket } from "../utils/api.js";
 import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
+import TicketSearch from "./TicketSearch.jsx"
 import { Modal, Form } from 'react-bootstrap';
 import { FaTrashAlt, FaArchive, FaPencilAlt  } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -95,6 +96,7 @@ function TicketList() {
 
     const handleArchiveConfirm = async () => {
         try {
+            setLoading(true);
             if (ticketToArchive) {
                 await archiveTicket(ticketToArchive.id, archiveNotes);
                 setTickets(tickets.filter((ticket) => ticket.id !== ticketToArchive.id));
@@ -104,6 +106,7 @@ function TicketList() {
             console.error("Error archiving ticket:", error);
             showToast("Error archiving ticket. Please try again.", "error");
         } finally {
+            setLoading(false);
             setShowArchiveModal(false);
             setArchiveNotes("");
         }
@@ -155,6 +158,12 @@ function TicketList() {
                     {user.role === "admin" ? "Create a New Ticket" : "Create a New Ticket"}
                 </h2>
                 <TicketForm selectedTicket={null} onSave={handleSave} />
+            </div>                          
+            )}
+            {user.role === "admin" && (
+                <div className="new-ticket">
+                <h2 className="text-center mb-2">Search Tickets</h2>
+                <TicketSearch />
             </div>                          
             )}
             <div className="mt-4">

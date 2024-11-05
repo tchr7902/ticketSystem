@@ -69,7 +69,7 @@ def create_ticket():
         'contact_method': data['contact_method']
     }
 
-    # send_google_chat_message(message_data)
+    send_google_chat_message(message_data)
 
     space_info = create_user_space(email)
 
@@ -174,6 +174,38 @@ def get_user_tickets(user_id):
 
     results = {status: count for status, count in tickets}
     return jsonify(results), 200
+
+
+# Search Tickets
+@tickets_bp.route('/search', methods=['GET'])
+@jwt_required()
+def search_tickets():
+    user = get_jwt_identity()
+    search_term = request.args.get('keywords', '').strip()  # Make sure the query param is 'keywords'
+
+    if not search_term:
+        return jsonify({"error": "Keywords required."}), 400
+
+    try:
+        cursor = get_db().cursor(dictionary=True)
+
+        if user['role'] == 'admin':
+            cursor.execute(
+                "SELECT * FROM tickets WHERE title LIKE %s OR description LIKE %s", 
+                ('%' + search_term + '%', '%' + search_term + '%')  # This uses single quotes in the SQL
+            )
+        else:
+            cursor.execute(
+                "SELECT * FROM tickets WHERE user_id = %s AND (title LIKE %s OR description LIKE %s)", 
+                (user['id'], '%' + search_term + '%', '%' + search_term + '%')  # Also uses single quotes in the SQL
+            )
+
+        tickets = cursor.fetchall() 
+        return jsonify(tickets), 200 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
 
 
 # Archive Ticket

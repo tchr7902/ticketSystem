@@ -679,6 +679,11 @@ input, select, textarea {
 }
 
 
+.dropdown-item:active {
+  background-color: #7FAC6E;
+}
+
+
 /* Media Queries */
 @media screen and (max-width: 995px) {
   .form-select-boxes {
@@ -786,6 +791,13 @@ input, select, textarea {
   justify-content: center;          
   align-items: center;              
   height: 80vh;                      
+}
+
+.loader-wrapper-2 {
+  display: flex;                   
+  justify-content: center;          
+  align-items: center;
+  margin: 20px;                                 
 }
 
 .lds-ellipsis,

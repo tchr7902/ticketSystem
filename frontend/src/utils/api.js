@@ -23,6 +23,13 @@ export const deleteTicket = async (id) => {
     await axiosInstance.delete(`${BASE_URL}/${id}`); 
 };
 
+export const searchTickets = async (keywords) => {
+    const response = await axiosInstance.get(`${BASE_URL}/search`, {
+        params: { keywords }
+    });
+    return response.data;
+};
+
 // User-related functions
 export const loginUser = async (email, password) => {
     const response = await axiosInstance.post(`${USER_URL}/login`, { email, password });

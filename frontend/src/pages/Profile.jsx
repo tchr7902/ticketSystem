@@ -9,7 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
 
-
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const timeZone = 'America/Denver';
