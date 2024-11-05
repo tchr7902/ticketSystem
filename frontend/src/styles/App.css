@@ -31,8 +31,8 @@ li {
   padding-right: 20px;
   margin-top: 5px;
   margin-bottom: 5px;
-  margin-right: 20px;
-  margin-left: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
   background-color: white;
   display: flex;
   justify-content: space-between;
@@ -54,11 +54,20 @@ li:hover {
   overflow: hidden;   
   text-overflow: ellipsis;
   display: inline-block; 
-  max-width: 70%;   
+  max-width: 50%;   
   vertical-align: middle; 
-
 }
 
+.title-div {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.li-div {
+  display: flex;
+  flex-direction: column;
+}
 
 /* Other body styles */
 
@@ -157,6 +166,7 @@ img {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
 }
 
 .page-div {
@@ -906,7 +916,7 @@ input, select, textarea {
 
   }
 
-  @media screen and (max-width: 550px) {
+  @media screen and (max-width: 500px) {
     .severity {
       display: none;
   }

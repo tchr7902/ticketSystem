@@ -173,8 +173,8 @@ function TicketList() {
                     <ul className="list-group">
                         <h3 className="d-flex justify-content-center">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
                         {tickets.map((ticket) => (
-                            <li key={ticket.id}>
-                                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                            <li className="" key={ticket.id}>
+                                <div className="title-div">
                                     <span
                                         style={{
                                             width: '10px',
