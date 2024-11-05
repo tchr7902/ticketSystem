@@ -12,13 +12,11 @@ const App = () => {
     const location = useLocation();
 
     useEffect(() => {
-        // Store the current route in sessionStorage when the location changes
         if (token) {
             sessionStorage.setItem('currentRoute', location.pathname);
         }
     }, [location, token]);
 
-    // Get the route from sessionStorage
     const storedRoute = sessionStorage.getItem('currentRoute') || '/users/login';
 
     return (

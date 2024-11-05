@@ -166,11 +166,13 @@ function TicketList() {
                 <TicketSearch />
             </div>                          
             )}
-            <div className="mt-4">
+            
+            <div className="list-div">
                 {tickets.length === 0 ? (
                     <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "You don't have any tickets yet."}</p>
                 ) : (
-                    <ul className="list-group">
+                    
+                    <div className="list-group">
                         <h3 className="d-flex justify-content-center">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
                         {tickets.map((ticket) => (
                             <li className="" key={ticket.id}>
@@ -184,13 +186,7 @@ function TicketList() {
                                             marginRight: '8px',
                                             position: 'relative',
                                         }}
-                                        data-tooltip-id={`tooltip-${ticket.id}`}
-                                        data-tooltip-content={ticket.status}
                                     />
-
-                                    <Tooltip id={`tooltip-${ticket.id}`} className="custom-tooltip" place="top" effect="solid">
-                                        {ticket.status}
-                                    </Tooltip>
 
                                     <strong className="hide-text">{ticket.title} -</strong>
                                     <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
@@ -216,7 +212,7 @@ function TicketList() {
                                 </div>
                             </li>
                         ))}
-                    </ul>
+                    </div>
                 )}
             </div>
             
