@@ -35,16 +35,17 @@ li {
   flex-direction: column;
   align-items: center;
   border-radius: 20px;
-  box-shadow: rgba(211, 211, 211, .6) 0px 2px 10px;
-  transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
-  border: .5px solid #D3D3D3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .13);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  border: 1px solid #d3d3d3;
   width: 100%;
   max-width: 350px;
   overflow: hidden;
 }
 
 li:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .13);
+  box-shadow: rgba(158, 158, 158, 0.6) 0px 2px 10px;
+  transform: scale(1.009);
 }
 
 .severity {
@@ -195,7 +196,7 @@ img {
 }
 
 .card {
-  background-color: rgba(255, 255, 255, .5);
+  background-color: rgb(240, 240, 240);
   max-height: 80vh;
   overflow-y: auto;
   border-radius: 10px;
@@ -266,7 +267,7 @@ img {
   justify-content: space-around;
   padding:0px 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, .09);
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255);
   border: .5px solid #D3D3D3;
 }
 
@@ -275,6 +276,7 @@ img {
 }
 
 .profile-navbar {
+  margin-top: 70px;
   padding-bottom: 30px;
   display: flex;
   justify-content: center;
@@ -287,6 +289,7 @@ img {
 }
 
 .settings-navbar {
+  margin-top: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -299,6 +302,7 @@ img {
 }
 
 .register-navbar {
+  margin-top: 70px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -703,7 +707,7 @@ input, select, textarea {
 
 .register-card {
   border: 1px solid #ddd;
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255);
   border-radius: 8px;
   overflow-y: auto;
   margin-bottom: 10px;
@@ -713,7 +717,7 @@ input, select, textarea {
 
 .register-admin-card {
   border: 1px solid #ddd;
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255);
   border-radius: 8px;
   overflow-y: auto;
   margin-bottom: 20px;

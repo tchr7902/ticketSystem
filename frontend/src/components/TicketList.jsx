@@ -197,7 +197,7 @@ function TicketList() {
                                         onClick={() => handleEdit(ticket)}
                                         data-tooltip-id="edit-tooltip"
                                         data-tooltip-content="Edit"
-                                        data-tooltip-delay-show={500}>
+                                        data-tooltip-delay-show={1000}>
                                         <FaPencilAlt />
                                     </button>
                                     
@@ -208,7 +208,7 @@ function TicketList() {
                                         }}
                                         data-tooltip-id="delete-tooltip"
                                         data-tooltip-content="Delete"
-                                        data-tooltip-delay-show={500}>
+                                        data-tooltip-delay-show={1000}>
                                         <FaTrashAlt />
                                     </button>
                                     {user.role === "admin" && (
@@ -253,6 +253,9 @@ function TicketList() {
                     >
                         Cancel
                     </button>
+                    <p>
+                        Created on: {selectedTicket ? new Date(selectedTicket.created_at).toLocaleDateString() : 'N/A'}
+                    </p>
                 </Modal.Footer>
             </Modal>
 
@@ -283,8 +286,11 @@ function TicketList() {
             {/* Archive Modal */}
             <Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title><h3 className="m-0">Archive "{ticketToArchive ? ticketToArchive.title : ''}"?</h3></Modal.Title>
+                    <Modal.Title><h3 className="m-0">Confirm Archive</h3></Modal.Title>
                 </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to archive "{ticketToArchive ? ticketToArchive.title : ''}"?
+                </Modal.Body>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="archiveNotes">
