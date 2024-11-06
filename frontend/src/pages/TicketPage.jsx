@@ -8,6 +8,7 @@ import logo from '../images/gem_logo.png';
 import { ToastContainer, Bounce } from 'react-toastify';
 import { FaBars } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaUser, FaCog, FaHome, FaUserPlus } from 'react-icons/fa';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
 import { Modal } from 'react-bootstrap';
 
@@ -89,50 +90,45 @@ function TicketPage() {
         <div className="vh-100">
             {/* Navbar with Header */}
             <nav className="custom-navbar">
-        <div className="container-fluid d-flex justify-content-between align-items-center">
-            <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
-                <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
-                <h2>IT Support Hub</h2>
-            </a>
+                <div className="container-fluid d-flex justify-content-between align-items-center">
+                    <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
+                        <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
+                        <h2>IT Support Hub</h2>
+                    </a>
 
-            {/* Menu Icon and Dropdown */}
-            <div className="d-flex align-items-center position-relative" ref={dropdownRef}>
-                <FaBars 
-                    className="home-page-icon" 
-                    onClick={handleMenuIconClick} 
-                />
-                
-                {dropdownOpen && (
-                    <div 
-                        className="dropdown-menu show" 
-                        style={{
-                            position: 'absolute', 
-                            right: 0, 
-                            top: '100%',
-                            marginTop: '5px',
-                            zIndex: 1050,
-                        }}
-                    >
-                        <button className="dropdown-item" onClick={handleProfileClick}>
-                            Profile
-                        </button>
-                        <button className="dropdown-item" onClick={handleSettingsClick}>
-                            Settings
-                        </button>
-                        {user.role === "admin" && (
-                        <button className="dropdown-item" onClick={handleAdminClick}>
-                            + Admin
-                        </button>
-                        )}
-                        <div className="dropdown-divider"></div>
-                        <button className="dropdown-item text-danger" onClick={handleLogout}>
-                            Logout
-                        </button>
+                    {/* Menu items */}
+                    <div className="d-flex align-items-center">
+                        <div className="nav-items">
+                            <div className="navbar-item navbar-home-div">
+                                <FaHome size={26} className="navbar-home"/>
+                                <div className="navbar-text" style={{textDecoration: "underline" }}>
+                                    <strong>Home</strong>
+                                </div>
+                            </div>
+                            <div className="navbar-item" onClick={handleProfileClick}>
+                                <FaUser size={24}/>
+                                <div className="navbar-text">
+                                    Profile
+                                </div>
+                            </div>
+                            <div className="navbar-item" onClick={handleSettingsClick}>
+                                <FaCog size={24}/>
+                                <div className="navbar-text">
+                                    Settings
+                                </div>
+                            </div>
+                            {user.role === "admin" && (
+                                <div className="navbar-item" onClick={handleAdminClick}>
+                                    <FaUserPlus size={24}/>
+                                    <div className="navbar-text">
+                                        Admin
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                )}
-            </div>
-        </div>
-    </nav>
+                </div>
+            </nav>
 
             <nav className="backup-navbar">
                 <img src={logo} alt="Logo" style={{ width: '188px', height: '43px' }} />
