@@ -8,7 +8,7 @@ import logo from '../images/gem_logo.png';
 import { ToastContainer, Bounce } from 'react-toastify';
 import { FaBars } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaUser, FaCog, FaHome, FaUserPlus } from 'react-icons/fa';
+import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
 import { Modal } from 'react-bootstrap';
 
@@ -125,6 +125,12 @@ function TicketPage() {
                                     </div>
                                 </div>
                             )}
+                            <div className="navbar-item" onClick={handleLogout}>
+                                <FaSignOutAlt size={24}/>
+                                <div className="navbar-text">
+                                    Logout
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

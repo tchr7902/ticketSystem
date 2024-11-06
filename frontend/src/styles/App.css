@@ -147,10 +147,6 @@ p {
   margin-bottom: 16px;
 }
 
-.p-profile {
-  padding: 3px;
-}
-
 h3 {
   margin-top: 20px;
   margin-bottom: 10px;
@@ -297,7 +293,7 @@ img {
 .navbar-item:hover {
   cursor: pointer;
   background-color: #f1f6ef;
-  transform: scale(1.03);
+  transform: scale(1.02);
  }
 
  .navbar-item:active {
@@ -310,6 +306,10 @@ img {
 
  .navbar-home-div {
   margin-right: 5px;
+ }
+
+ .react-icon:hover {
+  cursor: pointer;
  }
 
 .backup-navbar {
@@ -565,7 +565,7 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: none;
+  overflow: hidden;
   p {
     margin: 0;
   }
@@ -632,10 +632,8 @@ input, select, textarea {
 }
 
 .responsive-settings-icon {
-  margin-top: 7px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+  width: 50px;
+  height: 50px;
   overflow: visible;
 }
 
@@ -979,7 +977,7 @@ input, select, textarea {
     justify-content: center;
     align-items: center;
     gap: 50px;
-    padding-bottom: 5px;
+    margin-bottom: 30px;
   }
 
   .settings-navbar {

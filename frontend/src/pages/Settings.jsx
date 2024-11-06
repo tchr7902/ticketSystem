@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
-import { FaCog } from 'react-icons/fa'
+import { FaArrowLeft, FaSignOutAlt } from 'react-icons/fa'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { Tooltip } from 'react-tooltip'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
+import logo2 from '../images/gem-singlelogo.png';
 
 const SettingsPage = () => {
     const { user, logout, changePassword, changeEmail } = useContext(AuthContext);
@@ -132,23 +134,27 @@ const SettingsPage = () => {
                 theme="light"
                 transition={Bounce}
             />
-            <nav className="settings-navbar">
-                <button className="btn-2" onClick={backButton}>
-                    Back
-                </button>
-                <img
-                    src={logo}
-                    alt="Logo"
-                    style={{ width: '375px', height: '86px'}}
-                />
-                <button className="btn-important" onClick={handleLogout}>
-                    Logout
-                </button>
+            <nav className="profile-navbar">
+                <FaArrowLeft className="react-icon" size={40} onClick={backButton}
+                data-tooltip-id="back-tooltip"
+                data-tooltip-content="Back"
+                data-tooltip-delay-show={300}></FaArrowLeft>
+                <img src={logo} alt="Logo" style={{ width: '375px', height: '86px' }} />
+                <FaSignOutAlt className="react-icon" size={40} onClick={handleLogout}
+                data-tooltip-id="logout-tooltip"
+                data-tooltip-content="Logout"
+                data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
-            <nav className="backup-settings-navbar">
-            <button className="btn-2" onClick={backButton}>Back</button>
-            <FaCog className="responsive-settings-icon"/>
-            <button className="btn-important" onClick={handleLogout}>Logout</button>
+            <nav className="backup-profile-navbar">
+                <FaArrowLeft className="react-icon" size={30} onClick={backButton}
+                data-tooltip-id="back-tooltip"
+                data-tooltip-content="Back"
+                data-tooltip-delay-show={300}></FaArrowLeft>
+                <img src={logo2} alt="Logo" style={{ width: '91px', height: '91px' }} />
+                <FaSignOutAlt className="react-icon" size={30} onClick={handleLogout}
+                data-tooltip-id="logout-tooltip"
+                data-tooltip-content="Logout"
+                data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
             <div className="change-div">
                 <div className="col-md-6 change">
@@ -233,6 +239,8 @@ const SettingsPage = () => {
                     </form>
                 </div>
             </div>
+            <Tooltip id="logout-tooltip" />
+            <Tooltip id="back-tooltip" />
         </div>
     );
 };

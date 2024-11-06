@@ -3,11 +3,13 @@ import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
 import { getUserTickets } from '../utils/api';
 import { Modal } from 'react-bootstrap';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaArrowLeft, FaSignOutAlt } from 'react-icons/fa';
 import { format } from 'date-fns-tz';
+import { Tooltip } from 'react-tooltip'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
+import logo2 from '../images/gem-singlelogo.png';
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -119,16 +121,29 @@ const ProfilePage = () => {
     return (
         <div className="container mt-5">
             <nav className="profile-navbar">
-                <button className="btn-2 mt-3" onClick={backButton}>Back</button>
+                <FaArrowLeft className="react-icon" size={40} onClick={backButton}
+                data-tooltip-id="back-tooltip"
+                data-tooltip-content="Back"
+                data-tooltip-delay-show={300}></FaArrowLeft>
                 <img src={logo} alt="Logo" style={{ width: '375px', height: '86px' }} />
-                <button className="btn-important mt-3" onClick={handleLogout}>Logout</button>
+                <FaSignOutAlt className="react-icon" size={40} onClick={handleLogout}
+                data-tooltip-id="logout-tooltip"
+                data-tooltip-content="Logout"
+                data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
             <nav className="backup-profile-navbar">
-            <button className="btn-2 mt-3" onClick={backButton}>Back</button>
-            <FaUser className="profile-icon" />
-            <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
+            <FaArrowLeft className="react-icon" size={30} onClick={backButton}
+                data-tooltip-id="back-tooltip"
+                data-tooltip-content="Back"
+                data-tooltip-delay-show={300}></FaArrowLeft>
+            <img src={logo2} alt="Logo" style={{ width: '91px', height: '91px' }} />
+            <FaSignOutAlt className="react-icon" size={30} onClick={handleLogout}
+                data-tooltip-id="logout-tooltip"
+                data-tooltip-content="Logout"
+                data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
             <div className="my-info">
+                <FaUser className="profile-icon" />
                 <h1>Hello, {user.first_name}!</h1>
                 <p className="p-profile">{user.email}</p>
                 <p className="p-profile">{user.phone_number}</p>
@@ -150,40 +165,42 @@ const ProfilePage = () => {
                     View Archived Tickets
                 </button>
             </div>
-
+            <Tooltip id="logout-tooltip" />
+            <Tooltip id="back-tooltip" />
+            
             <Modal show={showArchivedModal} onHide={() => setShowArchivedModal(false)}>
-        <Modal.Header closeButton>
-            <Modal.Title><h3>Archived Tickets</h3></Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
-            {loading ? (
-                <p>Loading...</p>
-            ) : archivedTickets.length > 0 ? (
-                archivedTickets.map((ticket, index) => {
-                    const [archivedTicketId, originalTicketId, user_id, title, description, status, archived_at, notes, created_at,  priority, contact_method, name] = ticket;
-                    return (
-                        <CollapsibleCard
-                            key={archivedTicketId}
-                            name={name}
-                            contact_method={contact_method}
-                            title={title}
-                            description={description}
-                            status={status}
-                            priority={priority}
-                            created_at={created_at}
-                            archived_at={archived_at}
-                            notes={notes}
-                        />
-                    );
-                })
-            ) : (
-                <p>No archived tickets found.</p>
-            )}
-        </Modal.Body>
-        <Modal.Footer>
-            <button className="btn-2" onClick={() => setShowArchivedModal(false)}>Close</button>
-        </Modal.Footer>
-    </Modal>
+            <Modal.Header closeButton>
+                <Modal.Title><h3>Archived Tickets</h3></Modal.Title>
+            </Modal.Header>
+                <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : archivedTickets.length > 0 ? (
+                        archivedTickets.map((ticket, index) => {
+                            const [archivedTicketId, originalTicketId, user_id, title, description, status, archived_at, notes, created_at,  priority, contact_method, name] = ticket;
+                            return (
+                                <CollapsibleCard
+                                    key={archivedTicketId}
+                                    name={name}
+                                    contact_method={contact_method}
+                                    title={title}
+                                    description={description}
+                                    status={status}
+                                    priority={priority}
+                                    created_at={created_at}
+                                    archived_at={archived_at}
+                                    notes={notes}
+                                />
+                            );
+                        })
+                    ) : (
+                        <p>No archived tickets found.</p>
+                    )}
+                </Modal.Body>
+            <Modal.Footer>
+                <button className="btn-2" onClick={() => setShowArchivedModal(false)}>Close</button>
+            </Modal.Footer>
+        </Modal>
 
 
             {error && <p className="text-danger">{error}</p>}

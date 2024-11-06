@@ -5,7 +5,9 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../images/gem_logo.png';
-import { FaUserPlus } from 'react-icons/fa';
+import logo2 from '../images/gem-singlelogo.png';
+import { FaSignOutAlt, FaArrowLeft } from 'react-icons/fa';
+import { Tooltip } from 'react-tooltip'
 import '../styles/App.css';
 
 function AdminRegister() {
@@ -70,7 +72,7 @@ function AdminRegister() {
     
 
     return (
-        <div className="container mt-5 d-flex flex-column align-items-center vh-100">
+        <div className="container d-flex flex-column align-items-center vh-100">
             <ToastContainer
                     position="top-center"
                     autoClose={3000}
@@ -84,15 +86,27 @@ function AdminRegister() {
                     theme="light"
                     transition={Bounce}
             />
-            <nav className="register-navbar">
-                <button className="btn-2 mt-3" onClick={backButton}>Back</button>
+            <nav className="profile-navbar">
+                <FaArrowLeft className="react-icon" size={40} onClick={backButton}
+                data-tooltip-id="back-tooltip"
+                data-tooltip-content="Back"
+                data-tooltip-delay-show={300}></FaArrowLeft>
                 <img src={logo} alt="Logo" style={{ width: '375px', height: '86px' }} />
-                <button className="btn-important mt-3" onClick={handleLogout}>Logout</button>
+                <FaSignOutAlt className="react-icon" size={40} onClick={handleLogout}
+                data-tooltip-id="logout-tooltip"
+                data-tooltip-content="Logout"
+                data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
-            <nav className="backup-register-navbar">
-                <button className="btn-2 mt-3" onClick={backButton}>Back</button>
-                <FaUserPlus className="register-icon" />
-                <button className="btn-important btn-outline-danger mt-3" onClick={handleLogout}>Logout</button>
+            <nav className="backup-profile-navbar pt-5 mb-1">
+                <FaArrowLeft className="react-icon" size={30} onClick={backButton}
+                data-tooltip-id="back-tooltip"
+                data-tooltip-content="Back"
+                data-tooltip-delay-show={300}></FaArrowLeft>
+                <img src={logo2} alt="Logo" style={{ width: '91px', height: '91px' }} />
+                <FaSignOutAlt className="react-icon" size={30} onClick={handleLogout}
+                data-tooltip-id="logout-tooltip"
+                data-tooltip-content="Logout"
+                data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
             <div className="register-admin-card p-4" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
@@ -176,6 +190,8 @@ function AdminRegister() {
                 </form>
                 {error && <p className="text-danger text-center mt-2">{error}</p>}
             </div>
+            <Tooltip id="logout-tooltip" />
+            <Tooltip id="back-tooltip" />
         </div>
     );
 }
