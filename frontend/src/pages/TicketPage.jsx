@@ -202,7 +202,6 @@ function TicketPage() {
                     right: '20px',
                     cursor: 'pointer',
                     zIndex: 1000,
-                    backgroundColor: '#fff',
                     borderRadius: '50%', 
                     padding: '10px'
                 }}
