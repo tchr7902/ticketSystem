@@ -4,9 +4,9 @@ import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
 import TicketSearch from "./TicketSearch.jsx"
 import { Modal, Form } from 'react-bootstrap';
-import { FaTrashAlt, FaArchive, FaPencilAlt  } from 'react-icons/fa';
+import { FaTrashAlt, FaArchive, FaPencilAlt, FaSpinner, FaClipboardCheck, FaRegCheckCircle, FaFlagCheckered  } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { Tooltip } from 'react-tooltip';
+import { Tooltip, TooltipProvider } from 'react-tooltip';
 
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/App.css';
@@ -125,14 +125,27 @@ function TicketList() {
         }
     };
 
-    const getDotColor = (status) => {
+    const getSeverityIcons = (severity) => {
+        switch (severity) {
+            case "Low":
+                return "Low";
+            case "Medium":
+                return "Medium";
+            case "High":
+                return "High";
+            default:
+                return "";
+        }
+    };
+
+    const getStatusIcon = (status) => {
         switch (status) {
             case 'Open':
-                return 'green';
+                return <FaRegCheckCircle />;
             case 'In Progress':
-                return 'orange';
+                return <FaSpinner className="spin"/>;
             case 'Closed':
-                return 'gray';
+                return <FaClipboardCheck />;
             default:
                 return '';
         }
@@ -152,6 +165,7 @@ function TicketList() {
 
     return (
         <div className="container mt-5 pb-5 main-div">
+            <div className="create-ticket-div">
             {user.role === "user" && (
                 <div className="new-ticket">
                 <h2 className="text-center mb-2">
@@ -166,32 +180,21 @@ function TicketList() {
                 <TicketSearch />
             </div>                          
             )}
-            
+            </div>
             <div className="list-div">
+                <h3 className="d-flex justify-content-center">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
                 {tickets.length === 0 ? (
                     <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "You don't have any tickets yet."}</p>
                 ) : (
                     
                     <div className="list-group">
-                        <h3 className="d-flex justify-content-center">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
                         {tickets.map((ticket) => (
                             <li className="" key={ticket.id}>
+                                <span className={`severity severity-banner ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
+                                </span>
+                                <span className="status-icon"> {getStatusIcon(ticket.status)} </span>
                                 <div className="title-div">
-                                    <span
-                                        style={{
-                                            width: '10px',
-                                            height: '10px',
-                                            borderRadius: '50%',
-                                            backgroundColor: getDotColor(ticket.status),
-                                            marginRight: '8px',
-                                            position: 'relative',
-                                        }}
-                                    />
-
-                                    <strong className="hide-text">{ticket.title} -</strong>
-                                    <span className={`severity badge-outline ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
-                                    {ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1)}
-                                    </span>
+                                    <strong className="hide-text">{ticket.title}</strong>
                                 </div>
                                 <div className="icon-div">
                                     <button className="icon" onClick={() => handleEdit(ticket)}>
