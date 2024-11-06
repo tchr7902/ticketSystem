@@ -30,10 +30,6 @@ li {
   padding-bottom: 20px;
   padding-left: 30px;
   padding-right: 30px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-right: 10px;
-  margin-left: 10px;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -42,7 +38,7 @@ li {
   box-shadow: rgba(211, 211, 211, .6) 0px 2px 10px;
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
   border: .5px solid #D3D3D3;
-  width: 95%;
+  width: 100%;
   max-width: 350px;
   overflow: hidden;
 }
@@ -75,6 +71,7 @@ li:hover {
   justify-content: center;
   padding-bottom: 40px;
   width: 100%;
+  gap: 7px;
 }
 
 .list-div {
@@ -193,7 +190,6 @@ img {
 }
 
 .container {
-  padding: 20px;
   margin: auto;
   overflow: none;
 }
@@ -279,10 +275,11 @@ img {
 }
 
 .profile-navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
   padding-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
 }
 
 .backup-profile-navbar {
@@ -291,8 +288,9 @@ img {
 
 .settings-navbar {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 60px;
   padding-bottom: 30px;
 }
 
@@ -303,8 +301,9 @@ img {
 .register-navbar {
   width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 60px;
   padding-bottom: 30px;
 }
 
@@ -482,6 +481,7 @@ input, select, textarea {
   width: 45px;
   height: 45px;
   margin-top: 10px;
+  overflow: visible;
 }
 
 /* List Group Styles */
@@ -579,6 +579,7 @@ input, select, textarea {
   height: 40px;
   cursor: pointer;
   background-color: transparent;
+  overflow: visible;
 }
 
 .profile-icon:hover {
@@ -590,6 +591,7 @@ input, select, textarea {
   width: 40px;
   height: 40px;
   cursor: pointer;
+  overflow: visible;
 }
 
 .responsive-chat-icon {
@@ -927,8 +929,9 @@ input, select, textarea {
 
   .backup-profile-navbar {
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-around;
+    gap: 50px;
     padding-bottom: 5px;
   }
 
@@ -938,8 +941,9 @@ input, select, textarea {
 
   .backup-settings-navbar {
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-around;
+    gap: 50px;
     padding-bottom: 5px;
   }
 
@@ -950,8 +954,9 @@ input, select, textarea {
   .backup-register-navbar {
     width: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-around;
+    gap: 50px;
     padding-bottom: 30px;
   }
 

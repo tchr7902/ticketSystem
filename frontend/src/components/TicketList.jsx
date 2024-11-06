@@ -4,10 +4,9 @@ import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
 import TicketSearch from "./TicketSearch.jsx"
 import { Modal, Form } from 'react-bootstrap';
-import { FaTrashAlt, FaArchive, FaPencilAlt, FaSpinner, FaClipboardCheck, FaRegCheckCircle, FaFlagCheckered  } from 'react-icons/fa';
+import { FaTrashAlt, FaArchive, FaPencilAlt, FaSpinner, FaRegFolderOpen, FaRegCheckCircle  } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { Tooltip, TooltipProvider } from 'react-tooltip';
-
+import { Tooltip } from 'react-tooltip'
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -125,27 +124,14 @@ function TicketList() {
         }
     };
 
-    const getSeverityIcons = (severity) => {
-        switch (severity) {
-            case "Low":
-                return "Low";
-            case "Medium":
-                return "Medium";
-            case "High":
-                return "High";
-            default:
-                return "";
-        }
-    };
-
     const getStatusIcon = (status) => {
         switch (status) {
             case 'Open':
-                return <FaRegCheckCircle />;
+                return <FaRegFolderOpen />;
             case 'In Progress':
                 return <FaSpinner className="spin"/>;
             case 'Closed':
-                return <FaClipboardCheck />;
+                return <FaRegCheckCircle />;
             default:
                 return '';
         }
@@ -164,7 +150,7 @@ function TicketList() {
     if (error) return <div className="text-center mt-3"><p className="text-danger">{error}</p></div>;
 
     return (
-        <div className="container mt-5 pb-5 main-div">
+        <div className="container mt-5 main-div">
             <div className="create-ticket-div">
             {user.role === "user" && (
                 <div className="new-ticket">
@@ -190,21 +176,39 @@ function TicketList() {
                     <div className="list-group">
                         {tickets.map((ticket) => (
                             <li className="" key={ticket.id}>
-                                <span className={`severity severity-banner ms-2 ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}>
+                                <span className={`severity severity-banner ms-2
+                                    ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}
+                                    data-tooltip-id="status-tooltip"
+                                    data-tooltip-content={getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}
+                                    data-tooltip-offset={-15}
+                                    data-tooltip-delay-show={300}>
                                 </span>
-                                <span className="status-icon"> {getStatusIcon(ticket.status)} </span>
+                                    <span className="status-icon"
+                                        data-tooltip-id="status-tooltip"
+                                        data-tooltip-content={ticket.status}
+                                        data-tooltip-delay-show={300}>
+                                        {getStatusIcon(ticket.status)}
+                                    </span>
                                 <div className="title-div">
                                     <strong className="hide-text">{ticket.title}</strong>
                                 </div>
                                 <div className="icon-div">
-                                    <button className="icon" onClick={() => handleEdit(ticket)}>
+                                    <button className="icon"
+                                        onClick={() => handleEdit(ticket)}
+                                        data-tooltip-id="edit-tooltip"
+                                        data-tooltip-content="Edit"
+                                        data-tooltip-delay-show={500}>
                                         <FaPencilAlt />
                                     </button>
                                     
-                                    <button className="icon" onClick={() => {
+                                    <button className="icon"
+                                        onClick={() => {
                                         setTicketToDelete(ticket);
                                         setShowDeleteModal(true);
-                                    }}>
+                                        }}
+                                        data-tooltip-id="delete-tooltip"
+                                        data-tooltip-content="Delete"
+                                        data-tooltip-delay-show={500}>
                                         <FaTrashAlt />
                                     </button>
                                     {user.role === "admin" && (
@@ -218,7 +222,10 @@ function TicketList() {
                     </div>
                 )}
             </div>
-            
+            <Tooltip id="status-tooltip" />
+            <Tooltip id="edit-tooltip" />
+            <Tooltip id="delete-tooltip" />
+            <Tooltip id="severity-tooltip" />
              {/* Edit Ticket Modal */}
              <Modal
                 show={showEditModal}

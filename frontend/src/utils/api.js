@@ -1,5 +1,6 @@
 import axiosInstance from './axiosInstance';
 
+
 const BASE_URL = "/tickets";
 const USER_URL = "/users";
 
@@ -10,7 +11,8 @@ export const fetchTickets = async () => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error fetching tickets:', error);
         throw error;
@@ -24,7 +26,8 @@ export const createTicket = async (ticket) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error creating ticket:', error);
         throw error;
@@ -37,7 +40,8 @@ export const updateTicket = async (id, updates) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error updating ticket:', error);
         throw error;
@@ -49,7 +53,8 @@ export const deleteTicket = async (id) => {
         await axiosInstance.delete(`${BASE_URL}/${id}`);
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error deleting ticket:', error);
         throw error;
@@ -64,7 +69,8 @@ export const searchTickets = async (keywords) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error searching tickets:', error);
         throw error;
@@ -97,7 +103,8 @@ export const fetchUser = async (token) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error fetching user:', error);
         throw error;
@@ -114,7 +121,8 @@ export const changeUserPassword = async (email, currentPassword, newPassword) =>
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error changing password:', error);
         throw error;
@@ -130,7 +138,8 @@ export const changeUserEmail = async (currentEmail, newEmail) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error changing email:', error);
         throw error;
@@ -143,7 +152,8 @@ export const getUserTickets = async (user_id) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error fetching tickets:', error);
         throw error;
@@ -164,7 +174,8 @@ export const archiveTicket = async (ticketId, notes) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error archiving ticket:', error);
         throw error;
@@ -177,7 +188,8 @@ export const fetchArchivedTickets = async (userId) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            logout();
+            console.error('Login token expired. Please log in again.')
+            throw error;
         }
         console.error('Error fetching archived tickets:', error);
         throw error;
