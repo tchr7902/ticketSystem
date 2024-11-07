@@ -125,7 +125,7 @@ function TicketPage() {
                                     </div>
                                 </div>
                             )}
-                            <div className="navbar-item" onClick={handleLogout}>
+                            <div className="navbar-item navbar-logout" onClick={handleLogout}>
                                 <FaSignOutAlt size={24}/>
                                 <div className="navbar-text">
                                     Logout

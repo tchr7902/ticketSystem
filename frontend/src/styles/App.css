@@ -70,10 +70,10 @@ li:hover {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
   padding-bottom: 40px;
   width: 100%;
-  gap: 7px;
+  gap: 5px;
 }
 
 .list-div {
@@ -90,8 +90,9 @@ li:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 1 1 300px;
-    margin: 10px;
+    width: 100%;
+    max-width: 350px;
+    gap: 5px;
 }
 
 
@@ -315,6 +316,12 @@ img {
 .navbar-item:hover {
   cursor: pointer;
   background-color: #f1f6ef;
+  transform: scale(1.02);
+ }
+
+ .navbar-logout:hover {
+  cursor: pointer;
+  background-color: #ffecec;
   transform: scale(1.02);
  }
 

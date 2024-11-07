@@ -184,9 +184,9 @@ function TicketList() {
                 {tickets.length === 0 ? (
                     <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "You don't have any tickets yet."}</p>
                 ) : (
-                    
-                    
                     <div className="list-group">
+
+                        {highSeverityTickets.length > 0 && (
                         <div className="high-sev-tickets">
                         {highSeverityTickets.map((ticket) => (
                             <li className="" key={ticket.id}>
@@ -233,7 +233,9 @@ function TicketList() {
                             </li>
                         ))}
                         </div>
+                        )}
 
+                        {mediumSeverityTickets.length > 0 && (
                         <div className="medium-sev-tickets">
                         {mediumSeverityTickets.map((ticket) => (
                             <li className="" key={ticket.id}>
@@ -281,7 +283,9 @@ function TicketList() {
                             </li>
                         ))}
                         </div>
+                        )}
 
+                        {lowSeverityTickets.length > 0 && (
                         <div className="low-sev-tickets">
                         {lowSeverityTickets.map((ticket) => (
                             <li className="" key={ticket.id}>
@@ -329,10 +333,12 @@ function TicketList() {
                             </li>
                         ))}
                         </div>
+                        )}
                     </div>
                     
                 )}
             </div>
+
             <Tooltip id="status-tooltip" />
             <Tooltip id="edit-tooltip" />
             <Tooltip id="delete-tooltip" />
