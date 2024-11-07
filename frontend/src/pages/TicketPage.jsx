@@ -92,7 +92,7 @@ function TicketPage() {
             <nav className="custom-navbar">
                 <div className="container-fluid d-flex justify-content-between align-items-center">
                     <a className="navbar-brand fw-bold fs-2 d-flex align-items-center" href="#">
-                        <img src={logo} alt="Logo" style={{ width: '219px', height: '50px', marginRight: '30px' }} />
+                        <img src={logo} alt="Logo" style={{ width: '263px', height: '61px', marginRight: '30px' }} />
                         <h2>IT Support Hub</h2>
                     </a>
 

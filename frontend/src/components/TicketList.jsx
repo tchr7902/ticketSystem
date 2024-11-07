@@ -23,6 +23,17 @@ function TicketList() {
     const [ticketToDelete, setTicketToDelete] = useState(null);
     const [ticketToArchive, setTicketToArchive] = useState(null);
     const [archiveNotes, setArchiveNotes] = useState("");
+    const highSeverityTickets = tickets
+    .filter(ticket => ticket.severity.toLowerCase() === 'high')
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    const mediumSeverityTickets = tickets
+    .filter(ticket => ticket.severity.toLowerCase() === 'medium')
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    const lowSeverityTickets = tickets
+    .filter(ticket => ticket.severity.toLowerCase() === 'low')
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
     const loadTickets = async () => {
         setLoading(true);
@@ -41,6 +52,7 @@ function TicketList() {
     useEffect(() => {
         loadTickets();
     }, []);
+    
 
     const showToast = (message, type = "success") => {
         toast(message, { type });
@@ -173,8 +185,57 @@ function TicketList() {
                     <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "You don't have any tickets yet."}</p>
                 ) : (
                     
+                    
                     <div className="list-group">
-                        {tickets.map((ticket) => (
+                        <div className="high-sev-tickets">
+                        {highSeverityTickets.map((ticket) => (
+                            <li className="" key={ticket.id}>
+                                <span className={`severity severity-banner ms-2
+                                    ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}
+                                    data-tooltip-id="status-tooltip"
+                                    data-tooltip-content={getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}
+                                    data-tooltip-offset={-15}
+                                    data-tooltip-delay-show={300}>
+                                </span>
+                                    <span className="status-icon"
+                                        data-tooltip-id="status-tooltip"
+                                        data-tooltip-content={ticket.status}
+                                        data-tooltip-delay-show={300}>
+                                        {getStatusIcon(ticket.status)}
+                                    </span>
+                                <div className="title-div">
+                                    <strong className="hide-text">{ticket.title}</strong>
+                                </div>
+                                <div className="icon-div">
+                                    <button className="icon"
+                                        onClick={() => handleEdit(ticket)}
+                                        data-tooltip-id="edit-tooltip"
+                                        data-tooltip-content="Edit"
+                                        data-tooltip-delay-show={1000}>
+                                        <FaPencilAlt />
+                                    </button>
+                                    <button className="icon"
+                                        onClick={() => {
+                                        setTicketToDelete(ticket);
+                                        setShowDeleteModal(true);
+                                        }}
+                                        data-tooltip-id="delete-tooltip"
+                                        data-tooltip-content="Delete"
+                                        data-tooltip-delay-show={1000}>
+                                        <FaTrashAlt />
+                                    </button>
+                                    {user.role === "admin" && (
+                                        <button className="icon" onClick={() => openArchiveModal(ticket)}>
+                                            <FaArchive />
+                                        </button>
+                                    )}
+                                </div>
+                            </li>
+                        ))}
+                        </div>
+
+                        <div className="medium-sev-tickets">
+                        {mediumSeverityTickets.map((ticket) => (
                             <li className="" key={ticket.id}>
                                 <span className={`severity severity-banner ms-2
                                     ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}
@@ -219,7 +280,57 @@ function TicketList() {
                                 </div>
                             </li>
                         ))}
+                        </div>
+
+                        <div className="low-sev-tickets">
+                        {lowSeverityTickets.map((ticket) => (
+                            <li className="" key={ticket.id}>
+                                <span className={`severity severity-banner ms-2
+                                    ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}
+                                    data-tooltip-id="status-tooltip"
+                                    data-tooltip-content={getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}
+                                    data-tooltip-offset={-15}
+                                    data-tooltip-delay-show={300}>
+                                </span>
+                                    <span className="status-icon"
+                                        data-tooltip-id="status-tooltip"
+                                        data-tooltip-content={ticket.status}
+                                        data-tooltip-delay-show={300}>
+                                        {getStatusIcon(ticket.status)}
+                                    </span>
+                                <div className="title-div">
+                                    <strong className="hide-text">{ticket.title}</strong>
+                                </div>
+                                <div className="icon-div">
+                                    <button className="icon"
+                                        onClick={() => handleEdit(ticket)}
+                                        data-tooltip-id="edit-tooltip"
+                                        data-tooltip-content="Edit"
+                                        data-tooltip-delay-show={1000}>
+                                        <FaPencilAlt />
+                                    </button>
+                                    
+                                    <button className="icon"
+                                        onClick={() => {
+                                        setTicketToDelete(ticket);
+                                        setShowDeleteModal(true);
+                                        }}
+                                        data-tooltip-id="delete-tooltip"
+                                        data-tooltip-content="Delete"
+                                        data-tooltip-delay-show={1000}>
+                                        <FaTrashAlt />
+                                    </button>
+                                    {user.role === "admin" && (
+                                        <button className="icon" onClick={() => openArchiveModal(ticket)}>
+                                            <FaArchive />
+                                        </button>
+                                    )}
+                                </div>
+                            </li>
+                        ))}
+                        </div>
                     </div>
+                    
                 )}
             </div>
             <Tooltip id="status-tooltip" />
@@ -253,9 +364,14 @@ function TicketList() {
                     >
                         Cancel
                     </button>
+                    <div className="edit-info">
                     <p>
                         Created on: {selectedTicket ? new Date(selectedTicket.created_at).toLocaleDateString() : 'N/A'}
                     </p>
+                    <p>
+                        by {selectedTicket ? selectedTicket.name : 'N/A'}
+                    </p>
+                    </div>
                 </Modal.Footer>
             </Modal>
 
