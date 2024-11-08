@@ -266,6 +266,13 @@ img {
   flex-wrap: wrap;
 }
 
+.new-ticket-admin {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .change-div {
   display: flex;
   flex-direction: row;

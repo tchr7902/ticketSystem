@@ -2,11 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import { fetchTickets, deleteTicket, createTicket, updateTicket, archiveTicket } from "../utils/api.js";
 import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
-import TicketSearch from "./TicketSearch.jsx"
 import { Modal, Form } from 'react-bootstrap';
 import { FaTrashAlt, FaArchive, FaPencilAlt, FaSpinner, FaRegFolderOpen, FaRegCheckCircle  } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Tooltip } from 'react-tooltip'
+import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -23,6 +23,24 @@ function TicketList() {
     const [ticketToDelete, setTicketToDelete] = useState(null);
     const [ticketToArchive, setTicketToArchive] = useState(null);
     const [archiveNotes, setArchiveNotes] = useState("");
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredTickets = tickets.filter(ticket => {
+        const formattedDate = ticket.created_at 
+            ? format(new Date(ticket.created_at), 'MM/dd/yyyy') 
+            : '';
+    
+        return (
+            (ticket.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (ticket.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (ticket.severity || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (ticket.status || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (ticket.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            formattedDate.includes(searchQuery.toLowerCase()) ||
+            (ticket.phone_number || '').toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    });
+
     const highSeverityTickets = tickets
     .filter(ticket => ticket.severity.toLowerCase() === 'high')
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -173,9 +191,17 @@ function TicketList() {
             </div>                          
             )}
             {user.role === "admin" && (
-                <div className="new-ticket">
+                <div className="new-ticket-admin">
                 <h2 className="text-center mb-2">Search Tickets</h2>
-                <TicketSearch />
+                <div className="type-div">
+                <input
+                    type="text"
+                    className="form-control input-box"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                </div>
             </div>                          
             )}
             </div>
@@ -188,7 +214,7 @@ function TicketList() {
 
                         {highSeverityTickets.length > 0 && (
                         <div className="high-sev-tickets">
-                        {highSeverityTickets.map((ticket) => (
+                            {filteredTickets.filter(ticket => ticket.severity.toLowerCase() === 'high').map((ticket) => (
                             <li className="" key={ticket.id}>
                                 <span className={`severity severity-banner ms-2
                                     ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}
@@ -237,7 +263,7 @@ function TicketList() {
 
                         {mediumSeverityTickets.length > 0 && (
                         <div className="medium-sev-tickets">
-                        {mediumSeverityTickets.map((ticket) => (
+                        {filteredTickets.filter(ticket => ticket.severity.toLowerCase() === 'medium').map((ticket) => (
                             <li className="" key={ticket.id}>
                                 <span className={`severity severity-banner ms-2
                                     ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}
@@ -287,7 +313,7 @@ function TicketList() {
 
                         {lowSeverityTickets.length > 0 && (
                         <div className="low-sev-tickets">
-                        {lowSeverityTickets.map((ticket) => (
+                        {filteredTickets.filter(ticket => ticket.severity.toLowerCase() === 'low').map((ticket) => (
                             <li className="" key={ticket.id}>
                                 <span className={`severity severity-banner ms-2
                                     ${getBadgeClass(ticket.severity.charAt(0).toUpperCase() + ticket.severity.slice(1))}`}

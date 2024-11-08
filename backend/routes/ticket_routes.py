@@ -20,6 +20,13 @@ def get_user_email(user_id):
     cursor.close()
     return user['email'] if user else None
 
+def get_user_phone(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT phone_number FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return user['phone_number'] if user else None
+
 def get_db():
     if 'db' not in g:
         g.db = connect_to_db()
@@ -52,11 +59,12 @@ def create_ticket():
 
     name = get_user_name(user['id'])
     email = get_user_email(user['id'])
+    phone_number = get_user_phone(user['id'])
 
     cursor = get_db().cursor()
     cursor.execute(
-        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'], name, email)
+        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'], name, email, phone_number)
     )
     get_db().commit()
     cursor.close()
