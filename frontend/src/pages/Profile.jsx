@@ -85,7 +85,11 @@ const ProfilePage = () => {
                 const data = await getUserTickets(user.id);
                 setTickets({ open: data.Open || 0, inProgress: data["In Progress"] || 0, closed: data.Closed || 0 });
             } catch (error) {
-                setError(error.message);
+                if (error.status === 401) {
+                    setError("Login token has expired. Please log back in.")
+                } else {
+                    setError(error.message);
+                }
             }
         };
         if (user) fetchUserTickets();
@@ -201,9 +205,9 @@ const ProfilePage = () => {
                 <button className="btn-2" onClick={() => setShowArchivedModal(false)}>Close</button>
             </Modal.Footer>
         </Modal>
-
-
+        <div className="d-flex justify-content-center">
             {error && <p className="text-danger">{error}</p>}
+        </div>
         </div>
     );
 };

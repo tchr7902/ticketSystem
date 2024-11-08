@@ -3,6 +3,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
 import logging
+from flask_mail import Message
 
 user_bp = Blueprint('user_bp', __name__)
 db = connect_to_db()
@@ -299,3 +300,63 @@ def change_email():
 
     finally:
         cursor.close()  # Always close the cursor
+
+# Forgot Pass
+@user_bp.route('/forgot_password', methods=['POST'])
+def forgot_password():
+    from app import mail, s
+    email = request.json.get('email')
+    db = connect_to_db()
+    cursor = db.cursor(dictionary=True)
+    
+    # Validate email
+    if not email:
+        return jsonify({"message": "Email is required"}), 400
+    
+    # Check if the email exists in the database
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    account = cursor.fetchone()  # Get the first row if any
+
+    if not account:  # If account is None, email is not found
+        return jsonify({"error": "No user registered with that email."}), 404
+
+    # Generate a password reset token
+    token = s.dumps(email, salt='password-reset')
+
+    # Create the password reset URL
+    reset_url = f"http://yourdomain.com/reset_password/{token}"
+
+    # Send the reset email
+    try:
+        msg = Message("Password Reset Request", recipients=[email])
+        msg.body = f"To reset your password, click the link below:\n{reset_url}"
+        mail.send(msg)
+        return jsonify({"message": "Password reset email sent!"}), 200
+    except Exception as e:
+        return jsonify({"message": f"Error sending email: {str(e)}"}), 500
+
+# Reset Pass
+@user_bp.route('/reset_password/<token>', methods=['POST'])
+def reset_password(token):
+    from app import mail, s
+    try:
+        # Verify the token (valid for 1 hour)
+        email = s.loads(token, salt='password-reset', max_age=3600)
+        
+        new_password = request.json.get('new_password')
+        if not new_password:
+            return jsonify({"message": "New password is required"}), 400
+
+        # Hash the new password (use a hashing function like bcrypt)
+        hashed_password = new_password  # Replace with actual password hashing logic
+
+        # Update the password in the database (pseudo code)
+        db = connect_to_db()
+        cursor = db.cursor()
+        cursor.execute("UPDATE users SET password = ? WHERE email = ?", (hashed_password, email))
+        db.commit()
+
+        return jsonify({"message": "Password successfully reset"}), 200
+
+    except Exception as e:
+        return jsonify({"message": "The reset link is invalid or has expired"}), 400

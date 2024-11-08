@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react";
 import { loginUser, registerUser } from "../utils/api";
 import { AuthContext } from "../utils/authContext.js";
 import { useNavigate } from "react-router-dom";
+import { Modal, Form } from 'react-bootstrap';
+import ForgotPasswordPage from "../components/ForgotPass.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../images/gem_logo.png';
 import logo2 from '../images/gem-singlelogo.png';
@@ -19,6 +21,7 @@ function LoginPage() {
     const [isRegister, setIsRegister] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false); 
     const navigate = useNavigate();
 
     const stores = [
@@ -47,7 +50,6 @@ function LoginPage() {
         try {
             let loginResponse;
     
-            // Registration-specific validations
             if (isRegister) {
                 if (password.length < 8) {
                     setError("Password must be at least 8 characters long.");
@@ -119,8 +121,7 @@ function LoginPage() {
             setLoading(false);
         }
     };
-    
-    
+
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
             <img className="img-1" 
@@ -200,8 +201,8 @@ function LoginPage() {
                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                     maxLength={14}
                                     required
-                                    />
-                                </div>
+                                />
+                            </div>
                             <div className="mb-3">
                                 <select
                                     className="form-select"
@@ -227,7 +228,7 @@ function LoginPage() {
                         {loading ? "Loading..." : (isRegister ? "Register" : "Login")}
                     </button>
                     <p 
-                        className="text-center text-secondary" 
+                        className="text-center text-secondary mt-3" 
                         style={{ cursor: "pointer" }} 
                         onClick={() => setIsRegister(!isRegister)}
                     >
@@ -235,9 +236,27 @@ function LoginPage() {
                             ? "Already have an account? Login" 
                             : "Don't have an account? Register"}
                     </p>
+                    <p 
+                        className="text-center text-secondary" 
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setModalVisible(true)} // Open modal on click
+                    >
+                        Forgot your password?
+                    </p>
                 </form>
                 {error && <p className="text-danger text-center mt-2">{error}</p>}
             </div>
+
+            {/* React-Bootstrap Modal */}
+            <Modal show={modalVisible} onHide={() => setModalVisible(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Forgot Password?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ForgotPasswordPage />
+                </Modal.Body>
+            </Modal>
+
         </div>
     );
 }

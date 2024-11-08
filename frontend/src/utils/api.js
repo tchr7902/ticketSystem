@@ -195,3 +195,17 @@ export const fetchArchivedTickets = async (userId) => {
         throw error;
     }
 };
+
+export const forgotPassword = async (email) => {
+    try {
+        const response = await axiosInstance.post(`${USER_URL}/forgot_password`, { email });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 404) {
+            console.error('User not found.');
+            throw new Error("User not found.");
+        }
+        console.error('Error sending password reset:', error);
+        throw error;
+    }
+};
