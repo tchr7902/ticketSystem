@@ -68,7 +68,7 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-@app.route('/<path:path>')
+@app.route('/<path:path>', methods=['GET', 'POST'])
 def catch_all(path):
     return send_from_directory('frontend/build', 'index.html')
 

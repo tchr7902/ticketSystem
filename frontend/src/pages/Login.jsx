@@ -124,7 +124,7 @@ function LoginPage() {
 
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
-            <img className="img-1" 
+            <img className="img-1 mt-4" 
                 src={logo} 
                 alt="Logo" 
                 style={{ width: '469px', height: '108px', marginBottom: '20px'}} 
@@ -135,7 +135,7 @@ function LoginPage() {
                 style={{ width: '150px', height: '150px', marginBottom: '20px'}} 
             />
             <h1 style={{ marginBottom: '20px'}}><strong>IT Support Hub</strong></h1>
-            <div className="register-card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+            <div className="register-card p-4 mb-4" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {isRegister ? "Register" : "Login"}
                 </h2>
