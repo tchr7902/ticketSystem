@@ -24,7 +24,7 @@ const App = () => {
         <Routes>
             {/* Public Routes */}
             <Route path="/users/login" element={<LoginPage />} />
-            <Route path="/reset_password/*" element={<PassReset />} />
+            <Route path="/users/reset_password/:resetToken" element={<PassReset />} />
 
             {/* Protected Routes */}
             <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/users/login" />} />

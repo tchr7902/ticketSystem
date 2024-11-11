@@ -321,9 +321,9 @@ def forgot_password():
 
     token = s.dumps(email, salt='password-reset')
 
-    encoded_token = quote(token)
+    resetToken = quote(token)
 
-    reset_url = f"https://gemtickets.org/reset_password/{encoded_token}"
+    reset_url = f"https://gemtickets.org/users/reset_password/{resetToken}"
 
     try:
         msg = Message("Password Reset Request", recipients=[email])
@@ -334,11 +334,12 @@ def forgot_password():
         return jsonify({"message": f"Error sending email: {str(e)}"}), 500
 
 # Reset Pass
-@user_bp.route('/reset_password/<token>', methods=['POST'])
-def reset_password(token):
+@user_bp.route('/reset_password/<resetToken>', methods=['POST'])
+def reset_password(resetToken):
     from app import s
     try:
-        email = s.loads(token, salt='password-reset', max_age=3600)
+        # Use resetToken instead of token
+        email = s.loads(resetToken, salt='password-reset', max_age=3600)
 
         new_password = request.json.get('new_password')
         if not new_password:
