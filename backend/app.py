@@ -71,11 +71,11 @@ def close_db(exception):
 @app.route('/<path:path>', methods=['GET', 'POST'])
 def catch_all(path):
     print(f"Serving index.html for route: {path}", flush=True)
-    return send_from_directory(app.static_folder, 'index.html')
+    return app.send_static_file('index.html')
 
 @app.route('/test_index')
 def test_index():
-    return send_from_directory('frontend/public', 'index.html')
+    return send_from_directory('frontend/build', 'index.html')
 
 # Run the Flask app
 if __name__ == '__main__':
