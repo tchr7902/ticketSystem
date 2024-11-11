@@ -13,7 +13,7 @@ from flask_mail import Mail, Message
 load_dotenv()
 
 # Initialize Flask app
-app = Flask(__name__, static_folder='build', static_url_path='')
+app = Flask(__name__, static_folder='./frontend/build', static_url_path='/')
 
 # CORS setup: Allow localhost and the deployed app
 CORS(app, supports_credentials=True, origins=[
@@ -68,11 +68,11 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-@app.route('/')
-@app.route('/<path:path>', methods=['GET', 'POST']) 
-def public_page_index(path=None):
-    print(f"Requested path: {path}") 
-    return send_from_directory('build', 'index.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+@app.errorhandler(404)
+def catch_all(path):
+    return app.send_static_file('index.html')
 
 # Run the Flask app
 if __name__ == '__main__':
