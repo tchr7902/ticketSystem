@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.3d27e541.css",
-    "main.js": "/static/js/main.00dfc54a.js",
-    "static/media/gem-singlelogo.png": "/static/media/gem-singlelogo.1ac438887fd3af245447.png",
-    "static/media/gem_logo.png": "/static/media/gem_logo.a4c7aa558f6bd84d6482.png",
-    "index.html": "/index.html",
-    "main.3d27e541.css.map": "/static/css/main.3d27e541.css.map",
-    "main.00dfc54a.js.map": "/static/js/main.00dfc54a.js.map"
+    "main.css": "/frontend/static/css/main.5ecc16a1.css",
+    "main.js": "/frontend/static/js/main.fca113af.js",
+    "static/media/gem-singlelogo.png": "/frontend/static/media/gem-singlelogo.1ac438887fd3af245447.png",
+    "static/media/gem_logo.png": "/frontend/static/media/gem_logo.a4c7aa558f6bd84d6482.png",
+    "index.html": "/frontend/index.html",
+    "main.5ecc16a1.css.map": "/frontend/static/css/main.5ecc16a1.css.map",
+    "main.fca113af.js.map": "/frontend/static/js/main.fca113af.js.map"
   },
   "entrypoints": [
-    "static/css/main.3d27e541.css",
-    "static/js/main.00dfc54a.js"
+    "static/css/main.5ecc16a1.css",
+    "static/js/main.fca113af.js"
   ]
 }
