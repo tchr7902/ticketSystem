@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, g
+from flask import Flask, request, jsonify, g, send_from_directory
 from flask_cors import CORS
 from config.db_config import connect_to_db
 from routes.ticket_routes import tickets_bp
@@ -70,7 +70,7 @@ def close_db(exception):
 
 @app.route('/<path:path>')
 def catch_all(path):
-    return app.send_static_file('index.html')
+    return send_from_directory('frontend/build', 'index.html')
 
 # Run the Flask app
 if __name__ == '__main__':
