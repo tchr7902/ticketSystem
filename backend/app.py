@@ -68,14 +68,6 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-# Catch-all route to serve React's index.html for all other routes
-@app.route('/')
-@app.route('/<path:path>')
-def serve_react(path=None):
-    if path and os.path.exists(f'../frontend/build/{path}'):
-        return send_from_directory('../frontend/build', path)
-    return send_from_directory('../frontend/build', 'index.html')
-
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
