@@ -213,9 +213,6 @@ export const forgotPassword = async (email) => {
 
 export const resetPassword = async (token, newPassword) => {
     try {
-        const verifyResponse = await axiosInstance.get(`${USER_URL}/reset_password/${token}`);
-        console.log(verifyResponse.data.message); 
-
         const response = await axiosInstance.post(`${USER_URL}/reset_password/${token}`, {
             new_password: newPassword,
         });
