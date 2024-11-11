@@ -355,8 +355,6 @@ def reset_password(token):
         response = jsonify({"message": "Password successfully reset."})
         response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, proxy-revalidate"
         return response
-
-        return jsonify({"message": "Password succesfully reset."}), 200
     
     except Exception as e:
         print(f"Error in resetting password: {e}")

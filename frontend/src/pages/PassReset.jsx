@@ -26,7 +26,6 @@ function PassReset() {
     };
     
     useEffect(() => {
-        window.location.reload(true);
         console.log("Reset Token: ", resetToken);
     }, [resetToken]);
     
