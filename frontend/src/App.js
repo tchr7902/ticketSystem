@@ -32,8 +32,6 @@ const App = () => {
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/login" />} />
             <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/login" />} />
             
-            {/* Catch-all route */}
-            <Route path="/*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/" />} />
         </Routes>
     );
 };
