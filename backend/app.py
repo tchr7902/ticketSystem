@@ -69,7 +69,7 @@ def close_db(exception):
         db.close()
 
 @app.route('/')
-@app.route('/<path:path>') 
+@app.route('/<path:path>', methods=['GET', 'POST']) 
 def public_page_index(path=None):
     print(f"Requested path: {path}") 
     return send_from_directory('build', 'index.html')
