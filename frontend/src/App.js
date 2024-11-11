@@ -33,7 +33,7 @@ const App = () => {
             <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/users/login" />} />
             
             {/* Catch-all route */}
-            <Route path="*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/users/login" />} />
+            <Route path="/*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/users/login" />} />
         </Routes>
     );
 };
