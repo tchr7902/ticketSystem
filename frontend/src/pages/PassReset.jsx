@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from '../utils/authContext';
 import { resetPassword } from "../utils/api"; 
@@ -24,6 +24,10 @@ function PassReset() {
         logout();
         navigate('/users/login');
     };
+    
+    useEffect(() => {
+        console.log("Reset Token: ", resetToken);
+    }, [resetToken]);
     
 
     const handlePasswordReset = async (e) => {
