@@ -249,7 +249,7 @@ function LoginPage() {
 
             {/* React-Bootstrap Modal */}
             <Modal show={modalVisible} onHide={() => setModalVisible(false)} centered>
-                <Modal.Header closeButton>
+                <Modal.Header className="m-2" closeButton>
                     <Modal.Title>Forgot Password?</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

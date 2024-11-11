@@ -309,54 +309,48 @@ def forgot_password():
     db = connect_to_db()
     cursor = db.cursor(dictionary=True)
     
-    # Validate email
     if not email:
         return jsonify({"message": "Email is required"}), 400
     
-    # Check if the email exists in the database
     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    account = cursor.fetchone()  # Get the first row if any
+    account = cursor.fetchone()
 
-    if not account:  # If account is None, email is not found
+    if not account:
         return jsonify({"error": "No user registered with that email."}), 404
 
-    # Generate a password reset token
     token = s.dumps(email, salt='password-reset')
 
-    # Create the password reset URL
-    reset_url = f"http://yourdomain.com/reset_password/{token}"
+    reset_url = f"https://gemtickets.org/reset_password/{token}"
 
-    # Send the reset email
     try:
         msg = Message("Password Reset Request", recipients=[email])
         msg.body = f"To reset your password, click the link below:\n{reset_url}"
         mail.send(msg)
-        return jsonify({"message": "Password reset email sent!"}), 200
+        return jsonify({"message": "Password reset email sent! Follow the link in your email to reset your password."}), 200
     except Exception as e:
         return jsonify({"message": f"Error sending email: {str(e)}"}), 500
 
 # Reset Pass
 @user_bp.route('/reset_password/<token>', methods=['POST'])
 def reset_password(token):
-    from app import mail, s
+    from app import s
     try:
-        # Verify the token (valid for 1 hour)
         email = s.loads(token, salt='password-reset', max_age=3600)
-        
+
         new_password = request.json.get('new_password')
         if not new_password:
-            return jsonify({"message": "New password is required"}), 400
+            return jsonify({"message": "New password is required."}), 400
+        
+        hashed_password = generate_password_hash(new_password)
 
-        # Hash the new password (use a hashing function like bcrypt)
-        hashed_password = new_password  # Replace with actual password hashing logic
-
-        # Update the password in the database (pseudo code)
         db = connect_to_db()
-        cursor = db.cursor()
-        cursor.execute("UPDATE users SET password = ? WHERE email = ?", (hashed_password, email))
+        cursor = db.cursor(dictionary=True)
+
+        cursor.execute("UPDATE users SET password = %s WHERE email = %s", (hashed_password, email))
         db.commit()
 
-        return jsonify({"message": "Password successfully reset"}), 200
-
+        return jsonify({"message": "Password succesfully reset."}), 200
+    
     except Exception as e:
-        return jsonify({"message": "The reset link is invalid or has expired"}), 400
+        print(f"Error in resetting password: {e}")
+        return jsonify({"message": "The reset link is invalid or has expired."}), 400

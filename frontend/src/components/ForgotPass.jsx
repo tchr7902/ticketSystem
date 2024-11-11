@@ -25,7 +25,7 @@ function ForgotPasswordPage() {
 
     return (
         <div>
-            <form onSubmit={handleForgotPasswordSubmit} className="d-flex flex-column justify-content-center align-items-center m-4">
+            <form onSubmit={handleForgotPasswordSubmit} className="d-flex flex-column justify-content-center align-items-center m-2">
                     <input
                         type="email"
                         className="form-control input-box-email"
@@ -38,8 +38,8 @@ function ForgotPasswordPage() {
                     {loading ? "Sending..." : "Send Reset Link"}
                 </button>
             </form>
-            {message && <p className="text-success d-flex justify-content-center">{message}</p>}
-            {error && <p className="text-danger d-flex justify-content-center">{error}</p>}
+            {message && <p className="text-success d-flex justify-content-center m-4">{message}</p>}
+            {error && <p className="text-danger d-flex justify-content-center m-4">{error}</p>}
         </div>
     );
 }

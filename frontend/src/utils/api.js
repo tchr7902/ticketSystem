@@ -209,3 +209,19 @@ export const forgotPassword = async (email) => {
         throw error;
     }
 };
+
+export const resetPassword = async (token, newPassword) => {
+    try {
+        const response = await axiosInstance.post(`${USER_URL}/reset_password/${token}`, {
+            new_password: newPassword,
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 400) {
+            console.error('Invalid or expired reset token.');
+            throw new Error("The reset link is invalid or has expired.");
+        }
+        console.error('Error resetting password:', error);
+        throw error;
+    }
+};
