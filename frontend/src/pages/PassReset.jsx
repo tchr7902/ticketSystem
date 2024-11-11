@@ -25,10 +25,6 @@ function PassReset() {
         navigate('/users/login');
     };
     
-    useEffect(() => {
-        console.log("Reset Token: ", resetToken);
-    }, [resetToken]);
-    
 
     const handlePasswordReset = async (e) => {
         e.preventDefault();
