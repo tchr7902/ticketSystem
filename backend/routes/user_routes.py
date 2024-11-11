@@ -320,7 +320,7 @@ def forgot_password():
 
     token = s.dumps(email, salt='password-reset')
 
-    reset_url = f"https://gemtickets.org/reset_password/{token}"
+    reset_url = f"https://gemtickets.org/users/reset_password/{token}"
 
     try:
         msg = Message("Password Reset Request", recipients=[email])
