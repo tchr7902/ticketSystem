@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
@@ -351,6 +351,10 @@ def reset_password(token):
 
         cursor.execute("UPDATE users SET password = %s WHERE email = %s", (hashed_password, email))
         db.commit()
+
+        response = jsonify({"message": "Password successfully reset."})
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, proxy-revalidate"
+        return response
 
         return jsonify({"message": "Password succesfully reset."}), 200
     
