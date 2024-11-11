@@ -23,8 +23,8 @@ const App = () => {
     return (
         <Routes>
             {/* Public Routes */}
+            <Route path="/reset_password/:resetToken" element={<PassReset />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/reset_password/*" element={<PassReset />} />
 
             {/* Protected Routes */}
             <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/login" />} />
@@ -32,6 +32,8 @@ const App = () => {
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/login" />} />
             <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/login" />} />
             
+            {/* Catch-all route */}
+            <Route path="/*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/" />} />
         </Routes>
     );
 };
