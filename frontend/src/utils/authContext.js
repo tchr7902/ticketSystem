@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const loadUser = async () => {
-            if (window.location.pathname.startsWith('/users/reset_password')) {
+            if (window.location.pathname.startsWith('/reset_password')) {
                 return;
             }
     
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.removeItem('tokenExpiration');
         setToken(null);
         setUser(null);
-        navigate("/users/login");
+        navigate("/login");
     };
 
     const changePassword = async (currentPassword, newPassword) => {

@@ -22,7 +22,7 @@ function PassReset() {
 
     const handleLogout = () => {
         logout();
-        navigate('/users/login');
+        navigate('/login');
     };
     
 

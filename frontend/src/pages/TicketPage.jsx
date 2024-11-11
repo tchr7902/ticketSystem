@@ -31,7 +31,7 @@ function TicketPage() {
     
     const handleLogout = () => {
         logout();
-        navigate("/users/login");
+        navigate("/login");
     };
 
     const handleProfileClick = () => {

@@ -23,17 +23,17 @@ const App = () => {
     return (
         <Routes>
             {/* Public Routes */}
-            <Route path="/users/login" element={<LoginPage />} />
-            <Route path="/users/reset_password/:resetToken" element={<PassReset />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/reset_password/:resetToken" element={<PassReset />} />
 
             {/* Protected Routes */}
-            <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/users/login" />} />
-            <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/users/login" />} />
-            <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/users/login" />} />
-            <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/users/login" />} />
+            <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/login" />} />
+            <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/login" />} />
+            <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/login" />} />
+            <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/login" />} />
             
             {/* Catch-all route */}
-            <Route path="/*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/users/login" />} />
+            <Route path="/*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/login" />} />
         </Routes>
     );
 };

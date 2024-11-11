@@ -41,7 +41,7 @@ function AdminRegister() {
 
     const handleLogout = () => {
         logout();
-        navigate('/users/login');
+        navigate('/login');
     };
 
     const showToast = (message, type = "success") => {

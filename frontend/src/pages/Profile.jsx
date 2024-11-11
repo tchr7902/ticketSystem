@@ -72,7 +72,7 @@ const ProfilePage = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/users/login');
+        navigate('/login');
     };
 
     const backButton = () => {
