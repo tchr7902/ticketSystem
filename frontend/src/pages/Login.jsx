@@ -228,7 +228,7 @@ function LoginPage() {
                         {loading ? "Loading..." : (isRegister ? "Register" : "Login")}
                     </button>
                     <p 
-                        className="text-center text-secondary mt-3" 
+                        className="text-center text-secondary mt-3 text-decoration-underline" 
                         style={{ cursor: "pointer" }} 
                         onClick={() => setIsRegister(!isRegister)}
                     >
@@ -237,7 +237,7 @@ function LoginPage() {
                             : "Don't have an account? Register"}
                     </p>
                     <p 
-                        className="text-center text-secondary" 
+                        className="text-center text-secondary text-decoration-underline" 
                         style={{ cursor: "pointer" }}
                         onClick={() => setModalVisible(true)} // Open modal on click
                     >

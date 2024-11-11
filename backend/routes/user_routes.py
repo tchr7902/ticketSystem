@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
 import logging
 from flask_mail import Message
+from urllib.parse import quote
 
 user_bp = Blueprint('user_bp', __name__)
 db = connect_to_db()
@@ -320,11 +321,13 @@ def forgot_password():
 
     token = s.dumps(email, salt='password-reset')
 
-    reset_url = f"https://gemtickets.org/users/reset_password/{token}"
+    encoded_token = quote(token)
+
+    reset_url = f"https://gemtickets.org/users/reset_password/{encoded_token}"
 
     try:
         msg = Message("Password Reset Request", recipients=[email])
-        msg.body = f"To reset your password, click the link below:\n{reset_url}"
+        msg.body = f"To reset your password, please click the link below:\n{reset_url}"
         mail.send(msg)
         return jsonify({"message": "Password reset email sent! Follow the link in your email to reset your password."}), 200
     except Exception as e:

@@ -12,6 +12,10 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const loadUser = async () => {
+            if (window.location.pathname.startsWith('/users/reset_password')) {
+                return;
+            }
+    
             const expirationTime = sessionStorage.getItem('tokenExpiration');
             if (token && expirationTime && new Date().getTime() < expirationTime) {
                 try {
@@ -25,9 +29,10 @@ export const AuthProvider = ({ children }) => {
                 logout();
             }
         };
-
+    
         loadUser(); 
-    }, [token]);
+    }, [token, navigate]);
+    
 
     const login = (token, userData) => {
         const expirationTime = new Date().getTime() + 12 * 60 * 60 * 1000;
