@@ -323,7 +323,7 @@ def forgot_password():
 
     resetToken = quote(token)
 
-    reset_url = f"https://gemtickets.org/users/reset_password/{resetToken}"
+    reset_url = f"https://gemtickets.org/users/reset_password"
 
     try:
         msg = Message("Password Reset Request", recipients=[email])
