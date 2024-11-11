@@ -73,10 +73,6 @@ def catch_all(path):
     print(f"Serving index.html for route: {path}", flush=True)
     return app.send_static_file('index.html')
 
-@app.route('/test_index')
-def test_index():
-    return send_from_directory('frontend/build', 'index.html')
-
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
