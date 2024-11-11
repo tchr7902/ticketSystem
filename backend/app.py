@@ -13,7 +13,7 @@ from flask_mail import Mail, Message
 load_dotenv()
 
 # Initialize Flask app
-app = Flask(__name__, static_folder='frontend/public', static_url_path='')
+app = Flask(__name__, static_folder='src/frontend/public', static_url_path='')
 
 # CORS setup: Allow localhost and the deployed app
 CORS(app, supports_credentials=True, origins=[
@@ -71,7 +71,7 @@ def close_db(exception):
 @app.route('/<path:path>', methods=['GET', 'POST'])
 def catch_all(path):
     print(f"Serving index.html for route: {path}")
-    return send_from_directory('frontend/public', 'index.html')
+    return send_from_directory('src/frontend/public', 'index.html')
 
 # Run the Flask app
 if __name__ == '__main__':
