@@ -5,6 +5,7 @@ import TicketPage from "./pages/TicketPage";
 import ProfilePage from "./pages/Profile"
 import SettingsPage from './pages/Settings';
 import AdminRegister from './pages/AdminRegister';
+import PassReset from './pages/PassReset';
 import { AuthProvider, useAuth } from './utils/authContext';
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/users/login" />} />
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/users/login" />} />
             <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/users/login" />} />
+            <Route path="/users/reset_password/:token" element={<PassReset />} />
         </Routes>
     );
 };
