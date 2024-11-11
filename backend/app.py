@@ -13,7 +13,7 @@ from flask_mail import Mail, Message
 load_dotenv()
 
 # Initialize Flask app
-app = Flask(__name__, static_folder='./frontend/build', static_url_path='/')
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 
 # CORS setup: Allow localhost and the deployed app
 CORS(app, supports_credentials=True, origins=[
@@ -68,11 +68,13 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-@app.route('/', defaults={'path': ''})
+# Catch-all route to serve React's index.html for all other routes
+@app.route('/')
 @app.route('/<path:path>')
-@app.errorhandler(404)
-def catch_all(path):
-    return app.send_static_file('index.html')
+def serve_react(path=None):
+    if path and os.path.exists(f'../frontend/build/{path}'):
+        return send_from_directory('../frontend/build', path)
+    return send_from_directory('../frontend/build', 'index.html')
 
 # Run the Flask app
 if __name__ == '__main__':
