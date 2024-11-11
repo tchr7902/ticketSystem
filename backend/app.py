@@ -72,7 +72,7 @@ def close_db(exception):
 @app.route('/<path:path>') 
 def public_page_index(path=None):
     print(f"Requested path: {path}") 
-    return send_from_directory('frontend/build', 'index.html')
+    return send_from_directory('build', 'index.html')
 
 # Run the Flask app
 if __name__ == '__main__':
