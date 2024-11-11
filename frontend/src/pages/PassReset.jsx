@@ -12,9 +12,9 @@ import { FaSignOutAlt } from 'react-icons/fa';
 
 function PassReset() {
     const navigate = useNavigate();
-    const { token: resetToken } = useParams();
+    const { resetToken } = useParams();
+    console.log("Reset Token:", resetToken);
     const { logout } = useContext(AuthContext);
-
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
