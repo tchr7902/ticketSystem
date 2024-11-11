@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
         };
     
         loadUser(); 
-    }, [token, navigate]);
+    }, [token, navigate]); 
     
 
     const login = (token, userData) => {
