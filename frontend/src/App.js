@@ -23,7 +23,7 @@ const App = () => {
     return (
         <Routes>
             {/* Public Routes */}
-            <Route path="/reset_password/:resetToken" element={<PassReset />} />
+            <Route path="/reset_password/*" element={<PassReset />} />
             <Route path="/login" element={<LoginPage />} />
 
             {/* Protected Routes */}
