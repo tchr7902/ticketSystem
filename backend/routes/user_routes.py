@@ -309,6 +309,9 @@ def forgot_password():
     email = request.json.get('email')
     db = connect_to_db()
     cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT first_name FROM users WHERE email = %s", (email,))
+    name = cursor.fetchone()
     
     if not email:
         return jsonify({"message": "Email is required"}), 400
@@ -327,7 +330,14 @@ def forgot_password():
 
     try:
         msg = Message("Password Reset Request", recipients=[email])
-        msg.body = f"To reset your password, please click the link below:\n{reset_url}"
+        msg.body = (
+            f"Hello {name},\n\n"
+            "We have received a request to reset your password. To securely reset your password, please use the link below:\n"
+            f"{reset_url}\n\n"
+            "If you did not request a password reset, please disregard this email, and your current password will remain unchanged.\n\n"
+            "Thanks,\n"
+            "GEM IT Team"
+        )
         mail.send(msg)
         return jsonify({"message": "Password reset email sent! Follow the link in your email to reset your password."}), 200
     except Exception as e:
