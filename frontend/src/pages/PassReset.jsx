@@ -60,7 +60,7 @@ function PassReset() {
             setConfirmPassword("");
 
             // Redirect to login after successful reset
-            setTimeout(() => navigate("/login"), 3000);
+            setTimeout(() => navigate("/login"), 9000);
         } catch (err) {
             toast.error('Failed to reset password. Please try again.');
             console.error('Password reset error:', err);
