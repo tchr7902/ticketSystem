@@ -135,7 +135,7 @@ function LoginPage() {
                 style={{ width: '150px', height: '150px', marginBottom: '20px'}} 
             />
             <h1 style={{ marginBottom: '20px'}}><strong>IT Support Hub</strong></h1>
-            <div className="register-card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+            <div className="register-card" style={{ maxWidth: '450px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {isRegister ? "Register" : "Login"}
                 </h2>

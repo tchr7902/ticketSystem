@@ -802,11 +802,12 @@ input, select, textarea {
 }
 
 .login-div {
-  margin-top: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  margin-top: 30px;
 }
 
 .register-card {
@@ -815,6 +816,7 @@ input, select, textarea {
   border-radius: 8px;
   margin-bottom: 50px;
   margin-top: 10px;
+  padding: 20px 40px 20px;
   overflow-y: auto;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
