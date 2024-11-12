@@ -311,7 +311,11 @@ def forgot_password():
     cursor = db.cursor(dictionary=True)
 
     cursor.execute("SELECT first_name FROM users WHERE email = %s", (email,))
-    name = cursor.fetchone()
+    result = cursor.fetchone()
+
+    name = result['first_name']
+
+    print(name)
     
     if not email:
         return jsonify({"message": "Email is required"}), 400
