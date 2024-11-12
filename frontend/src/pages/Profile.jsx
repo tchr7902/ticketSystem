@@ -76,7 +76,7 @@ const ProfilePage = () => {
     };
 
     const backButton = () => {
-        navigate('/tickets');
+        navigate('/home');
     }
 
     useEffect(() => {

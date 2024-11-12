@@ -36,7 +36,7 @@ const SettingsPage = () => {
     };
 
     const backButton = () => {
-        navigate('/tickets');
+        navigate('/home');
     };
 
     const handleEmailChange = async (e) => {

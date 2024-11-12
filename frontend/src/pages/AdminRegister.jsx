@@ -36,7 +36,7 @@ function AdminRegister() {
     const navigate = useNavigate();
 
     const backButton = () => {
-        navigate('/tickets');
+        navigate('/home');
     }
 
     const handleLogout = () => {
@@ -108,7 +108,7 @@ function AdminRegister() {
                 data-tooltip-content="Logout"
                 data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
-            <div className="register-admin-card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+            <div className="register-admin-card" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {"Register An Admin"}
                 </h2>

@@ -27,7 +27,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
 
             {/* Protected Routes */}
-            <Route path="/tickets" element={token ? <TicketPage /> : <Navigate to="/login" />} />
+            <Route path="/home" element={token ? <TicketPage /> : <Navigate to="/login" />} />
             <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/login" />} />
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/login" />} />
             <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/login" />} />

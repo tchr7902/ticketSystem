@@ -81,7 +81,7 @@ function LoginPage() {
                             login(access_token, user);
     
                             // Redirect based on user role
-                            navigate(user.role === 'admin' ? '/tickets' : '/tickets');
+                            navigate(user.role === 'admin' ? '/home' : '/home');
                         } catch (loginError) {
                             console.error("Login error after registration:", loginError);
                             const backendMessage = loginError.response?.data?.error || "Login failed after registration. Please check your credentials and try again.";
@@ -107,7 +107,7 @@ function LoginPage() {
                     login(access_token, user);
     
                     // Redirect based on user role
-                    navigate(user.role === 'admin' ? '/tickets' : '/tickets');
+                    navigate(user.role === 'admin' ? '/home' : '/home');
                 } catch (loginError) {
                     console.error("Login error:", loginError);
                     const backendMessage = loginError.response?.data?.error || "Invalid email or password. Please try again.";
@@ -123,7 +123,7 @@ function LoginPage() {
     };
 
     return (
-        <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
+        <div className="container login-div">
             <img className="img-1 mt-4" 
                 src={logo} 
                 alt="Logo" 
@@ -135,7 +135,7 @@ function LoginPage() {
                 style={{ width: '150px', height: '150px', marginBottom: '20px'}} 
             />
             <h1 style={{ marginBottom: '20px'}}><strong>IT Support Hub</strong></h1>
-            <div className="register-card p-4 mb-4" style={{ maxWidth: '400px', width: '100%' }}>
+            <div className="register-card p-4" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {isRegister ? "Register" : "Login"}
                 </h2>
