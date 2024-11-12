@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { AuthContext } from '../utils/authContext';
 import { resetPassword } from "../utils/api"; 
 import { Tooltip } from 'react-tooltip'
@@ -12,8 +12,9 @@ import { FaSignOutAlt } from 'react-icons/fa';
 
 function PassReset() {
     const navigate = useNavigate();
-    const { resetToken } = useParams();
-    console.log("Reset Token:", resetToken);
+    const location = useLocation();
+    const pathParts = location.pathname.split('/');
+    const resetToken = pathParts[pathParts.length - 1];
     const { logout } = useContext(AuthContext);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
