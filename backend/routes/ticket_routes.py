@@ -13,6 +13,13 @@ def get_user_name(user_id):
     cursor.close()
     return f"{user['first_name']} {user['last_name']}" if user else None
 
+def get_user_first_name(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT first_name FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return f"{user['first_name']}" if user else None
+
 def get_user_email(user_id):
     cursor = get_db().cursor(dictionary=True)
     cursor.execute("SELECT email FROM users WHERE id = %s", (user_id,))
@@ -33,6 +40,13 @@ def get_user_id(email):
     user = cursor.fetchone()
     cursor.close()
     return user['id'] if user else None
+
+def get_user_id_ticket(ticket_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT user_id FROM tickets WHERE id = %s", (ticket_id,))
+    user_id = cursor.fetchone()
+    cursor.close()
+    return user_id['user_id'] if user_id else None
 
 def get_db():
     if 'db' not in g:
@@ -65,6 +79,7 @@ def create_ticket():
     status = data.get('status') if data.get('status') else 'Open'
 
     name = get_user_name(user['id'])
+    first_name = get_user_first_name(user['id'])
     email = get_user_email(user['id'])
     phone_number = get_user_phone(user['id'])
 
@@ -96,7 +111,7 @@ def create_ticket():
 
         # Send the chat notification
         message_text = (
-            f"🔔 *Hello {name}!*\n\n"
+            f"🔔 *Hello {first_name}!*\n\n"
             f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
             f"We've received your request and will begin addressing it as soon as possible.\n\n"
             f"If we have any questions, we will reach out to you using the contact method you provided:\n*{data['contact_method']}*\n\n"
@@ -114,6 +129,9 @@ def create_ticket():
 def update_ticket(ticket_id):
     user = get_jwt_identity()
     data = request.json
+
+    user_id = get_user_id_ticket(ticket_id)
+    first_name = get_user_first_name(user_id)
 
     cursor = get_db().cursor(dictionary=True)
     cursor.execute("SELECT * FROM tickets WHERE id = %s", (ticket_id,))
@@ -143,7 +161,7 @@ def update_ticket(ticket_id):
 
             # Send the chat notification
             message_text = (
-                f"📢 *Hello {ticket['name']}!*\n\n"
+                f"📢 *Hello {first_name}!*\n\n"
                 f"The status of your ticket: *{ticket['title']}* has been updated to: *{data['status']}*.\n\n"
                 f"Thank you for your patience, and feel free to reach out to an IT Member if you have any questions!"
             )

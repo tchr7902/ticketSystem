@@ -18,12 +18,16 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-    (response) => response,
+    (response) => response,  
     (error) => {
         if (error.response && error.response.status === 401) {
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('tokenExpiration');
-            window.location.href = '/login';
+
+            if (!window.location.pathname.includes('/login')) {
+
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('tokenExpiration');
+                window.location.href = '/login'; 
+            }
         }
         return Promise.reject(error);
     }
