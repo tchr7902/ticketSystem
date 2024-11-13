@@ -3,8 +3,6 @@ import requests
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
-from app import app
-
 
 tickets_bp = Blueprint('tickets', __name__)
 
@@ -335,53 +333,3 @@ def get_archived_tickets(user_id):
 def handle_chat_event():
     data = request.get_json()
     return jsonify({"text": "Message received!"})
-
-
-@app.route('', methods=['POST'])
-def submit_chat_ticket():
-    data = request.get_json()
-
-    # Check if this is a MESSAGE event from Google Chat
-    if data.get('type') == 'MESSAGE':
-        ticket_title = data.get('ticket_title', 'Sample Ticket')
-        ticket_description = data.get('ticket_description', 'No description provided.')
-        ticket_severity = data.get('ticket_severity', 'Low')
-        ticket_email = data.get('ticket_email')
-
-        # Example: Extract user email from the Google Chat event
-        if 'user' in data:
-            ticket_email = data['user']['email']
-
-        # Process the ticket creation
-        user_id = get_user_id(ticket_email)
-        name = get_user_name(user_id)
-        phone_number = get_user_phone(user_id)
-        ticket_status = 'Open'
-
-        # Create ticket in database
-        cursor = get_db().cursor()
-        cursor.execute(
-            "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            (ticket_title, ticket_description, ticket_severity, user_id, ticket_status, ticket_email, name, ticket_email, phone_number)
-        )
-        get_db().commit()
-        cursor.close()
-
-        # Notify the user in Google Chat
-        space_info = create_user_space(ticket_email)
-        if space_info:
-            space_id = space_info.get('name')
-            add_members_to_space(space_id, ticket_email)
-            message_text = (
-                f"🔔 *Hello {name}!*\n\n"
-                f"Thank you for submitting your IT ticket: *{ticket_title}*.\n\n"
-                f"We've received your request and will begin addressing it as soon as possible.\n\n"
-                f"If we have any questions, we will reach out to you using the contact method you provided:\n*{ticket_email}*\n\n"
-                f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
-                f"You'll receive updates on your ticket status here in this chat. Thank you!"
-            )
-            send_message(space_id, message_text)
-
-        return jsonify({'status': 'Ticket created and notification sent'})
-    else:
-        return jsonify({'status': 'Unhandled event type'})

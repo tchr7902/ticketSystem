@@ -7,7 +7,7 @@ import tempfile
 import logging
 
 # Load environment variables
-load_dotenv('../../.env')
+load_dotenv('../.env')
 
 def connect_to_db():
     cert_file_path = None 

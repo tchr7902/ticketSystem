@@ -9,7 +9,6 @@ import os
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
 
-
 # Load environment variables
 load_dotenv()
 
@@ -23,7 +22,6 @@ CORS(app, supports_credentials=True, origins=[
     "http://localhost:3000",
     "http://localhost:5000",
     "http://127.0.0.1:5000",
-    "https://chat.google.com"
 ])
 
 # Configure the JWT secret key
@@ -69,3 +67,7 @@ def close_db(exception):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
+# Run the Flask app
+if __name__ == '__main__':
+    app.run(debug=True)
