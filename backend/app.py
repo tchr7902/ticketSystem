@@ -9,6 +9,7 @@ import os
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
 
+
 # Load environment variables
 load_dotenv()
 
@@ -68,7 +69,3 @@ def close_db(exception):
     db = g.pop('db', None)
     if db is not None:
         db.close()
-
-# Run the Flask app
-if __name__ == '__main__':
-    app.run(debug=True)
