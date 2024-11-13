@@ -360,4 +360,33 @@ def submit_chat_ticket():
         "text": f"Thank you for submitting your ticket!\n\nTitle: {ticket_title}\nSeverity: {ticket_severity}\nWe will contact you via {ticket_email}."
     }
 
+    message_data = {
+        'title': ticket_title,
+        'description': ticket_description,
+        'severity': ticket_severity,
+        'name': name,
+        'contact_method': ticket_email
+    }
+
+    send_google_chat_message(message_data)
+
+    space_info = create_user_space(ticket_email)
+
+    if space_info:
+        space_id = space_info.get('name')
+
+        # Add the ticket owner to the space
+        add_members_to_space(space_id, ticket_email)
+
+        # Send the chat notification
+        message_text = (
+            f"🔔 *Hello {name}!*\n\n"
+            f"Thank you for submitting your IT ticket: *{ticket_title}*.\n\n"
+            f"We've received your request and will begin addressing it as soon as possible.\n\n"
+            f"If we have any questions, we will reach out to you using the contact method you provided:\n*{ticket_email}*\n\n"
+            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
+            f"You'll receive updates on your ticket status here in this chat. Thank you!"
+        )
+        send_message(space_id, message_text)
+
     return jsonify(response_message)
