@@ -807,7 +807,7 @@ input, select, textarea {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .register-card {

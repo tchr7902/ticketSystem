@@ -27,6 +27,13 @@ def get_user_phone(user_id):
     cursor.close()
     return user['phone_number'] if user else None
 
+def get_user_id(email):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+    cursor.close()
+    return user['id'] if user else None
+
 def get_db():
     if 'db' not in g:
         g.db = connect_to_db()
@@ -326,3 +333,31 @@ def get_archived_tickets(user_id):
 def handle_chat_event():
     data = request.get_json()
     return jsonify({"text": "Message received!"})
+
+
+@tickets_bp.route('/submit_ticket/chats', methods=['POST'])
+def submit_chat_ticket():
+    data = request.json
+    ticket_title = data['action']['parameters'][0]['value']
+    ticket_description = data['action']['parameters'][1]['value']
+    ticket_severity = data['action']['parameters'][2]['value']
+    ticket_email = data['action']['parameters'][3]['value']
+
+    user_id = get_user_id(ticket_email)
+    name = get_user_name(user_id)
+    phone_number = get_user_phone(user_id)
+    ticket_status = 'Open'
+
+    cursor = get_db().cursor()
+    cursor.execute(
+        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        (ticket_title, ticket_description, ticket_severity, user_id, ticket_status, ticket_email, name, ticket_email, phone_number)
+    )
+    get_db().commit()
+    cursor.close()
+
+    response_message = {
+        "text": f"Thank you for submitting your ticket!\n\nTitle: {ticket_title}\nSeverity: {ticket_severity}\nWe will contact you via {ticket_email}."
+    }
+
+    return jsonify(response_message)
