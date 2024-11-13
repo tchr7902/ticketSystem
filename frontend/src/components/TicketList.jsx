@@ -205,8 +205,8 @@ function TicketList() {
             </div>                          
             )}
             </div>
+            <h3 className="d-flex justify-content-center mt-5">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
             <div className="list-div">
-                <h3 className="d-flex justify-content-center mt-4 mb-3">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
                 {tickets.length === 0 ? (
                     <p className="text-center">{user.role === "admin" ? "Congrats, you're caught up!" : "You don't have any tickets yet."}</p>
                 ) : (

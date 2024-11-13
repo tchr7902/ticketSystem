@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify, g
+from flask import Blueprint, request, jsonify, g, redirect, url_for
+import requests
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message, send_create_message
@@ -335,13 +336,15 @@ def handle_chat_event():
     return jsonify({"text": "Message received!"})
 
 
-@tickets_bp.route('/submit_ticket/chats', methods=['POST'])
+@tickets_bp.route('/submit_ticket/chats', methods=['GET'])
 def submit_chat_ticket():
-    data = request.json
-    ticket_title = data['action']['parameters'][0]['value']
-    ticket_description = data['action']['parameters'][1]['value']
-    ticket_severity = data['action']['parameters'][2]['value']
-    ticket_email = data['action']['parameters'][3]['value']
+    ticket_title = request.args.get('ticket_title')
+    ticket_description = request.args.get('ticket_description')
+    ticket_severity = request.args.get('ticket_severity')
+    ticket_email = request.args.get('ticket_email')
+
+    if not all([ticket_title, ticket_description, ticket_severity, ticket_email]):
+        return "Missing required parameters", 400
 
     user_id = get_user_id(ticket_email)
     name = get_user_name(user_id)
@@ -355,10 +358,6 @@ def submit_chat_ticket():
     )
     get_db().commit()
     cursor.close()
-
-    response_message = {
-        "text": f"Thank you for submitting your ticket!\n\nTitle: {ticket_title}\nSeverity: {ticket_severity}\nWe will contact you via {ticket_email}."
-    }
 
     message_data = {
         'title': ticket_title,
@@ -389,4 +388,5 @@ def submit_chat_ticket():
         )
         send_message(space_id, message_text)
 
-    return jsonify(response_message)
+    return ("Success")
+ #   return redirect("https://gemtickets.org/login")
