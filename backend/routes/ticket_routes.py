@@ -336,17 +336,15 @@ def handle_chat_event():
     return jsonify({"text": "Message received!"})
 
 
-@tickets_bp.route('/submit_ticket/chats', methods=['POST'])
+@tickets_bp.route('/submit_chat_ticket', methods=['GET'])
 def submit_chat_ticket():
-    ticket_title = request.json.get('ticket_title')
-    ticket_description = request.json.get('ticket_description')
-    ticket_severity = request.json.get('ticket_severity')
-    ticket_email = request.json.get('ticket_email')
+    ticket_title = request.args.get('ticket_title')
+    ticket_description = request.args.get('ticket_description')
+    ticket_severity = request.args.get('ticket_severity')
+    ticket_email = request.args.get('ticket_email')
 
     if not all([ticket_title, ticket_description, ticket_severity, ticket_email]):
         return "Missing required parameters", 400
-    
-    print(ticket_title, ticket_description, ticket_severity, ticket_email)
 
     user_id = get_user_id(ticket_email)
     name = get_user_name(user_id)
@@ -390,5 +388,5 @@ def submit_chat_ticket():
         )
         send_message(space_id, message_text)
 
-    return {"status": "success", "message": "Ticket created successfully!"}
+    return ("Success")
  #   return redirect("https://gemtickets.org/login")
