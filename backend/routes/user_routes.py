@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, Response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
 from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
 import logging
@@ -53,6 +54,26 @@ def register():
         cursor.execute("INSERT INTO users (email, password, store_id, first_name, last_name, phone_number) VALUES (%s, %s, %s, %s, %s, %s)", 
                        (email, hashed_password, store_id, first_name, last_name, phone_number))
         db.commit()
+
+        space_info = create_user_space(email)
+
+        if space_info:
+            space_id = space_info.get('name')
+
+            # Add the ticket owner to the space
+            add_members_to_space(space_id, email)
+
+            # Send the chat notification
+            message_text = (
+                f"🔔 *Hello {first_name}!*\n\n"
+                f"Thank you for registering with our IT support system! 🎉\n\n"
+                f"You can visit *gemtickets.org* to submit tickets for any IT issues you're experiencing.\n\n"
+                f"Once we receive your ticket, we will get to it as soon as possible. You'll receive updates on your tickets right here in this chat.\n\n"
+                f"If you have any questions or need further assistance, feel free to reach out to the IT team directly!\n\n"
+                f"Thank you for being part of the team! 😊"
+            )
+            send_message(space_id, message_text)
+
         return jsonify({"message": "User registered successfully"}), 201
     except Exception as e:
         logging.error(f"Database error: {e}")
