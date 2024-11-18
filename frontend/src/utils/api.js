@@ -94,7 +94,6 @@ export const registerAdmin = async (email, password, first_name, last_name, stor
 };
 
 export const fetchUser = async (token) => {
-    console.log("Sending token: ", token); // Debug the token being sent
     try {
         const response = await axiosInstance.get(`${USER_URL}/me`, {
             headers: {

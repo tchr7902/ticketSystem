@@ -187,9 +187,6 @@ def login():
         cursor.close()
 
 
-# Ensure logging is configured to show DEBUG level logs
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
