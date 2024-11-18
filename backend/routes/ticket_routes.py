@@ -384,7 +384,9 @@ def submit_chat_ticket():
         user_id = get_user_id(ticket_email)
         name = get_user_name(user_id)
         phone_number = get_user_phone(user_id)
+        first_name = get_user_first_name(user_id)
         ticket_status = 'Open'
+        severity = ticket_severity.capitalize()
 
         # Insert the ticket into the database
         cursor = get_db().cursor()
@@ -401,7 +403,7 @@ def submit_chat_ticket():
         message_data = {
         'title': ticket_title,
         'description': ticket_description,
-        'severity': ticket_severity,
+        'severity': severity,
         'name': name,
         'contact_method': ticket_email
         }
@@ -413,7 +415,7 @@ def submit_chat_ticket():
             space_id = space_info.get('name')
             add_members_to_space(space_id, ticket_email)
             message_text = (
-                f"🔔 *Hello {name}!*\n\n"
+                f"🔔 *Hello {first_name}!*\n\n"
                 f"Thank you for submitting your IT ticket: *{ticket_title}*.\n\n"
                 f"We've received your request and will begin addressing it as soon as possible.\n\n"
                 f"If we have any questions, we will reach out to you using the contact method you provided:\n*{ticket_email}*\n\n"
