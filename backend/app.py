@@ -15,7 +15,6 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 
-# CORS setup: Allow localhost and the deployed app
 CORS(app, supports_credentials=True, origins=[
     "https://ticketsystem-1.onrender.com",
     "https://gemtickets.org",
