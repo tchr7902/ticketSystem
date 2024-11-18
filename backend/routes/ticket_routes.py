@@ -356,29 +356,42 @@ def handle_chat_event():
 @tickets_bp.route('/chat_ticket', methods=['POST'])
 def submit_chat_ticket():
     data = request.get_json()
-    # Check if this is a MESSAGE event from Google Chat
-    if data.get('type') == 'MESSAGE':
-        ticket_title = data.get('ticket_title', 'Sample Ticket')
-        ticket_description = data.get('ticket_description', 'No description provided.')
-        ticket_severity = data.get('ticket_severity', 'Low')
-        ticket_email = data.get('ticket_email')
-        # Example: Extract user email from the Google Chat event
-        if 'user' in data:
-            ticket_email = data['user']['email']
-        # Process the ticket creation
+    
+    # Debugging: Print the incoming data
+    print(f"Received data: {data}")
+
+    # Check if this is a valid event for ticket submission (sent from the Cloud Function)
+    if data:
+        # Extract ticket data from the request
+        ticket_title = data.get('title')
+        ticket_description = data.get('description')
+        ticket_severity = data.get('severity')
+        ticket_email = data.get('email')
+
+        # Validate that necessary fields are present
+        if not ticket_title or not ticket_description or not ticket_severity or not ticket_email:
+            print("Error: Missing required ticket information.")
+            return jsonify({'error': 'Missing required fields'}), 400
+        
+        # Example: Extract additional user details (you can modify this as needed)
         user_id = get_user_id(ticket_email)
         name = get_user_name(user_id)
         phone_number = get_user_phone(user_id)
         ticket_status = 'Open'
-        # Create ticket in database
+
+        # Insert the ticket into the database
         cursor = get_db().cursor()
         cursor.execute(
-            "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            """
+            INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email, phone_number)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
             (ticket_title, ticket_description, ticket_severity, user_id, ticket_status, ticket_email, name, ticket_email, phone_number)
         )
         get_db().commit()
         cursor.close()
-        # Notify the user in Google Chat
+
+        # Optional: Notify the user in Google Chat
         space_info = create_user_space(ticket_email)
         if space_info:
             space_id = space_info.get('name')
@@ -392,6 +405,8 @@ def submit_chat_ticket():
                 f"You'll receive updates on your ticket status here in this chat. Thank you!"
             )
             send_message(space_id, message_text)
-        return jsonify({'status': 'Ticket created and notification sent'})
+
+        return jsonify({'status': 'Ticket created and notification sent'}), 200
     else:
-        return jsonify({'status': 'Unhandled event type'})
+        print("Error: Invalid data received.")
+        return jsonify({'error': 'Invalid event data'}), 400
