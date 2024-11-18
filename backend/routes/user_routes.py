@@ -189,41 +189,65 @@ def login():
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
-    user_identity = get_jwt_identity()  # Get user identity and role from the token
-    db = connect_to_db()
-    cursor = db.cursor(dictionary=True)
+    from app import logger
+    logger.info("GET /me route accessed.")
+    try:
+        # Extract JWT identity
+        user_identity = get_jwt_identity()
+        logger.debug(f"User identity from token: {user_identity}")
 
-    if user_identity['role'] == 'admin':
-        # If the role is admin, fetch admin details
-        cursor.execute("SELECT id, first_name, last_name, store_id, email FROM admin WHERE id = %s", (user_identity['id'],))
-        admin = cursor.fetchone()
+        db = connect_to_db()
+        cursor = db.cursor(dictionary=True)
 
-        if admin:
-            return jsonify({
-                'id': admin['id'],
-                'first_name': admin['first_name'],
-                'last_name': admin['last_name'],
-                'email': admin['email'],
-                'store_id': admin['store_id'],
-                'role': 'admin'
-            }), 200
+        if user_identity['role'] == 'admin':
+            logger.info("Fetching admin details...")
+            cursor.execute(
+                "SELECT id, first_name, last_name, store_id, email FROM admin WHERE id = %s", 
+                (user_identity['id'],)
+            )
+            admin = cursor.fetchone()
+            logger.debug(f"Admin data fetched: {admin}")
 
-    else:
-        # Otherwise, fetch user details
-        cursor.execute("SELECT id, first_name, email, store_id, phone_number FROM users WHERE id = %s", (user_identity['id'],))
-        user = cursor.fetchone()
+            if admin:
+                logger.info("Admin details found, returning response.")
+                return jsonify({
+                    'id': admin['id'],
+                    'first_name': admin['first_name'],
+                    'last_name': admin['last_name'],
+                    'email': admin['email'],
+                    'store_id': admin['store_id'],
+                    'role': 'admin'
+                }), 200
+        else:
+            logger.info("Fetching user details...")
+            cursor.execute(
+                "SELECT id, first_name, email, store_id, phone_number FROM users WHERE id = %s", 
+                (user_identity['id'],)
+            )
+            user = cursor.fetchone()
+            logger.debug(f"User data fetched: {user}")
 
-        if user:
-            return jsonify({
-                'id': user['id'],
-                'first_name': user['first_name'],
-                'email': user['email'],
-                'phone_number': user['phone_number'],
-                'store_id': user['store_id'],
-                'role': 'user'
-            }), 200
+            if user:
+                logger.info("User details found, returning response.")
+                return jsonify({
+                    'id': user['id'],
+                    'first_name': user['first_name'],
+                    'email': user['email'],
+                    'phone_number': user['phone_number'],
+                    'store_id': user['store_id'],
+                    'role': 'user'
+                }), 200
 
-    return jsonify({"error": "User not found"}), 404
+        logger.warning("No user or admin found with the given ID.")
+        return jsonify({"error": "User not found"}), 404
+
+    except Exception as e:
+        logger.exception("An error occurred in GET /me route.")
+        return jsonify({"error": "Internal server error"}), 500
+
+    finally:
+        cursor.close()
+
 
 
 # Change password

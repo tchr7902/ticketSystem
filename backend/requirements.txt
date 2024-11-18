@@ -1,7 +1,7 @@
 Flask
 gunicorn
 Flask-Cors
-Flask-JWT-Extended
+flask-jwt-extended==24.3.1
 python-dotenv
 requests
 Werkzeug
