@@ -3,6 +3,7 @@ import requests
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
+import json
 
 tickets_bp = Blueprint('tickets', __name__)
 
@@ -57,7 +58,8 @@ def get_db():
 @tickets_bp.route('', methods=['GET'])
 @jwt_required()
 def get_tickets():
-    user = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)
     cursor = get_db().cursor(dictionary=True)
 
     if user['role'] == 'admin':
@@ -73,7 +75,8 @@ def get_tickets():
 @tickets_bp.route('', methods=['POST'])
 @jwt_required()
 def create_ticket():
-    user = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
     data = request.json
 
     status = data.get('status') if data.get('status') else 'Open'
@@ -127,7 +130,8 @@ def create_ticket():
 @tickets_bp.route('/<int:ticket_id>', methods=['PUT'])
 @jwt_required()
 def update_ticket(ticket_id):
-    user = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
     data = request.json
 
     user_id = get_user_id_ticket(ticket_id)
@@ -176,7 +180,8 @@ def update_ticket(ticket_id):
 @tickets_bp.route('/<int:ticket_id>', methods=['DELETE'])
 @jwt_required()
 def delete_ticket(ticket_id):
-    user = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
 
     cursor = get_db().cursor(dictionary=True)
 
@@ -217,7 +222,8 @@ def get_user_tickets(user_id):
 @tickets_bp.route('/search', methods=['GET'])
 @jwt_required()
 def search_tickets():
-    user = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
     search_term = request.args.get('keywords', '').strip()  # Make sure the query param is 'keywords'
 
     if not search_term:
@@ -334,7 +340,8 @@ def archive_ticket(ticket_id):
 @tickets_bp.route('/users/<int:user_id>/archived', methods=['GET'])
 @jwt_required()
 def get_archived_tickets(user_id):
-    user = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
     cursor = get_db().cursor()
     if user['role'] == 'admin':
         cursor.execute('SELECT * FROM archived_tickets')

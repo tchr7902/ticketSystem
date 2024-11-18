@@ -6,6 +6,7 @@ from config.db_config import connect_to_db
 import logging
 from flask_mail import Message
 from urllib.parse import quote
+import json
 
 user_bp = Blueprint('user_bp', __name__)
 db = connect_to_db()
@@ -168,7 +169,8 @@ def login():
             return jsonify({"error": "Password is incorrect."}), 401
 
         # If both email and password are correct
-        access_token = create_access_token(identity=str(account['id']))  # id as string
+        identity = json.dumps({'id': account['id'], 'role': account['role']})
+        access_token = create_access_token(identity=identity)
         return jsonify({
             'access_token': access_token,
             'user': {
@@ -191,7 +193,8 @@ def login():
 def get_current_user():
     try:
         # Extract JWT identity
-        user_identity = get_jwt_identity()
+        user_identity_str = get_jwt_identity()
+        user_identity = json.loads(user_identity_str)
 
         db = connect_to_db()
         cursor = db.cursor(dictionary=True)
@@ -229,11 +232,10 @@ def get_current_user():
                     'role': 'user'
                 }), 200
 
-        print("No user or admin found with the given ID.", flush=True)
         return jsonify({"error": "User not found"}), 404
 
     except Exception as e:
-        print("An error occurred in GET /me route.", flush=True)
+        logging.error(f"Error in /me route: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
     finally:
@@ -245,7 +247,8 @@ def get_current_user():
 @user_bp.route('/change-password', methods=['POST'])
 @jwt_required()
 def change_password():
-    user_identity = get_jwt_identity()  # Get user identity from the token
+    user_identity_str = get_jwt_identity()
+    user_identity = json.loads(user_identity_str)  # Deserialize identity
     data = request.json
     current_password = data.get('currentPassword')
     new_password = data.get('newPassword')
@@ -253,20 +256,15 @@ def change_password():
     db = connect_to_db()
     cursor = db.cursor(dictionary=True)
 
-    # Determine if user is admin or user
     if user_identity['role'] == 'admin':
-        # Fetch the admin's current password
         cursor.execute("SELECT password FROM admin WHERE id = %s", (user_identity['id'],))
     else:
-        # Fetch the user's current password
         cursor.execute("SELECT password FROM users WHERE id = %s", (user_identity['id'],))
 
     user = cursor.fetchone()
 
     if user and check_password_hash(user['password'], current_password):
-        # Current password matches, proceed to update the password
         hashed_new_password = generate_password_hash(new_password)
-        
         if user_identity['role'] == 'admin':
             cursor.execute("UPDATE admin SET password = %s WHERE id = %s", (hashed_new_password, user_identity['id']))
         else:
@@ -278,11 +276,13 @@ def change_password():
     return jsonify({"error": "Current password is incorrect."}), 401
 
 
+
 # Change email
 @user_bp.route('/change-email', methods=['POST'])
 @jwt_required()
 def change_email():
-    user_identity = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user_identity = json.loads(user_identity_str)
     data = request.json
     current_email = data.get('currentEmail')
     new_email = data.get('newEmail')
