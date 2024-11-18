@@ -168,7 +168,7 @@ def login():
             return jsonify({"error": "Password is incorrect."}), 401
 
         # If both email and password are correct
-        access_token = create_access_token(identity=str(account['id']), role=account['role'])
+        access_token = create_access_token(identity={"id": account['id'], "role": account['role']})
         return jsonify({
             'access_token': access_token,
             'user': {
