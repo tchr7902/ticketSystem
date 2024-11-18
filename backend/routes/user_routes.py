@@ -166,15 +166,17 @@ def login():
         # Check if the password is correct
         if not check_password_hash(account['password'], password):
             return jsonify({"error": "Password is incorrect."}), 401
+        
+        role = account.get('role', 'user')
 
         # If both email and password are correct
-        access_token = create_access_token(identity={"id": account['id'], "role": account['role']})
+        access_token = create_access_token(identity={"id": account['id'], "role": role})
         return jsonify({
             'access_token': access_token,
             'user': {
                 'id': account['id'],
                 'email': account['email'],
-                'role': account['role'],
+                'role': role,
             }
         }), 200
 
