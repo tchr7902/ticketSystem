@@ -189,26 +189,21 @@ def login():
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
-    print("GET /me route accessed.", flush=True)
     try:
         # Extract JWT identity
         user_identity = get_jwt_identity()
-        print(f"User identity from token: {user_identity}", flush=True)
 
         db = connect_to_db()
         cursor = db.cursor(dictionary=True)
 
         if user_identity['role'] == 'admin':
-            print("Fetching admin details...", flush=True)
             cursor.execute(
                 "SELECT id, first_name, last_name, store_id, email FROM admin WHERE id = %s", 
                 (user_identity['id'],)
             )
             admin = cursor.fetchone()
-            print(f"Admin data fetched: {admin}", flush=True)
 
             if admin:
-                print("Admin details found, returning response.", flush=True)
                 return jsonify({
                     'id': admin['id'],
                     'first_name': admin['first_name'],
@@ -218,16 +213,13 @@ def get_current_user():
                     'role': 'admin'
                 }), 200
         else:
-            print("Fetching user details...", flush=True)
             cursor.execute(
                 "SELECT id, first_name, email, store_id, phone_number FROM users WHERE id = %s", 
                 (user_identity['id'],)
             )
             user = cursor.fetchone()
-            print(f"User data fetched: {user}", flush=True)
 
             if user:
-                print("User details found, returning response.", flush=True)
                 return jsonify({
                     'id': user['id'],
                     'first_name': user['first_name'],
@@ -370,9 +362,9 @@ def forgot_password():
     if not account:
         return jsonify({"error": "No user registered with that email."}), 404
 
-    token = s.dumps(email, salt='password-reset')
+    preToken = s.dumps(email, salt='password-reset')
 
-    resetToken = quote(token)
+    resetToken = quote(preToken)
 
     reset_url = f"https://gemtickets.org/reset_password/{resetToken}"
 

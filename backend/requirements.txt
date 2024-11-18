@@ -1,4 +1,4 @@
-Flask
+flask==24.3.1
 gunicorn
 Flask-Cors
 flask-jwt-extended
