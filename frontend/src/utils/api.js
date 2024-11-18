@@ -97,7 +97,8 @@ export const fetchUser = async (token) => {
     try {
         const response = await axiosInstance.get(`${USER_URL}/me`, {
             headers: {
-                Authorization: `Bearer ${token}`, 
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
             },
         });
         return response.data;
