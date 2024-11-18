@@ -190,6 +190,7 @@ def login():
 @jwt_required()
 def get_current_user():
     user_identity = get_jwt_identity()  # Get user identity and role from the token
+    print(user_identity)
     db = connect_to_db()
     cursor = db.cursor(dictionary=True)
 
