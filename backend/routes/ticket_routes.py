@@ -398,7 +398,16 @@ def submit_chat_ticket():
         get_db().commit()
         cursor.close()
 
-        # Optional: Notify the user in Google Chat
+        message_data = {
+        'title': ticket_title,
+        'description': ticket_description,
+        'severity': ticket_severity,
+        'name': name,
+        'contact_method': ticket_email
+        }
+
+        send_google_chat_message(message_data)
+
         space_info = create_user_space(ticket_email)
         if space_info:
             space_id = space_info.get('name')
