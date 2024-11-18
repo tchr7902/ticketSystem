@@ -18,7 +18,7 @@ const App = () => {
         }
     }, [location, token]);
 
-    const storedRoute = sessionStorage.getItem('currentRoute') || '/users/login';
+    const storedRoute = sessionStorage.getItem('currentRoute') || '/login';
 
     return (
         <Routes>
