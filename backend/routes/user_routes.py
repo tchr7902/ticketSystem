@@ -29,6 +29,7 @@ def register():
     first_name = data.get('first_name')
     last_name = data.get('last_name')
     phone_number = data.get('phone_number')
+    role = "user"
 
     password_error = validate_password(password)
     if password_error:
@@ -51,8 +52,8 @@ def register():
             return jsonify({"error": "Account already registered with this email."}), 400
 
         hashed_password = generate_password_hash(password)
-        cursor.execute("INSERT INTO users (email, password, store_id, first_name, last_name, phone_number) VALUES (%s, %s, %s, %s, %s, %s)", 
-                       (email, hashed_password, store_id, first_name, last_name, phone_number))
+        cursor.execute("INSERT INTO users (email, password, role, store_id, first_name, last_name, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+                       (email, hashed_password, role, store_id, first_name, last_name, phone_number))
         db.commit()
 
         space_info = create_user_space(email)
@@ -194,10 +195,8 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(me
 def get_current_user():
     try:
         user_identity = get_jwt_identity()  # Get user identity and role from the token
-        logging.debug(f"User identity from token: {user_identity}")  # This will log the token info
 
         if not user_identity:
-            logging.error("No user identity found in token.")
             return jsonify({"error": "Invalid token or user not found in token"}), 401
 
         db = connect_to_db()
@@ -207,12 +206,10 @@ def get_current_user():
         if user_identity['role'] == 'admin':
             query = "SELECT id, first_name, last_name, store_id, email FROM admin WHERE id = %s"
             params = (user_identity['id'],)
-            logging.debug(f"Executing query: {query} with params: {params}")
             cursor.execute(query, params)
             admin = cursor.fetchone()
 
             if admin:
-                logging.debug(f"Admin found: {admin}")
                 return jsonify({
                     'id': admin['id'],
                     'first_name': admin['first_name'],
@@ -227,12 +224,10 @@ def get_current_user():
         else:
             query = "SELECT id, first_name, email, store_id, phone_number FROM users WHERE id = %s"
             params = (user_identity['id'],)
-            logging.debug(f"Executing query: {query} with params: {params}")
             cursor.execute(query, params)
             user = cursor.fetchone()
 
             if user:
-                logging.debug(f"User found: {user}")
                 return jsonify({
                     'id': user['id'],
                     'first_name': user['first_name'],
@@ -248,7 +243,6 @@ def get_current_user():
 
     except Exception as e:
         # Log the exception message
-        logging.error(f"Error in fetching user details: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
 
