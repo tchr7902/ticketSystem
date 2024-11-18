@@ -186,12 +186,15 @@ def login():
         cursor.close()
 
 
+# Ensure logging is configured to show DEBUG level logs
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
     try:
         user_identity = get_jwt_identity()  # Get user identity and role from the token
-        logging.debug(f"User identity from token: {user_identity}")
+        logging.debug(f"User identity from token: {user_identity}")  # This will log the token info
 
         if not user_identity:
             logging.error("No user identity found in token.")
