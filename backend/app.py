@@ -18,6 +18,7 @@ app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 CORS(app, supports_credentials=True, origins=[
     "https://ticketsystem-1.onrender.com",
     "https://gemtickets.org",
+    "https://gemtickets.org/",
     "http://localhost:3000",
     "http://localhost:5000",
     "http://127.0.0.1:5000"
