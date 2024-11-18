@@ -189,27 +189,26 @@ def login():
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
-    from app import logger
-    logger.info("GET /me route accessed.")
+    print("GET /me route accessed.", flush=True)
     try:
         # Extract JWT identity
         user_identity = get_jwt_identity()
-        logger.debug(f"User identity from token: {user_identity}")
+        print(f"User identity from token: {user_identity}", flush=True)
 
         db = connect_to_db()
         cursor = db.cursor(dictionary=True)
 
         if user_identity['role'] == 'admin':
-            logger.info("Fetching admin details...")
+            print("Fetching admin details...", flush=True)
             cursor.execute(
                 "SELECT id, first_name, last_name, store_id, email FROM admin WHERE id = %s", 
                 (user_identity['id'],)
             )
             admin = cursor.fetchone()
-            logger.debug(f"Admin data fetched: {admin}")
+            print(f"Admin data fetched: {admin}", flush=True)
 
             if admin:
-                logger.info("Admin details found, returning response.")
+                print("Admin details found, returning response.", flush=True)
                 return jsonify({
                     'id': admin['id'],
                     'first_name': admin['first_name'],
@@ -219,16 +218,16 @@ def get_current_user():
                     'role': 'admin'
                 }), 200
         else:
-            logger.info("Fetching user details...")
+            print("Fetching user details...", flush=True)
             cursor.execute(
                 "SELECT id, first_name, email, store_id, phone_number FROM users WHERE id = %s", 
                 (user_identity['id'],)
             )
             user = cursor.fetchone()
-            logger.debug(f"User data fetched: {user}")
+            print(f"User data fetched: {user}", flush=True)
 
             if user:
-                logger.info("User details found, returning response.")
+                print("User details found, returning response.", flush=True)
                 return jsonify({
                     'id': user['id'],
                     'first_name': user['first_name'],
@@ -238,11 +237,11 @@ def get_current_user():
                     'role': 'user'
                 }), 200
 
-        logger.warning("No user or admin found with the given ID.")
+        print("No user or admin found with the given ID.", flush=True)
         return jsonify({"error": "User not found"}), 404
 
     except Exception as e:
-        logger.exception("An error occurred in GET /me route.")
+        print("An error occurred in GET /me route.", flush=True)
         return jsonify({"error": "Internal server error"}), 500
 
     finally:

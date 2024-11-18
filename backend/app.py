@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 import os
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
-import logging
 
 # Load environment variables
 load_dotenv()
@@ -24,16 +23,6 @@ CORS(app, supports_credentials=True, origins=[
     "http://localhost:5000",
     "http://127.0.0.1:5000"
 ])
-
-# Logging setup
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.StreamHandler()  # Ensure logs go to stdout
-    ]
-)
-logger = logging.getLogger(__name__)
 
 # Configure the JWT secret key
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_KEY')
