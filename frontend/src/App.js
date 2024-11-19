@@ -6,6 +6,7 @@ import ProfilePage from "./pages/Profile"
 import SettingsPage from './pages/Settings';
 import AdminRegister from './pages/AdminRegister';
 import PassReset from './pages/PassReset';
+import GuidesPage from './pages/Guides';
 import { AuthProvider, useAuth } from './utils/authContext';
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/home" element={token ? <TicketPage /> : <Navigate to="/login" />} />
             <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/login" />} />
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/login" />} />
+            <Route path="/guides" element={token ? <GuidesPage /> : <Navigate to="/login" />} />
             <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/login" />} />
             
             {/* Catch-all route */}

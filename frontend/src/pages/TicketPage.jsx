@@ -8,7 +8,7 @@ import logo from '../images/gem_logo.png';
 import { ToastContainer, Bounce } from 'react-toastify';
 import { FaBars } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook } from 'react-icons/fa';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
 import { Modal } from 'react-bootstrap';
 
@@ -44,6 +44,10 @@ function TicketPage() {
 
     const handleAdminClick = () => {
         navigate("/admin/registration");
+    };
+
+    const handleGuidesClick = () => {
+        navigate("/guides");
     };
 
     const handleChatClick = () => {
@@ -115,6 +119,12 @@ function TicketPage() {
                                 <FaCog size={24}/>
                                 <div className="navbar-text">
                                     Settings
+                                </div>
+                            </div>
+                            <div className="navbar-item" onClick={handleGuidesClick}>
+                                <FaBook size={24}/>
+                                <div className="navbar-text">
+                                    Guides
                                 </div>
                             </div>
                             {user.role === "admin" && (

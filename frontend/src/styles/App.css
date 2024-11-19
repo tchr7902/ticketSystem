@@ -233,8 +233,8 @@ img {
 }
 
 .create-ticket-div {
-  padding-top: 30px;
-  padding-bottom: 40px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 10px;
@@ -246,6 +246,33 @@ img {
 
 .create-ticket-div:hover {
   box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 10px;
+}
+
+.filter-div {
+  display: flex;
+  justify-content: center;
+}
+
+.filter-guides {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.guides-result-div {
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 10px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 747px;
+  height: 100%;
+  margin: 30px;
+  margin-bottom: 70px;
+  overflow: auto;
+}
+
+.guides-result-div-mobile {
+  display: none;
 }
 
 .edit-info p {
@@ -308,6 +335,10 @@ img {
   justify-content: center;
 }
 
+.navbar-brand {
+  overflow: hidden;
+}
+
 .navbar-item {
   display: flex;
   flex-direction: column;
@@ -322,14 +353,12 @@ img {
 
 .navbar-item:hover {
   cursor: pointer;
-  background-color: #f1f6ef;
-  transform: scale(1.02);
+  background-color: #f3f3f3;
  }
 
  .navbar-logout:hover {
   cursor: pointer;
   background-color: #ffecec;
-  transform: scale(1.02);
  }
 
  .navbar-item:active {
@@ -1085,5 +1114,16 @@ input, select, textarea {
 
     .change {
       width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 770px) {
+    .guides-result-div {
+      display: none;
+    }
+    
+    .guides-result-div-mobile {
+      display: block;
+      margin:10px;
     }
   }

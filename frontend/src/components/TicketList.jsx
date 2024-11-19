@@ -185,7 +185,7 @@ function TicketList() {
             {user.role === "user" && (
                 <div className="new-ticket">
                 <h2 className="text-center mb-2">
-                    {user.role === "admin" ? "Create a New Ticket" : "Create a New Ticket"}
+                    {user.role === "admin" ? "New Ticket" : "New Ticket"}
                 </h2>
                 <TicketForm selectedTicket={null} onSave={handleSave} />
             </div>                          
