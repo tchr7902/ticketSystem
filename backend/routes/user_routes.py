@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, request, jsonify, g, Response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,6 +7,8 @@ import logging
 from flask_mail import Message
 from urllib.parse import quote
 import json
+from config.db_config import connect_to_db
+
 
 user_bp = Blueprint('user_bp', __name__)
 db = connect_to_db()
@@ -19,6 +21,11 @@ def validate_password(password):
     if not any(char in "!@#$%^&*" for char in password):
         return "Password must contain at least one special character."
     return None
+
+def get_db():
+    if 'db' not in g:
+        g.db = connect_to_db()
+    return g.db
 
 # Register a new user
 @user_bp.route('/register', methods=['POST'])
@@ -240,6 +247,76 @@ def get_current_user():
 
     finally:
         cursor.close()
+
+
+
+@user_bp.route('/search_users', methods=['GET'])
+@jwt_required()
+def get_users():
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)
+    search_term = request.args.get('keywords', '').strip() 
+
+    if not search_term:
+        return jsonify({"error": "Keywords required."}), 400
+
+    try:
+        cursor = get_db().cursor(dictionary=True)
+
+        # If user is an admin, allow searching across all fields
+        if user['role'] == 'admin':
+            cursor.execute(
+                """
+                SELECT * FROM users 
+                WHERE 
+                    id LIKE %s OR 
+                    email LIKE %s OR 
+                    store_id LIKE %s OR 
+                    first_name LIKE %s OR 
+                    last_name LIKE %s OR 
+                    phone_number LIKE %s
+                """, 
+                (
+                    '%' + search_term + '%',  # for id
+                    '%' + search_term + '%',  # for email
+                    '%' + search_term + '%',  # for store_id
+                    '%' + search_term + '%',  # for first_name
+                    '%' + search_term + '%',  # for last_name
+                    '%' + search_term + '%',  # for phone_number
+                )
+            )
+        else:
+            # If user is not an admin, limit search to their own records
+            cursor.execute(
+                """
+                SELECT * FROM users 
+                WHERE 
+                    id = %s AND (
+                        id LIKE %s OR 
+                        email LIKE %s OR 
+                        first_name LIKE %s OR 
+                        last_name LIKE %s OR 
+                        phone_number LIKE %s
+                    )
+                """, 
+                (
+                    user['id'],  
+                    '%' + search_term + '%',  # for id
+                    '%' + search_term + '%',  # for email
+                    '%' + search_term + '%',  # for first_name
+                    '%' + search_term + '%',  # for last_name
+                    '%' + search_term + '%',  # for phone_number
+                )
+            )
+
+        users = cursor.fetchall()  # Fetch the result
+
+        return jsonify(users), 200  # Return users as JSON
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
 
 
 

@@ -227,3 +227,20 @@ export const resetPassword = async (token, newPassword) => {
         throw error;
     }
 };
+
+
+export const searchUsers = async (keywords) => {
+    try {
+        const response = await axiosInstance.get(`${USER_URL}/search_users`, {
+            params: { keywords }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            console.error('Login token expired. Please log in again.')
+            throw error;
+        }
+        console.error('Error searching users:', error);
+        throw error;
+    }
+};

@@ -224,7 +224,7 @@ def get_user_tickets(user_id):
 def search_tickets():
     user_identity_str = get_jwt_identity()
     user = json.loads(user_identity_str)  # Deserialize identity
-    search_term = request.args.get('keywords', '').strip()  # Make sure the query param is 'keywords'
+    search_term = request.args.get('keywords', '').strip() 
 
     if not search_term:
         return jsonify({"error": "Keywords required."}), 400

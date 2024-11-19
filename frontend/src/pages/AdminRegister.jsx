@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
-import { registerAdmin } from "../utils/api";
+import { Modal } from 'react-bootstrap';
+import { registerAdmin, searchUsers } from "../utils/api";
 import { AuthContext } from "../utils/authContext.js";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -19,19 +20,29 @@ function AdminRegister() {
     const [store_id, setStoreId] = useState("");
     const [last_name, setLastName] = useState("");
     const [error, setError] = useState("");
+    const [error2, setError2] = useState("");
     const [loading, setLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     const stores = [
-        { store_id: 1, store_name: "Headquarters" },
-        { store_id: 2, store_name: "Warehouse" },
-        { store_id: 3, store_name: "American Fork" },
-        { store_id: 4, store_name: "Spanish Fork" },
-        { store_id: 5, store_name: "Orem" },
-        { store_id: 6, store_name: "Riverdale" },
-        { store_id: 7, store_name: "Sandy" },
-        { store_id: 8, store_name: "Park City" },
-        { store_id: 9, store_name: "Layton" },
+        { store_id: 1, store_name: "HQ" },
+        { store_id: 2, store_name: "WH" },
+        { store_id: 3, store_name: "AF" },
+        { store_id: 4, store_name: "SF" },
+        { store_id: 5, store_name: "OR" },
+        { store_id: 6, store_name: "RD" },
+        { store_id: 7, store_name: "SA" },
+        { store_id: 8, store_name: "PC" },
+        { store_id: 9, store_name: "LA" },
     ];
+
+    const getStoreName = (store_id) => {
+        const store = stores.find(store => store.store_id === store_id);
+        return store ? store.store_name : "Unknown Store";
+    };
 
     const navigate = useNavigate();
 
@@ -69,7 +80,40 @@ function AdminRegister() {
             setLoading(false);
         }
     };
+
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError2("");
+        setSearchResults([]);
+
+        try {
+            const users = await searchUsers(searchQuery);
+
+            if (users.length < 1) {
+                setError2("No results found.");
+            }
     
+            setSearchResults(users);
+        } catch (err) {
+            showToast("Error searching users. Please try again.", "error");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const openSearchResult = (userId) => {
+        const user = searchResults.find((user) => user.id === userId);
+        setSelectedUser(user);
+        setIsModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedUser(null);
+    }
+
 
     return (
         <div className="container d-flex flex-column align-items-center vh-100">
@@ -108,6 +152,7 @@ function AdminRegister() {
                 data-tooltip-content="Logout"
                 data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
+            <div className="register-div">
             <div className="register-admin-card" style={{ maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">
                     {"Register An Admin"}
@@ -182,7 +227,7 @@ function AdminRegister() {
                         </>
                     <button 
                         type="submit" 
-                        className="btn-2 w-100 mb-3" 
+                        className="btn-2" 
                         disabled={loading}
                     >
                         {"Register"}
@@ -190,8 +235,80 @@ function AdminRegister() {
                 </form>
                 {error && <p className="text-danger text-center mt-2">{error}</p>}
             </div>
+            <div className="register-admin-card" style={{ maxWidth: '400px', width: '100%' }}>
+                <h2 className="text-center mb-4">
+                    {"Search Users"}
+                </h2>
+                <form onSubmit={handleSearch}>
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Keywords..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button 
+                        type="submit" 
+                        className="btn-2" 
+                        disabled={loading}
+                    >
+                        {"Search"}
+                    </button>
+                </form>
+
+                {/* Display search results */}
+                {loading ? (
+                        <div className="loader-wrapper-2">
+                        <div className="lds-ellipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    ) : 
+                searchResults.length > 0 && (
+                    <div className="search-results">
+                        <h4>Results:</h4>
+                        <div className="search-div">
+                            {searchResults.map((user) => (
+                                <span key={user.id} className="search-results-span" onClick={() => {openSearchResult(user.id);}}>
+                                    <div><strong>{user.id}</strong></div>
+                                    <div>{user.first_name} {user.last_name}</div>
+                                    <div><strong>{getStoreName(user.store_id)}</strong></div>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {error2 && <p className="text-danger text-center mt-2">{error2}</p>}
+            </div>
+            </div>
             <Tooltip id="logout-tooltip" />
             <Tooltip id="back-tooltip" />
+            <Modal
+                show={isModalOpen}
+                onHide={closeModal}
+                centered
+            >
+                {selectedUser && (
+                    <div>
+                        <Modal.Header closeButton>
+                            <Modal.Title>User Information</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p><strong>User ID:</strong> {selectedUser.id}</p>
+                            <p><strong>Name:</strong> {selectedUser.first_name} {selectedUser.last_name}</p>
+                            <p><strong>Email:</strong> {selectedUser.email}</p>
+                            <p><strong>Phone Number:</strong> {selectedUser.phone_number}</p>
+                            <p><strong>Store ID:</strong> {selectedUser.store_id}</p>
+                        </Modal.Body>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 }
