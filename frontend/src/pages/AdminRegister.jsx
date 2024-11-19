@@ -304,7 +304,7 @@ function AdminRegister() {
                             <p><strong>Name:</strong> {selectedUser.first_name} {selectedUser.last_name}</p>
                             <p><strong>Email:</strong> {selectedUser.email}</p>
                             <p><strong>Phone Number:</strong> {selectedUser.phone_number}</p>
-                            <p><strong>Store ID:</strong> {selectedUser.store_id}</p>
+                            <p><strong>Store:</strong> {getStoreName(selectedUser.store_id)}</p>
                         </Modal.Body>
                     </div>
                 )}
