@@ -83,7 +83,6 @@ function LoginPage() {
                             // Redirect based on user role
                             navigate(user.role === 'admin' ? '/home' : '/home');
                         } catch (loginError) {
-                            console.error("Login error after registration:", loginError);
                             const backendMessage = loginError.response?.data?.error || "Login failed after registration. Please check your credentials and try again.";
                             setError(backendMessage);
                         }
@@ -109,7 +108,6 @@ function LoginPage() {
                     // Redirect based on user role
                     navigate(user.role === 'admin' ? '/home' : '/home');
                 } catch (loginError) {
-                    console.error("Login error:", loginError);
                     const backendMessage = loginError.response?.data?.error || "Invalid email or password. Please try again.";
                     setError(backendMessage);
                     setLoading(false);

@@ -170,6 +170,9 @@ function TicketPage() {
                             <button className="dropdown-item" onClick={handleSettingsClick}>
                                 Settings
                             </button>
+                            <button className="dropdown-item" onClick={handleGuidesClick}>
+                                Guides
+                            </button>
                             {user.role == "admin" && (
                             <button className="dropdown-item" onClick={handleAdminClick}>
                                 + Admin
