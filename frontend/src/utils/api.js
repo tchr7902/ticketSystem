@@ -111,6 +111,19 @@ export const fetchUser = async (token) => {
     }
 };
 
+export const deleteUser = async (user_id) => {
+    try {
+        await axiosInstance.delete(`${USER_URL}/${user_id}`);
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            console.error('Login token expired. Please log in again.')
+            throw error;
+        }
+        console.error('Error deleting user:', error);
+        throw error;
+    }
+};
+
 export const changeUserPassword = async (email, currentPassword, newPassword) => {
     try {
         const response = await axiosInstance.post(`${USER_URL}/change-password`, {

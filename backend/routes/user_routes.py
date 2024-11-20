@@ -318,7 +318,25 @@ def get_users():
         cursor.close()
 
 
+# Delete User (Only the admin can delete)
+@user_bp.route('/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_ticket(user_id):
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
 
+    cursor = get_db().cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+
+    if not user:
+        return jsonify({"error": "User not found."}), 404
+
+    cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
+    get_db().commit()
+    cursor.close()
+    return jsonify({"message": "User deleted successfully."}), 204
 
 # Change password
 @user_bp.route('/change-password', methods=['POST'])

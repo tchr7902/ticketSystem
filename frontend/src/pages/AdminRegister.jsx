@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 import { Modal } from 'react-bootstrap';
-import { registerAdmin, searchUsers } from "../utils/api";
+import { registerAdmin, searchUsers, deleteUser } from "../utils/api";
 import { AuthContext } from "../utils/authContext.js";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../images/gem_logo.png';
 import logo2 from '../images/gem-singlelogo.png';
-import { FaSignOutAlt, FaArrowLeft } from 'react-icons/fa';
+import { FaSignOutAlt, FaArrowLeft, FaTrashAlt, FaEye } from 'react-icons/fa';
 import { Tooltip } from 'react-tooltip'
 import '../styles/App.css';
 
@@ -26,6 +26,9 @@ function AdminRegister() {
     const [searchResults, setSearchResults] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [userToDelete, setUserToDelete] = useState(null); 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
+
 
     const stores = [
         { store_id: 1, store_name: "HQ" },
@@ -113,6 +116,34 @@ function AdminRegister() {
         setIsModalOpen(false);
         setSelectedUser(null);
     }
+
+    const openDeleteModal = (userId) => {
+        const user = searchResults.find((user) => user.id === userId);
+        setUserToDelete(user);
+        setIsDeleteModalOpen(true);
+    };
+    
+    const closeDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+        setUserToDelete(null);
+    };
+
+    const handleDeleteUser = () => {
+        if (userToDelete) {
+            console.log(userToDelete.id)
+            deleteUser(userToDelete.id)
+                .then(() => {
+                    showToast("User deleted successfully!", "success");
+                    setSearchResults(searchResults.filter(user => user.id !== userToDelete.id)); 
+                    setIsModalOpen(false); 
+                    closeDeleteModal(); 
+                })
+                .catch((error) => {
+                    console.error("Error deleting user:", error);
+                    showToast("Error deleting user. Please try again.", "error");
+                });
+        }
+    };
 
 
     return (
@@ -275,20 +306,40 @@ function AdminRegister() {
                         <h4>Results:</h4>
                         <div className="search-div">
                             {searchResults.map((user) => (
-                                <span key={user.id} className="search-results-span" onClick={() => {openSearchResult(user.id);}}>
-                                    <div><strong>{user.id}</strong></div>
-                                    <div>{user.first_name} {user.last_name}</div>
-                                    <div><strong>{getStoreName(user.store_id)}</strong></div>
+                                <span key={user.id} className="search-results-span">
+                                    <div><strong>{getStoreName(user.store_id)}</strong> - {user.first_name} {user.last_name}</div>
+                                    <div>
+                                    <button
+                                        className="icon"
+                                        onClick={() => {openSearchResult(user.id);}}
+                                        data-tooltip-id="view-tooltip"
+                                        data-tooltip-content="View"
+                                        data-tooltip-delay-show={1000}
+                                    >
+                                    <FaEye />
+                                    </button>
+                                    <button
+                                        className="icon"
+                                        onClick={() => {openDeleteModal(user.id);}}
+                                        data-tooltip-id="delete-tooltip"
+                                        data-tooltip-content="Delete"
+                                        data-tooltip-delay-show={1000}
+                                    >
+                                    <FaTrashAlt />
+                                    </button>
+                                    </div>
                                 </span>
                             ))}
                         </div>
                     </div>
                 )}
-                {error2 && <p className="text-danger text-center mt-2">{error2}</p>}
+                {error2 && <p className="text-danger text-center mt-5">{error2}</p>}
             </div>
             </div>
             <Tooltip id="logout-tooltip" />
             <Tooltip id="back-tooltip" />
+            <Tooltip id="delete-tooltip" />
+            <Tooltip id="view-tooltip" />
             <Modal
                 show={isModalOpen}
                 onHide={closeModal}
@@ -308,6 +359,28 @@ function AdminRegister() {
                         </Modal.Body>
                     </div>
                 )}
+            </Modal>
+            <Modal
+                show={isDeleteModalOpen}
+                onHide={closeDeleteModal}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Are you sure you want to delete <strong>{userToDelete?.first_name} {userToDelete?.last_name}</strong>?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn-2" onClick={closeDeleteModal}>
+                        Cancel
+                    </button>
+                    <button
+                        className="btn-important"
+                        onClick={handleDeleteUser}
+                    >
+                        Confirm Delete
+                    </button>
+                </Modal.Footer>
             </Modal>
         </div>
     );

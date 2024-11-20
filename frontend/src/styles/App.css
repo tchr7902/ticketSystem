@@ -59,16 +59,20 @@ li:hover {
 
 .search-div {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
+  gap: 7px;
 }
 
 .search-results-span {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, .13);
   transition: box-shadow 0.3s ease;
@@ -78,7 +82,6 @@ li:hover {
 
 .search-results-span:hover {
   box-shadow: rgba(158, 158, 158, 0.6) 0px 2px 10px;
-  cursor: pointer;
 }
 
 .severity {
