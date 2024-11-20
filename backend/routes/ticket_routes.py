@@ -424,7 +424,7 @@ def submit_chat_ticket():
             )
             send_message(space_id, message_text)
 
-        return jsonify({'status': 'Ticket created and notification sent'}), 200
+        return jsonify({'text': 'Your ticket has been successfully submitted!'}), 200
     else:
         print("Error: Invalid data received.")
-        return jsonify({'error': 'Invalid event data'}), 400
+        return jsonify({'text': 'Invalid event data'}), 400
