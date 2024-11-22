@@ -9,6 +9,16 @@ import PassReset from './pages/PassReset';
 import GuidesPage from './pages/Guides';
 import { AuthProvider, useAuth } from './utils/authContext';
 
+const AdminRoute = ({ element: Component }) => {
+    const { user, token } = useAuth();
+    
+    if (!token || user?.role !== 'admin') {
+        return <Navigate to="/home" />;
+    }
+
+    return Component;
+};
+
 const App = () => {
     const { token } = useAuth();
     const location = useLocation();
@@ -32,7 +42,7 @@ const App = () => {
             <Route path="/settings" element={token ? <SettingsPage /> : <Navigate to="/login" />} />
             <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/login" />} />
             <Route path="/guides" element={token ? <GuidesPage /> : <Navigate to="/login" />} />
-            <Route path="/admin/registration" element={token ? <AdminRegister /> : <Navigate to="/login" />} />
+            <Route path="/admin" element={<AdminRoute element={<AdminRegister />} />} />
             
             {/* Catch-all route */}
             <Route path="/*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/" />} />

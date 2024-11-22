@@ -43,7 +43,7 @@ function TicketPage() {
     };
 
     const handleAdminClick = () => {
-        navigate("/admin/registration");
+        navigate("/admin");
     };
 
     const handleGuidesClick = () => {
