@@ -115,10 +115,11 @@ def create_ticket():
         # Send the chat notification
         message_text = (
             f"🛠️ *Hello {first_name}!*\n\n"
-            f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
-            f"We've received your request and will begin addressing it as soon as possible. "
-            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly."
-        )
+            f"The IT team has received your ticket: *{data['title']}*.\n\n"
+            f"We will begin addressing your request as soon as possible. "
+            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
+            "Thank you!"
+            )
         send_message(space_id, message_text)
 
     return jsonify({"message": "Ticket created successfully!"}), 201
@@ -414,8 +415,8 @@ def submit_chat_ticket():
             add_members_to_space(space_id, ticket_email)
             message_text = (
             f"🛠️ *Hello {first_name}!*\n\n"
-            f"The IT team has received your request: *{data['title']}*.\n\n"
-            f"We will begin addressing it as soon as possible. "
+            f"The IT team has received your ticket: *{data['title']}*.\n\n"
+            f"We will begin addressing your request as soon as possible. "
             f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
             "Thank you!"
             )
