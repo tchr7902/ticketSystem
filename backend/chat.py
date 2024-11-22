@@ -101,7 +101,6 @@ def create_user_space(owner_email, description=None, guidelines=None):
             "description": description,
             "guidelines": guidelines
         } if description or guidelines else {},
-        "avatar": "💡"
     }
 
     try:
