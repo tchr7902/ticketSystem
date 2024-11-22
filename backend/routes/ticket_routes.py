@@ -114,12 +114,11 @@ def create_ticket():
 
         # Send the chat notification
         message_text = (
-            f"🔔 *Hello {first_name}!*\n\n"
+            f"🛠️ *Hello {first_name}!*\n\n"
             f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
-            f"We've received your request and will begin addressing it as soon as possible.\n\n"
-            f"If we have any questions, we will reach out to you using the contact method you provided:\n*{data['contact_method']}*\n\n"
+            f"We've received your request and will begin addressing it as soon as possible."
             f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
-            f"You'll receive updates on your ticket status here in this chat. Thank you!"
+            f"Thank you!"
         )
         send_message(space_id, message_text)
 
@@ -415,12 +414,11 @@ def submit_chat_ticket():
             space_id = space_info.get('name')
             add_members_to_space(space_id, ticket_email)
             message_text = (
-                f"🔔 *Hello {first_name}!*\n\n"
-                f"Thank you for submitting your IT ticket: *{ticket_title}*.\n\n"
-                f"We've received your request and will begin addressing it as soon as possible.\n\n"
-                f"If we have any questions, we will reach out to you using the contact method you provided:\n*{ticket_email}*\n\n"
-                f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
-                f"You'll receive updates on your ticket status here in this chat. Thank you!"
+            f"🛠️ *Hello {first_name}!*\n\n"
+            f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
+            f"We've received your request and will begin addressing it as soon as possible."
+            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
+            f"Thank you!"
             )
             send_message(space_id, message_text)
 
