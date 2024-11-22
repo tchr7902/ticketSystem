@@ -116,9 +116,8 @@ def create_ticket():
         message_text = (
             f"🛠️ *Hello {first_name}!*\n\n"
             f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
-            f"We've received your request and will begin addressing it as soon as possible."
-            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
-            f"Thank you!"
+            f"We've received your request and will begin addressing it as soon as possible. "
+            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly."
         )
         send_message(space_id, message_text)
 
@@ -165,8 +164,8 @@ def update_ticket(ticket_id):
             # Send the chat notification
             message_text = (
                 f"📢 *Hello {first_name}!*\n\n"
-                f"The status of your ticket: *{ticket['title']}* has been updated to: *{data['status']}*.\n\n"
-                f"Thank you for your patience, and feel free to reach out to an IT Member if you have any questions!"
+                f"The status of your ticket: *{ticket['title']}* has been updated to: *{data['status']}*. "
+                f"Thank you for your patience!"
             )
             send_message(space_id, message_text)
 
@@ -415,10 +414,10 @@ def submit_chat_ticket():
             add_members_to_space(space_id, ticket_email)
             message_text = (
             f"🛠️ *Hello {first_name}!*\n\n"
-            f"Thank you for submitting your IT ticket: *{data['title']}*.\n\n"
-            f"We've received your request and will begin addressing it as soon as possible."
+            f"The IT team has received your request: *{data['title']}*.\n\n"
+            f"We will begin addressing it as soon as possible. "
             f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
-            f"Thank you!"
+            "Thank you!"
             )
             send_message(space_id, message_text)
 
