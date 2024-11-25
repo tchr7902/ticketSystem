@@ -138,12 +138,12 @@ function LoginPage() {
 
     return (
         <div className="container login-div">
-            <img className="img-1 mt-4" 
+            <img className="img-1" 
                 src={logo} 
                 alt="Logo" 
                 style={{ width: '469px', height: '108px', marginBottom: '20px'}} 
             />
-            <img className="img-2" 
+            <img className="img-2 mt-2" 
                 src={logo2} 
                 alt="Logo2" 
                 style={{ width: '150px', height: '150px', marginBottom: '20px'}} 

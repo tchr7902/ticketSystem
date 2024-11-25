@@ -52,6 +52,11 @@ function TicketPage() {
         navigate("/admin");
     };
 
+    const handleHomeClick = () => {
+        window.location.reload()
+        console.log("click")
+    };
+
     const handleGuidesClick = () => {
         navigate("/guides");
     };
@@ -148,7 +153,7 @@ function TicketPage() {
                         <div className="nav-items">
                             <div className="navbar-item navbar-home-div">
                                 <FaHome size={26} className="navbar-home"/>
-                                <div className="navbar-text" style={{textDecoration: "underline" }}>
+                                <div className="navbar-text" style={{textDecoration: "underline" }} onClick={handleHomeClick}>
                                     <strong>Home</strong>
                                 </div>
                             </div>
