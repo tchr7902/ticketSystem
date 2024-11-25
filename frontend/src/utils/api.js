@@ -257,3 +257,20 @@ export const searchUsers = async (keywords) => {
         throw error;
     }
 };
+
+
+export const submitFeedback = async (feedback) => {
+    try {
+        const response = await axiosInstance.post(`${USER_URL}/feedback`, {
+            feedback,
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            console.error('Login token expired. Please log in again.');
+        } else {
+            console.error('Error submitting feedback:', error.response?.data || error.message);
+        }
+        throw error; 
+    }
+};

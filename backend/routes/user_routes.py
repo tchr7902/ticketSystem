@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, g, Response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
+from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message, send_feedback_message
 from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
 import logging
@@ -21,6 +21,27 @@ def validate_password(password):
     if not any(char in "!@#$%^&*" for char in password):
         return "Password must contain at least one special character."
     return None
+
+def get_user_name(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT first_name, last_name FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return f"{user['first_name']} {user['last_name']}" if user else None
+
+def get_user_email(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT email FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return user['email'] if user else None
+
+def get_user_phone(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT phone_number FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return user['phone_number'] if user else None
 
 def get_db():
     if 'db' not in g:
@@ -505,3 +526,39 @@ def reset_password(resetToken):
     except Exception as e:
         print(f"Error in resetting password: {e}")
         return jsonify({"message": "The reset link is invalid or has expired."}), 400
+
+
+@user_bp.route('/feedback', methods=['POST'])
+@jwt_required()
+def submit_feedback():
+    try:
+        # Get user information
+        user_identity_str = get_jwt_identity()
+        user = json.loads(user_identity_str)
+        name = get_user_name(user.get('id'))
+        phone_number = get_user_phone(user.get('id'))
+        email = get_user_email(user.get('id'))
+
+        # Parse and validate request data
+        data = request.json
+        feedback = data.get('feedback')  # Safely get feedback
+        if not feedback:
+            return jsonify({"error": "Feedback content is required"}), 400
+
+        # Prepare feedback message data
+        feedback_data = {
+            "name": name,
+            "feedback": feedback,
+            "contact_method": f"{phone_number}, {email}"
+        }
+
+        # Send feedback to Google Chat
+        send_feedback_message(feedback_data)
+
+        return jsonify({"message": "Feedback submitted successfully!"}), 201
+
+    except Exception as e:
+        # Handle unexpected errors
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": "An error occurred while submitting feedback"}), 500

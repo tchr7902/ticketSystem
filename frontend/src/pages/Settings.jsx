@@ -80,17 +80,17 @@ const SettingsPage = () => {
         }
 
         if (newPassword.length < 8) {
-            setError("Password must be at least 8 characters long.");
+            toast.error("Password must be at least 8 characters long.");
             return;
         }
 
         if (!/[A-Z]/.test(newPassword)) {
-            setError("Password must contain at least one uppercase letter.");
+            toast.error("Password must contain at least one uppercase letter.");
             return;
         }
         
         if (!/[!@#$%^&*]/.test(newPassword)) {
-            setError("Password must contain at least one special character.");
+            toast.error("Password must contain at least one special character.");
             return;
         }
 
@@ -102,7 +102,6 @@ const SettingsPage = () => {
             setConfirmPassword("");
         } catch (err) {
             setTimeout(() => toast.error('Failed to change password.'), 100);
-            console.error('Password change error:', err);
         }
     };
 

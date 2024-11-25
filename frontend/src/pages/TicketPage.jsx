@@ -11,18 +11,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook } from 'react-icons/fa';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
 import { Modal } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { submitFeedback } from "../utils/api.js";
 
 function TicketPage() {
     const { user, logout } = useContext(AuthContext);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [chatWindowOpen, setChatWindowOpen] = useState(false);
+    const [chatDropdownOpen, setChatDropdownOpen] = useState(false);
     const [backupDropdownOpen, setBackupDropdownOpen] = useState(false);
+    const [contactITModalOpen, setContactITModalOpen] = useState(false);
+    const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
+    const [feedback, setFeedback] = useState('');
     const dropdownRef = useRef(null);
     const backupDropdownRef = useRef(null);
+    const chatDropdownRef = useRef(null); 
     const navigate = useNavigate();
 
-    const handleMenuIconClick = () => {
-        setDropdownOpen((prevState) => !prevState);
+    const showToast = (message, type = "success") => {
+        toast(message, { type });
     };
 
     const handleBackupMenuIconClick = () => {
@@ -50,11 +56,42 @@ function TicketPage() {
         navigate("/guides");
     };
 
-    const handleChatClick = () => {
-        setChatWindowOpen(true);
+
+    const handleContactIT = () => {
+        setContactITModalOpen(true); 
+        setChatDropdownOpen(false); 
+    };
+
+    const handleSubmitFeedback = () => {
+        setFeedbackModalOpen(true); 
+        setChatDropdownOpen(false);
+    };
+
+    const submitUserFeedback = async (feedback) => {
+        try {
+            await submitFeedback(feedback); 
+            showToast("Feedback submitted successfully!", "success"); 
+        } catch (error) {
+            showToast("Error submitting feedback", "error"); 
+        }
     };
     
 
+    const handleFeedbackChange = (event) => {
+        setFeedback(event.target.value);
+    };
+
+    const handleSubmitUserFeedback = () => {
+        if (feedback.trim()) {
+            submitUserFeedback(feedback);
+            setFeedbackModalOpen(false); 
+            setFeedback('');
+        } else {
+            console.error('Feedback cannot be empty');
+        }
+    };
+
+    
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (
@@ -68,6 +105,12 @@ function TicketPage() {
                 !backupDropdownRef.current.contains(event.target)
             ) {
                 setBackupDropdownOpen(false);
+            }
+            if (
+                chatDropdownRef.current &&
+                !chatDropdownRef.current.contains(event.target)
+            ) {
+                setChatDropdownOpen(false); 
             }
         };
 
@@ -218,7 +261,7 @@ function TicketPage() {
                     borderRadius: '50%', 
                     padding: '10px'
                 }}
-                onClick={handleChatClick}
+                onClick={() => setChatDropdownOpen((prev) => !prev)}
             >
                 <FontAwesomeIcon
                     className="responsive-chat-icon"
@@ -226,10 +269,28 @@ function TicketPage() {
                     style={{ color: '#1C1C1C' }}
                 />
             </div>
-            <Modal
-                    show={chatWindowOpen}
+
+            {/* Chat Dropdown */}
+            {chatDropdownOpen && (
+                <div
+                    ref={chatDropdownRef}
+                    className="dropdown-menu show"
+                    style={{
+                        position: 'fixed',
+                        bottom: '10%',
+                        right: '20px',
+                        zIndex: 1050,
+                    }}
+                >
+                    <button className="dropdown-item" onClick={handleContactIT}>Contact IT</button>
+                    <button className="dropdown-item" onClick={handleSubmitFeedback}>Submit Feedback</button>
+                </div>
+            )}
+             {/* Contact IT Modal */}
+             <Modal
+                    show={contactITModalOpen}
                     onHide={() => {
-                        setChatWindowOpen(false);
+                        setContactITModalOpen(false);
                     }}
                     centered
                 >
@@ -257,14 +318,40 @@ function TicketPage() {
                         <button
                             className="btn-2"
                             onClick={() => {
-                                setChatWindowOpen(false);
+                                setContactITModalOpen(false);
                             }}
                         >
                             Close
                         </button>
                     </Modal.Footer>
                 </Modal>
-        </div>
+
+            {/* Submit Feedback Modal */}
+            <Modal
+                show={feedbackModalOpen}
+                onHide={() => setFeedbackModalOpen(false)}
+                centered
+            >
+                <Modal.Header closeButton className="modal-title text-white">
+                    <Modal.Title>
+                        <h3 className="m-0">Have Feedback?</h3>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <textarea
+                        className="form-control"
+                        rows="5"
+                        placeholder="Enter your feedback here..."
+                        value={feedback} 
+                        onChange={handleFeedbackChange}
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn-2" onClick={() => setFeedbackModalOpen(false)}>Close</button>
+                    <button className="btn-important" onClick={handleSubmitUserFeedback}>Submit</button>
+                </Modal.Footer>
+            </Modal>
+        </div>    
     );
 }
 

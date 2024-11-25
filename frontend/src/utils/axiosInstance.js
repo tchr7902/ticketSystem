@@ -17,20 +17,30 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+
+const isTokenExpired = () => {
+    const expiration = sessionStorage.getItem('tokenExpiration');
+    return expiration && new Date() > new Date(expiration);
+};
+
 axiosInstance.interceptors.response.use(
-    (response) => response,  
+    (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-
-            if (!window.location.pathname.includes('/login')) {
-
-                sessionStorage.removeItem('token');
-                sessionStorage.removeItem('tokenExpiration');
-                window.location.href = '/login'; 
+            if (isTokenExpired()) {
+                if (!window.location.pathname.includes('/login')) {
+                    sessionStorage.removeItem('token');
+                    sessionStorage.removeItem('tokenExpiration');
+                    window.location.href = '/login';
+                }
+            } else {
+                console.warn('401 error but token is not expired. Handling without logout.');
             }
         }
         return Promise.reject(error);
     }
 );
+
+
 
 export default axiosInstance;

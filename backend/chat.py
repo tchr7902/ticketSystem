@@ -191,3 +191,23 @@ def send_create_message(space_id, text):
         print(f'Sent message successfully.')
     except Exception as e:
         print(f'Failed to send message to space: {e}')
+
+
+def send_feedback_message(feedback_data):
+    webhook_url = chatURL
+
+    message = {
+        'text': (
+            f"💬 *New Feedback Received!*\n\n"
+            f"*Submitted By:* {feedback_data['name']}\n"
+            f"*Feedback:* {feedback_data['feedback']}\n\n"
+            f"*Contact Info:* {feedback_data['contact_method']}\n"
+        )
+    }
+
+    response = requests.post(webhook_url, json=message)
+
+    if response.status_code == 200:
+        print('Feedback message sent successfully!')
+    else:
+        print(f'Failed to send feedback message: {response.content}')
