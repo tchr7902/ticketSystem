@@ -36,6 +36,7 @@ const GuidesPage = () => {
     const backButton = () => {
         navigate('/home');
     };
+    
 
     const handleFilterChange = (e) => {
         const selectedTitle = e.target.value;
@@ -142,6 +143,7 @@ const GuidesPage = () => {
                         width="100%"
                         height="1000"
                         style={{ border: 'none' }}
+                        sandbox="allow-same-origin allow-scripts"
                     ></iframe>
                 </div>
                 <div className="guides-result-div-mobile">

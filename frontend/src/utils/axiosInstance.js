@@ -33,8 +33,6 @@ axiosInstance.interceptors.response.use(
                     sessionStorage.removeItem('tokenExpiration');
                     window.location.href = '/login';
                 }
-            } else {
-                console.warn('401 error but token is not expired. Handling without logout.');
             }
         }
         return Promise.reject(error);
