@@ -70,7 +70,7 @@ function TicketPage() {
     const submitUserFeedback = async (feedback) => {
         try {
             await submitFeedback(feedback); 
-            showToast("Feedback submitted successfully!", "success"); 
+            showToast("Feedback submitted! Thank you!", "success"); 
         } catch (error) {
             showToast("Error submitting feedback", "error"); 
         }
@@ -334,7 +334,7 @@ function TicketPage() {
             >
                 <Modal.Header closeButton className="modal-title text-white">
                     <Modal.Title>
-                        <h3 className="m-0">Have Feedback?</h3>
+                        <h3 className="m-0">Submit Feedback</h3>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

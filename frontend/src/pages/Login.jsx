@@ -36,6 +36,22 @@ function LoginPage() {
         { store_id: 9, store_name: "Layton" },
     ];
 
+    const handlePhoneNumberChange = (e) => {
+        let input = e.target.value.replace(/\D/g, "");
+        if (input.length > 10) input = input.slice(0, 10);
+    
+        let formatted = input;
+        if (input.length > 6) {
+            formatted = `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6)}`;
+        } else if (input.length > 3) {
+            formatted = `(${input.slice(0, 3)}) ${input.slice(3)}`;
+        } else if (input.length > 0) {
+            formatted = `(${input}`;
+        }
+    
+        setPhoneNumber(formatted);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -194,9 +210,9 @@ function LoginPage() {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="(000) 000-0000"
+                                    placeholder="Phone Number"
                                     value={phone_number}
-                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    onChange={handlePhoneNumberChange}
                                     maxLength={14}
                                     required
                                 />
@@ -247,8 +263,10 @@ function LoginPage() {
 
             {/* React-Bootstrap Modal */}
             <Modal show={modalVisible} onHide={() => setModalVisible(false)} centered>
-                <Modal.Header className="m-2" closeButton>
-                    <Modal.Title>Forgot Password?</Modal.Title>
+                <Modal.Header closeButton className="modal-title text-white">
+                        <Modal.Title>
+                            <h3 className="m-0">Forgot Password?</h3>
+                        </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ForgotPasswordPage />
