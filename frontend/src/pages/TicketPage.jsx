@@ -271,9 +271,9 @@ function TicketPage() {
                     {/* Menu items */}
                     <div className="d-flex align-items-center">
                         <div className="nav-items">
-                            <div className="navbar-item navbar-home-div">
+                            <div className="navbar-item navbar-home-div" onClick={handleHomeClick}>
                                 <FaHome size={26} className="navbar-home"/>
-                                <div className="navbar-text" style={{textDecoration: "underline" }} onClick={handleHomeClick}>
+                                <div className="navbar-text" style={{textDecoration: "underline" }}>
                                     <strong>Home</strong>
                                 </div>
                             </div>
