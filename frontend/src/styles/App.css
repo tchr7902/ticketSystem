@@ -265,6 +265,14 @@ img {
   padding-bottom: 80px;
   padding-top: 0px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.archive-button {
+  display: flex;
+  justify-content: center;
 }
 
 .create-ticket-div {
@@ -632,6 +640,7 @@ input, select, textarea {
   box-shadow: none;
 }
 
+
 .icon {
   color: #1C1C1C;
   border: none;
@@ -647,6 +656,17 @@ input, select, textarea {
   height: 45px;
   margin-top: 10px;
   overflow: visible;
+}
+
+.delete-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.delete-confirmation {
+  display: flex;
+  gap: 15px;
 }
 
 /* List Group Styles */
@@ -1038,6 +1058,13 @@ input, select, textarea {
   justify-content: center;          
   align-items: center;
   margin: 20px;                                 
+}
+
+.loader-wrapper-3 {
+  display: flex;                   
+  justify-content: center;          
+  align-items: center;
+  height: 50vh;                                
 }
 
 .lds-ellipsis,

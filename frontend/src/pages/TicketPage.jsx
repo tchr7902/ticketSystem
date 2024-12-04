@@ -1,21 +1,120 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
+import React, { useContext, useState, useRef, useEffect, useCallback } from "react";
 import TicketList from "../components/TicketList.jsx";
 import { AuthContext } from "../utils/authContext"; 
 import { useNavigate } from "react-router-dom";
+import { format } from 'date-fns-tz';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
 import { ToastContainer, Bounce } from 'react-toastify';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaCheck, FaTimes } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook } from 'react-icons/fa';
+import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook, FaTrashAlt } from 'react-icons/fa';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
 import { Modal } from 'react-bootstrap';
+import { Tooltip } from 'react-tooltip'
 import { toast } from 'react-toastify';
-import { submitFeedback } from "../utils/api.js";
+import { submitFeedback, deleteArchivedTicket } from "../utils/api.js";
+
+
+const CollapsibleCard = ({
+    name,
+    contact_method,
+    title,
+    description,
+    status,
+    priority,
+    created_at,
+    archived_at,
+    notes,
+    archivedTicketId,
+    handleDeleteArchivedTicket,
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false); // State for showing confirmation buttons
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString); // Ensure valid date
+        if (isNaN(date)) return 'Invalid Date'; // Handle invalid date
+        const timeZone = 'America/Denver';
+        return format(date, "MMMM dd, yyyy 'at' h:mm a", { timeZone });
+    };
+
+    // Toggle card open/close
+    const handleCardClick = () => setIsOpen(!isOpen);
+
+    // Handle delete click to show confirmation buttons
+    const handleDeleteClick = (e) => {
+        e.stopPropagation(); // Prevent the card from collapsing when clicking delete
+        setShowConfirmation(true); // Show the confirmation buttons (check and X)
+    };
+
+    // Handle delete confirmation
+    const handleConfirmDelete = () => {
+        handleDeleteArchivedTicket(archivedTicketId); // Call delete function
+        setShowConfirmation(false); // Hide confirmation buttons and show trash can again
+    };
+
+    // Handle cancel delete
+    const handleCancelDelete = (e) => {
+        e.stopPropagation(); // Prevent the card from collapsing when clicking delete
+        setShowConfirmation(false); // Hide confirmation buttons and show trash can again
+    };
+
+    return (
+        <div className={`card ${isOpen ? 'active' : ''}`} onClick={handleCardClick}>
+            <div className="card-header">
+                <strong>{title}</strong>
+                <span>{isOpen ? '-' : '+'}</span>
+            </div>
+            {isOpen && (
+                <div className="card-body">
+                    <p><strong>Submitted By:</strong> {name}</p>
+                    <p><strong>Contact Method:</strong> {contact_method}</p>
+                    <p><strong>Description:</strong> {description}</p>
+                    <p><strong>Status:</strong> {status}</p>
+                    <p><strong>Priority:</strong> {priority}</p>
+                    <p><strong>Created:</strong> {formatDate(created_at)}</p>
+                    <p><strong>Archived:</strong> {formatDate(archived_at)}</p>
+                    <p><strong>Notes:</strong> {notes}</p>
+                    <div className="delete-button-container">
+                        {!showConfirmation && (
+                            <FaTrashAlt onClick={handleDeleteClick}
+                            data-tooltip-id="delete"
+                            data-tooltip-content="Delete"
+                            data-tooltip-delay-show={300}
+                            />
+                        )}
+                        {showConfirmation && (
+                            <div className="delete-confirmation">
+                                <FaTimes onClick={handleCancelDelete}
+                                data-tooltip-id="cancel"
+                                data-tooltip-content="Cancel"
+                                data-tooltip-delay-show={300}
+                                /> 
+                                <FaCheck onClick={handleConfirmDelete}
+                                data-tooltip-id="confirm"
+                                data-tooltip-delay-show={300}
+                                data-tooltip-content="Confirm"
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>     
+            )}
+            <Tooltip id="delete" />
+            <Tooltip id="cancel" />
+            <Tooltip id="confirm" />
+        </div>
+    );
+};
+
+
 
 function TicketPage() {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout, getArchivedTickets } = useContext(AuthContext);
+    const [archivedTickets, setArchivedTickets] = useState([]);
+    const [showArchivedModal, setShowArchivedModal] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [chatDropdownOpen, setChatDropdownOpen] = useState(false);
     const [backupDropdownOpen, setBackupDropdownOpen] = useState(false);
@@ -25,7 +124,9 @@ function TicketPage() {
     const dropdownRef = useRef(null);
     const backupDropdownRef = useRef(null);
     const chatDropdownRef = useRef(null); 
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
 
     const showToast = (message, type = "success") => {
         toast(message, { type });
@@ -54,7 +155,6 @@ function TicketPage() {
 
     const handleHomeClick = () => {
         window.location.reload()
-        console.log("click")
     };
 
     const handleGuidesClick = () => {
@@ -92,38 +192,58 @@ function TicketPage() {
             setFeedbackModalOpen(false); 
             setFeedback('');
         } else {
-            console.error('Feedback cannot be empty');
+            showToast("Please enter feedback.", "error");
         }
     };
 
+    const handleDeleteArchivedTicket = async (archivedTicketId) => {
+        try {
+            await deleteArchivedTicket(archivedTicketId);
+            setShowArchivedModal(false)
+            showToast("Archived ticket deleted successfully!", "success");
+        } catch (error) {    
+            showToast("Failed to delete archived ticket. Please try again.", "error");
+        }
+    };
+
+    const fetchArchivedTickets = useCallback(async () => {
+        setLoading(true);
+        try {
+            const data = await getArchivedTickets(user.id);
+            setArchivedTickets(data || []);
+        } catch (error) {
+            showToast("Failed to fetch archived tickets. Please try again.", "error");
+        } finally {
+            setLoading(false);
+        }
+    }, [user]);
+
     
     useEffect(() => {
+        // Handling outside clicks for dropdowns
         const handleOutsideClick = (event) => {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target)
-            ) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setDropdownOpen(false);
             }
-            if (
-                backupDropdownRef.current &&
-                !backupDropdownRef.current.contains(event.target)
-            ) {
+            if (backupDropdownRef.current && !backupDropdownRef.current.contains(event.target)) {
                 setBackupDropdownOpen(false);
             }
-            if (
-                chatDropdownRef.current &&
-                !chatDropdownRef.current.contains(event.target)
-            ) {
+            if (chatDropdownRef.current && !chatDropdownRef.current.contains(event.target)) {
                 setChatDropdownOpen(false); 
             }
         };
-
+    
+        // Fetch archived tickets if modal is shown
+        if (showArchivedModal) {
+            fetchArchivedTickets();
+        }
+    
         document.addEventListener("mousedown", handleOutsideClick);
         return () => {
             document.removeEventListener("mousedown", handleOutsideClick);
         };
-    }, []);
+    }, [showArchivedModal, fetchArchivedTickets]);
+    
 
     if (!user) {
         return (
@@ -252,6 +372,13 @@ function TicketPage() {
                     transition={Bounce}
                 />
                 <TicketList />
+                {user.role === "admin" && (
+                    <div className="archive-button">
+                        <button className="btn-2 mt-3" onClick={() => setShowArchivedModal(true)}>
+                            View Archived Tickets
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Chat Icon */}
@@ -297,7 +424,6 @@ function TicketPage() {
                     onHide={() => {
                         setContactITModalOpen(false);
                     }}
-                    centered
                 >
                     <Modal.Header closeButton className="modal-title text-white">
                         <Modal.Title>
@@ -335,7 +461,6 @@ function TicketPage() {
             <Modal
                 show={feedbackModalOpen}
                 onHide={() => setFeedbackModalOpen(false)}
-                centered
             >
                 <Modal.Header closeButton className="modal-title text-white">
                     <Modal.Title>
@@ -356,7 +481,44 @@ function TicketPage() {
                     <button className="btn-important" onClick={handleSubmitUserFeedback}>Submit</button>
                 </Modal.Footer>
             </Modal>
+            {/* Archived Tickets Modal */}
+            <Modal show={showArchivedModal} onHide={() => setShowArchivedModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title><h3>Archived Tickets</h3></Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : archivedTickets.length > 0 ? (
+                        archivedTickets.map((ticket) => {
+                            const [archivedTicketId, , , title, description, status, archived_at, notes, created_at, priority, contact_method, name] = ticket;
+                            return (
+                                <CollapsibleCard
+                                    key={archivedTicketId}
+                                    name={name}
+                                    contact_method={contact_method}
+                                    title={title}
+                                    description={description}
+                                    status={status}
+                                    priority={priority}
+                                    created_at={created_at}
+                                    archived_at={archived_at}
+                                    notes={notes}
+                                    archivedTicketId={archivedTicketId}
+                                    handleDeleteArchivedTicket={handleDeleteArchivedTicket}
+                                />
+                            );
+                        })
+                    ) : (
+                        <p>No archived tickets found.</p>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn-2" onClick={() => setShowArchivedModal(false)}>Close</button>
+                </Modal.Footer>
+            </Modal>
         </div>    
+        
     );
 }
 

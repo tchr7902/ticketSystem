@@ -63,7 +63,6 @@ function PassReset() {
             setTimeout(() => navigate("/login"), 9000);
         } catch (err) {
             toast.error('Failed to reset password. Please try again.');
-            console.error('Password reset error:', err);
         }
     };
 

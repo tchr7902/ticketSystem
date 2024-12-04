@@ -351,6 +351,29 @@ def get_archived_tickets(user_id):
 
     return jsonify(tickets), 200
 
+# Delete Ticket (Only the owner or admin can delete)
+@tickets_bp.route('/archived/<int:archived_ticket_id>', methods=['DELETE'])
+@jwt_required()
+def delete_archived_ticket(archived_ticket_id):
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
+
+    cursor = get_db().cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM archived_tickets WHERE id = %s", (archived_ticket_id,))
+    ticket = cursor.fetchone()
+
+    if not ticket:
+        return jsonify({"error": "Archived ticket not found."}), 404
+
+    if ticket['user_id'] != user['id'] and user['role'] != 'admin':
+        return jsonify({"error": "Unauthorized access."}), 403
+
+    cursor.execute("DELETE FROM archived_tickets WHERE id = %s", (archived_ticket_id,))
+    get_db().commit()
+    cursor.close()
+    return jsonify({"message": "Archived ticket deleted successfully."}), 204
+
 
 # Chat API
 @tickets_bp.route('/api/google-chat', methods=['POST'])

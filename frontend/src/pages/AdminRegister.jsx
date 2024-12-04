@@ -77,7 +77,6 @@ function AdminRegister() {
             await registerAdmin(email, password, first_name, last_name, store_id);
             showToast("Registration successful!", "success");
         } catch (err) {
-            console.error("Auth error:", err);
             showToast("Error registering admin. Please try again.", "error");
         } finally {
             setLoading(false);
@@ -130,7 +129,6 @@ function AdminRegister() {
 
     const handleDeleteUser = () => {
         if (userToDelete) {
-            console.log(userToDelete.id)
             deleteUser(userToDelete.id)
                 .then(() => {
                     showToast("User deleted successfully!", "success");
@@ -139,7 +137,6 @@ function AdminRegister() {
                     closeDeleteModal(); 
                 })
                 .catch((error) => {
-                    console.error("Error deleting user:", error);
                     showToast("Error deleting user. Please try again.", "error");
                 });
         }

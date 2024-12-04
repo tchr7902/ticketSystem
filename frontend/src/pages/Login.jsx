@@ -106,7 +106,6 @@ function LoginPage() {
                     }, 500); // Delay to prevent immediate login after registration
     
                 } catch (registrationError) {
-                    console.error("Registration error:", registrationError);
                     const backendMessage = registrationError.response?.data?.error || "An error occurred during registration. Please try again.";
                     setError(backendMessage);
                     setLoading(false);
@@ -130,7 +129,6 @@ function LoginPage() {
                 }
             }
         } catch (generalError) {
-            console.error("Unexpected error:", generalError);
             setError("An unexpected error occurred. Please try again later.");
             setLoading(false);
         }

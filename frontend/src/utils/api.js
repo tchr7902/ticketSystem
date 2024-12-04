@@ -1,6 +1,5 @@
 import axiosInstance from './axiosInstance';
 
-
 const BASE_URL = "/tickets";
 const USER_URL = "/users";
 
@@ -205,6 +204,19 @@ export const fetchArchivedTickets = async (userId) => {
             throw error;
         }
         console.error('Error fetching archived tickets:', error);
+        throw error;
+    }
+};
+
+export const deleteArchivedTicket = async (id) => {
+    try {
+        await axiosInstance.delete(`${BASE_URL}/archived/${id}`);
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            console.error('Login token expired. Please log in again.')
+            throw error;
+        }
+        console.error('Error deleting archived ticket:', error);
         throw error;
     }
 };

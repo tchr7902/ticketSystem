@@ -22,6 +22,8 @@ function TicketList() {
     const [showArchiveModal, setShowArchiveModal] = useState(false);
     const [ticketToDelete, setTicketToDelete] = useState(null);
     const [ticketToArchive, setTicketToArchive] = useState(null);
+    const [timeSpent, setTimeSpent] = useState("");
+    const [partsNeeded, setPartsNeeded] = useState("");
     const [archiveNotes, setArchiveNotes] = useState("");
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -59,7 +61,6 @@ function TicketList() {
             const fetchedTickets = await fetchTickets();
             setTickets(fetchedTickets);
         } catch (err) {
-            console.error("Failed to fetch tickets:", err);
             setError("Unable to load tickets.");
             logout();
         } finally {
@@ -85,7 +86,6 @@ function TicketList() {
                 showToast("Ticket deleted successfully!", "success");
             }
         } catch (err) {
-            console.error("Failed to delete ticket:", err);
             showToast("Error deleting ticket. Please try again.", "error");
         } finally {
             setShowDeleteModal(false);
@@ -110,7 +110,6 @@ function TicketList() {
             setSelectedTicket(null);
             await loadTickets();
         } catch (error) {
-            console.error("Error while saving ticket:", error);
             setTimeout(() => toast.error("Error saving ticket. Please try again."), 100);
         } finally {
             setLoading(false);
@@ -127,19 +126,27 @@ function TicketList() {
         try {
             setLoading(true);
             if (ticketToArchive) {
-                await archiveTicket(ticketToArchive.id, archiveNotes);
+                const combinedNotes = `
+                    Time Spent: ${timeSpent}
+                    Parts Needed: ${partsNeeded}
+                    Additional Notes: ${archiveNotes}
+                `;
+                
+                await archiveTicket(ticketToArchive.id, combinedNotes); 
                 setTickets(tickets.filter((ticket) => ticket.id !== ticketToArchive.id));
                 showToast("Ticket archived successfully!", "success");
             }
         } catch (error) {
-            console.error("Error archiving ticket:", error);
             showToast("Error archiving ticket. Please try again.", "error");
         } finally {
             setLoading(false);
             setShowArchiveModal(false);
-            setArchiveNotes("");
+            setTimeSpent("");  
+            setPartsNeeded("");  
+            setArchiveNotes("");    
         }
     };
+    
 
     const getBadgeClass = (severity) => {
         switch (severity) {
@@ -168,7 +175,7 @@ function TicketList() {
     };
 
     if (loading) return (
-        <div className="loader-wrapper">
+        <div className="loader-wrapper-3">
             <div className="lds-ellipsis">
                 <div></div>
                 <div></div>
@@ -441,14 +448,33 @@ function TicketList() {
                 </Modal.Body>
                 <Modal.Body>
                     <Form>
-                        <Form.Group controlId="archiveNotes">
-                            <Form.Control className="input-box"
-                                as="textarea"
-                                rows={3}
-                                value={archiveNotes}
-                                onChange={(e) => setArchiveNotes(e.target.value)}
-                                placeholder="Notes for archiving"
-                            />
+                    <Form.Group controlId="archiveNotes">
+                        <Form.Control
+                            className="input-box"
+                            as="textarea"
+                            rows={1}
+                            value={timeSpent}  // Manage separate states for each field
+                            onChange={(e) => setTimeSpent(e.target.value)}
+                            placeholder="Time Spent"
+                        />
+                        
+                        <Form.Control
+                            className="input-box"
+                            as="textarea"
+                            rows={1}
+                            value={partsNeeded}  // Manage separate states for each field
+                            onChange={(e) => setPartsNeeded(e.target.value)}
+                            placeholder="Parts Needed"
+                        />
+
+                        <Form.Control
+                            className="input-box"
+                            as="textarea"
+                            rows={3}
+                            value={archiveNotes}  // Combined field for all notes
+                            onChange={(e) => setArchiveNotes(e.target.value)}
+                            placeholder="Additional Notes"
+                        />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
