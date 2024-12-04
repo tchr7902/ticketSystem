@@ -18,11 +18,6 @@ axiosInstance.interceptors.request.use(
 );
 
 
-const isTokenExpired = () => {
-    const expiration = sessionStorage.getItem('tokenExpiration');
-    return expiration && new Date() > new Date(expiration);
-};
-
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {

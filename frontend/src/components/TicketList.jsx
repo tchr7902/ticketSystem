@@ -273,7 +273,12 @@ function TicketList({setShowArchivedModal}) {
                                         <FaTrashAlt />
                                     </button>
                                     {user.role === "admin" && (
-                                        <button className="icon" onClick={() => openArchiveModal(ticket)}>
+                                        <button className="icon"
+                                        onClick={() => openArchiveModal(ticket)}
+                                        data-tooltip-id="archive-tooltip"
+                                        data-tooltip-content="Archive"
+                                        data-tooltip-delay-show={1000}
+                                        >
                                             <FaArchive />
                                         </button>
                                     )}
@@ -323,7 +328,12 @@ function TicketList({setShowArchivedModal}) {
                                         <FaTrashAlt />
                                     </button>
                                     {user.role === "admin" && (
-                                        <button className="icon" onClick={() => openArchiveModal(ticket)}>
+                                        <button className="icon"
+                                        onClick={() => openArchiveModal(ticket)}
+                                        data-tooltip-id="archive-tooltip"
+                                        data-tooltip-content="Archive"
+                                        data-tooltip-delay-show={1000}
+                                        >
                                             <FaArchive />
                                         </button>
                                     )}
@@ -373,7 +383,12 @@ function TicketList({setShowArchivedModal}) {
                                         <FaTrashAlt />
                                     </button>
                                     {user.role === "admin" && (
-                                        <button className="icon" onClick={() => openArchiveModal(ticket)}>
+                                        <button className="icon"
+                                        onClick={() => openArchiveModal(ticket)}
+                                        data-tooltip-id="archive-tooltip"
+                                        data-tooltip-content="Archive"
+                                        data-tooltip-delay-show={1000}
+                                        >
                                             <FaArchive />
                                         </button>
                                     )}
@@ -390,6 +405,7 @@ function TicketList({setShowArchivedModal}) {
             <Tooltip id="status-tooltip" />
             <Tooltip id="edit-tooltip" />
             <Tooltip id="delete-tooltip" />
+            <Tooltip id="archive-tooltip" />
             <Tooltip id="severity-tooltip" />
              {/* Edit Ticket Modal */}
              <Modal

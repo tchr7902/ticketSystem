@@ -8,6 +8,7 @@ from flask_mail import Message
 from urllib.parse import quote
 import json
 from config.db_config import connect_to_db
+from datetime import timedelta
 
 
 user_bp = Blueprint('user_bp', __name__)
@@ -196,9 +197,11 @@ def login():
         if not check_password_hash(account['password'], password):
             return jsonify({"error": "Password is incorrect."}), 401
 
+        expiration_time = timedelta(hours=3)
+
         # If both email and password are correct
         identity = json.dumps({'id': account['id'], 'role': account['role']})
-        access_token = create_access_token(identity=identity)
+        access_token = create_access_token(identity=identity, expires_delta=expiration_time)
         return jsonify({
             'access_token': access_token,
             'user': {
