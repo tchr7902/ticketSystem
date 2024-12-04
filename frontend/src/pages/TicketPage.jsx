@@ -9,7 +9,7 @@ import logo from '../images/gem_logo.png';
 import { ToastContainer, Bounce } from 'react-toastify';
 import { FaBars, FaCheck, FaTimes } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook, FaTrashAlt } from 'react-icons/fa';
+import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook, FaTrashAlt, FaArchive } from 'react-icons/fa';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
 import { Modal } from 'react-bootstrap';
 import { Tooltip } from 'react-tooltip'
@@ -371,14 +371,7 @@ function TicketPage() {
                     theme="light"
                     transition={Bounce}
                 />
-                <TicketList />
-                {user.role === "admin" && (
-                    <div className="archive-button">
-                        <button className="btn-2 mt-3" onClick={() => setShowArchivedModal(true)}>
-                            View Archived Tickets
-                        </button>
-                    </div>
-                )}
+                <TicketList setShowArchivedModal={setShowArchivedModal}/>
             </div>
 
             {/* Chat Icon */}

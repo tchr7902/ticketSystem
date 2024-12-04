@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../styles/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function TicketList() {
+function TicketList({setShowArchivedModal}) {
     const { user, logout } = useContext(AuthContext);
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -199,18 +199,33 @@ function TicketList() {
             )}
             {user.role === "admin" && (
                 <div className="new-ticket-admin">
-                <h2 className="text-center mb-2">Search Tickets</h2>
-                <div className="type-div">
-                <input
-                    type="text"
-                    className="form-control input-box"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                    <div className="search-container">
+                        <h2 className="text-center mb-2">Search Tickets</h2>
+                        <div className="archive-modal-button">
+                            <FaArchive
+                                className="archive-button-2"
+                                onClick={() => setShowArchivedModal(true)}
+                                style={{ cursor: 'pointer' }}
+                                data-tooltip-id="archive-button-tooltip"
+                                data-tooltip-content="Archived Tickets"
+                                data-tooltip-offset={10}
+                                data-tooltip-delay-show={300}
+                            />
+                        </div>
+                    </div>
+                    <Tooltip id="archive-button-tooltip" />
+                    <div className="type-div">
+                        <input
+                            type="text"
+                            className="form-control input-box"
+                            placeholder="Search..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
                 </div>
-            </div>                          
             )}
+
             </div>
             <h3 className="d-flex justify-content-center mt-5">{user.role === "admin" ? "All Tickets" : "My Tickets"}</h3>
             <div className="list-div">
