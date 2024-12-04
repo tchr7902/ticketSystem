@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     
 
     const login = (token, userData) => {
-        const expirationTime = new Date().getTime() + 5 * 1000;
+        const expirationTime = new Date().getTime() + 3 * 60 * 60 * 1000;
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('tokenExpiration', expirationTime);
         setToken(token);
