@@ -158,7 +158,7 @@ def update_ticket(ticket_id):
         notes = ""
         last_update_index = data['description'].rfind("Update:")  # Find the last "Update:"
         if last_update_index != -1:
-            notes = f"*Update*: {data['description'][last_update_index + len("Update:"):].strip()}\n\n"  # Capture after "Update:"
+            notes = f"*Update*: {data['description'][last_update_index + len('Update:'):].strip()}\n\n"  # Capture after "Update:"
 
         # Create a named space for the ticket notification
         space_info = create_user_space(ticket['email'])
