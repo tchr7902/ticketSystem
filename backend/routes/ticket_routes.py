@@ -146,20 +146,24 @@ def update_ticket(ticket_id):
     if ticket['user_id'] != user['id'] and user['role'] != 'admin':
         return jsonify({"error": "Unauthorized access."}), 403
 
-    # Update ticket description with new data
+    # Get the old description to compare with the new one
+    old_description = ticket['description']
+
+    # Update ticket description with new data (including title, description, severity, status)
     cursor.execute(
         "UPDATE tickets SET title = %s, description = %s, severity = %s, status = %s WHERE id = %s",
         (data['title'], data['description'], data['severity'], data['status'], ticket_id)
     )
 
-    # Only proceed with space creation and notifications if the user is an admin
-    if user['role'] == 'admin':
-        # Search for the last occurrence of "Update:" and extract everything after it
-        notes = ""
+    # Prepare message text and check if there's a new update in the description
+    notes = ""
+    if old_description != data['description']:  # Only if description has changed
         last_update_index = data['description'].rfind("Update:")  # Find the last "Update:"
         if last_update_index != -1:
             notes = f"*Update*: {data['description'][last_update_index + len('Update:'):].strip()}\n\n"  # Capture after "Update:"
 
+    # Send the message regardless of whether there is a new update
+    if user['role'] == 'admin':
         # Create a named space for the ticket notification
         space_info = create_user_space(ticket['email'])
 
@@ -169,7 +173,7 @@ def update_ticket(ticket_id):
             # Add the ticket owner to the space
             add_members_to_space(space_id, ticket['email'])
 
-            # Send the chat notification, including the last "Update:"
+            # Send the chat notification, including the new "Update:" if there is one
             message_text = (
                 f"📢 *Hello {first_name}!*\n\n"
                 f"The status of your ticket *{ticket['title']}* has been updated to: *{data['status']}*.\n\n"
@@ -181,6 +185,7 @@ def update_ticket(ticket_id):
     get_db().commit()
     cursor.close()
     return jsonify({"message": "Ticket updated successfully!"}), 200
+
 
 
 # Delete Ticket (Only the owner or admin can delete)

@@ -79,7 +79,7 @@ function TicketForm({ selectedTicket, onSave }) {
                     <div className="type-div">
                         <textarea
                             className="form-control input-box"
-                            placeholder="Update"
+                            placeholder="Updates"
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             style={{ height: "100px" }}
