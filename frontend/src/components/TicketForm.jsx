@@ -8,6 +8,7 @@ function TicketForm({ selectedTicket, onSave }) {
     const [severity, setSeverity] = useState("");
     const [status, setStatus] = useState("Open");
     const [contactMethod, setContactMethod] = useState(""); 
+    const [notes, setNotes] = useState("");
     const { user } = useAuth(); 
 
     // Populate form with ticket data if editing an existing ticket
@@ -18,6 +19,7 @@ function TicketForm({ selectedTicket, onSave }) {
             setSeverity(selectedTicket.severity);
             setStatus(selectedTicket.status);
             setContactMethod(selectedTicket.contact_method || "");
+            setNotes("");
         } else {
             // Clear form if no ticket is selected (creating a new one)
             setTitle("");
@@ -30,9 +32,12 @@ function TicketForm({ selectedTicket, onSave }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const updatedDescription = notes ? `${description}\n\nUpdate:\n${notes}` : description;
+
         const ticketData = { 
             title, 
-            description, 
+            description: updatedDescription, 
             severity, 
             status, 
             contact_method: contactMethod 
@@ -68,6 +73,20 @@ function TicketForm({ selectedTicket, onSave }) {
                     />
                 </div>
             </div>
+
+            {user?.role === 'admin' && (
+                <div className="form-box d-flex flex-column align-items-center">
+                    <div className="type-div">
+                        <textarea
+                            className="form-control input-box"
+                            placeholder="Update"
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                            style={{ height: "100px" }}
+                        />
+                    </div>
+                </div>
+            )}
 
             <div className="input-form-box d-flex flex-column align-items-center">
                 <div className="input-div">

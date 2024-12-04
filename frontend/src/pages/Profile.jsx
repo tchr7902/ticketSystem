@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
 import { getUserTickets } from '../utils/api';
+import { ToastContainer, Bounce } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Modal } from 'react-bootstrap';
 import { FaUser, FaArrowLeft, FaSignOutAlt } from 'react-icons/fa';
 import { format } from 'date-fns-tz';
@@ -24,6 +26,10 @@ const ProfilePage = () => {
     const [tickets, setTickets] = useState({ open: 0, inProgress: 0, closed: 0 });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const showToast = (message, type = "success") => {
+        toast(message, { type });
+    };
 
     const stores = [
         { store_id: 1, store_name: "Headquarters" },
@@ -58,9 +64,9 @@ const ProfilePage = () => {
                 setTickets({ open: data.Open || 0, inProgress: data["In Progress"] || 0, closed: data.Closed || 0 });
             } catch (error) {
                 if (error.status === 401) {
-                    setError("Login token has expired. Please log back in.")
+                    showToast("Login token has expired. Please log back in.")
                 } else {
-                    setError(error.message);
+                    showToast(error.message);
                 }
             }
         };
@@ -80,6 +86,20 @@ const ProfilePage = () => {
 
     return (
         <div className="container mt-5">
+            {/* Toast Container */}
+            <ToastContainer
+                    position="top-center"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss={false}
+                    draggable
+                    pauseOnHover={false}
+                    theme="light"
+                    transition={Bounce}
+                />
             <nav className="profile-navbar">
                 <FaArrowLeft className="react-icon" size={40} onClick={backButton}
                     data-tooltip-id="back-tooltip"

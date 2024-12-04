@@ -32,7 +32,7 @@ function PassReset() {
         
         // Validation for password fields
         if (newPassword !== confirmPassword) {
-            toast.error('Passwords do not match.');
+            setError('Passwords do not match.');
             return;
         }
 

@@ -146,6 +146,7 @@ def update_ticket(ticket_id):
     if ticket['user_id'] != user['id'] and user['role'] != 'admin':
         return jsonify({"error": "Unauthorized access."}), 403
 
+    # Update ticket description with new data
     cursor.execute(
         "UPDATE tickets SET title = %s, description = %s, severity = %s, status = %s WHERE id = %s",
         (data['title'], data['description'], data['severity'], data['status'], ticket_id)
@@ -153,6 +154,12 @@ def update_ticket(ticket_id):
 
     # Only proceed with space creation and notifications if the user is an admin
     if user['role'] == 'admin':
+        # Search for the last occurrence of "Update:" and extract everything after it
+        notes = ""
+        last_update_index = data['description'].rfind("Update:")  # Find the last "Update:"
+        if last_update_index != -1:
+            notes = f"*Update*: {data['description'][last_update_index + len("Update:"):].strip()}\n\n"  # Capture after "Update:"
+
         # Create a named space for the ticket notification
         space_info = create_user_space(ticket['email'])
 
@@ -162,10 +169,11 @@ def update_ticket(ticket_id):
             # Add the ticket owner to the space
             add_members_to_space(space_id, ticket['email'])
 
-            # Send the chat notification
+            # Send the chat notification, including the last "Update:"
             message_text = (
                 f"📢 *Hello {first_name}!*\n\n"
                 f"The status of your ticket *{ticket['title']}* has been updated to: *{data['status']}*.\n\n"
+                f"{notes}"
                 f"Thank you for your patience!"
             )
             send_message(space_id, message_text)
