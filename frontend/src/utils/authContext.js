@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
                     const userData = await fetchUser(token);
                     setUser(userData);
                 } catch (err) {
-                    console.error('Error fetching user:', err);
                     logout();
                 }
             } else {
@@ -35,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     
 
     const login = (token, userData) => {
-        const expirationTime = new Date().getTime() + 12 * 60 * 60 * 1000;
+        const expirationTime = new Date().getTime() + 5 * 1000;
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('tokenExpiration', expirationTime);
         setToken(token);
@@ -59,7 +58,6 @@ export const AuthProvider = ({ children }) => {
             const response = await changeUserPassword(user.email, currentPassword, newPassword);
             return response;
         } catch (err) {
-            console.error("Failed to change password:", err);
             throw new Error("Failed to change password. Please try again.");
         }
     };
@@ -73,7 +71,6 @@ export const AuthProvider = ({ children }) => {
             const response = await changeUserEmail(currentEmail, newEmail);
             return response;
         } catch (err) {
-            console.error("Failed to change email:", err);
             throw new Error("Failed to change email. Please try again.");
         }
     };
@@ -87,7 +84,6 @@ export const AuthProvider = ({ children }) => {
             });
             return response.data;
         } catch (error) {
-            console.error('Error archiving ticket:', error);
             throw new Error('Failed to archive ticket. Please try again.');
         }
     };
@@ -97,7 +93,6 @@ export const AuthProvider = ({ children }) => {
             const data = await fetchArchivedTickets(userId);
             return data;
         } catch (error) {
-            console.error('Error fetching archived tickets:', error);
             throw error;
         }
     };
