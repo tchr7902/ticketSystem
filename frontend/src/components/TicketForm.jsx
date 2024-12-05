@@ -123,8 +123,8 @@ function TicketForm({ selectedTicket, onSave }) {
                         {!selectedTicket && (
                             <>
                                 <option value={user?.email}>{user?.email}</option>
-                                <option value={`${user?.phone_number} - Call`}>{user?.phone_number} - Call</option>
-                                <option value={`${user?.phone_number} - Text`}>{user?.phone_number} - Text</option>
+                                <option value={`Call - ${user?.phone_number}`}>Call - {user?.phone_number}</option>
+                                <option value={`Text - ${user?.phone_number} `}>Text - {user?.phone_number}</option>
                                 <option value="Google Chats">Google Chats</option>
                                 <option value="Store">Store</option>
                             </>
