@@ -251,3 +251,18 @@ export const submitFeedback = async (feedback) => {
         throw error; 
     }
 };
+
+
+export const messageUsers = async (message) => {
+    try {
+        const response = await axiosInstance.post(`${USER_URL}/message-users`, {
+            message,
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+        } else {
+        }
+        throw error; 
+    }
+};

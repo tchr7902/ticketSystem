@@ -399,9 +399,6 @@ def handle_chat_event():
 def submit_chat_ticket():
     data = request.get_json()
     
-    # Debugging: Print the incoming data
-    print(f"Received data: {data}")
-
     # Check if this is a valid event for ticket submission (sent from the Cloud Function)
     if data:
         # Extract ticket data from the request
@@ -412,7 +409,6 @@ def submit_chat_ticket():
 
         # Validate that necessary fields are present
         if not ticket_title or not ticket_description or not ticket_severity or not ticket_email:
-            print("Error: Missing required ticket information.")
             return jsonify({'error': 'Missing required fields'}), 400
         
         # Example: Extract additional user details (you can modify this as needed)
@@ -460,5 +456,4 @@ def submit_chat_ticket():
 
         return jsonify({'text': 'Your ticket has been successfully submitted!'}), 200
     else:
-        print("Error: Invalid data received.")
         return jsonify({'text': 'Invalid event data'}), 400

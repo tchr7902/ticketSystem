@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Modal } from 'react-bootstrap';
-import { registerAdmin, searchUsers, deleteUser } from "../utils/api";
+import { registerAdmin, searchUsers, deleteUser, messageUsers } from "../utils/api";
 import { AuthContext } from "../utils/authContext.js";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -21,9 +21,12 @@ function AdminRegister() {
     const [last_name, setLastName] = useState("");
     const [error, setError] = useState("");
     const [error2, setError2] = useState("");
+    const [error3, setError3] = useState("");
     const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [messageText, setMessageText] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null); 
@@ -141,6 +144,28 @@ function AdminRegister() {
                 });
         }
     };
+
+    const handleMessage = async (e) => {
+        e.preventDefault();
+        setLoading2(true);
+        setError3("");
+        
+        try {
+            const response = await messageUsers(messageText);
+    
+            if (response) {
+                showToast("Message sent successfully!", "success");
+                setMessageText("");
+            } else {
+                showToast("Error sending message. Please try again.", "error");
+            }
+        } catch (err) {
+            showToast("Error sending message. Please try again.", "error");
+        } finally {
+            setLoading2(false);
+        }
+    };
+    
 
 
     return (
@@ -332,6 +357,44 @@ function AdminRegister() {
                 )}
                 {error2 && <p className="text-danger text-center mt-5">{error2}</p>}
             </div>
+
+            <div className="register-admin-card" style={{ maxWidth: '400px', width: '100%' }}>
+                <h2 className="text-center mb-4">
+                    {"Message Users"}
+                </h2>
+                <form onSubmit={handleMessage}>
+                    <div className="mb-3">
+                    <textarea
+                        className="form-control"
+                        placeholder="What would you like to say?"
+                        value={messageText}
+                        onChange={(e) => setMessageText(e.target.value)}
+                        rows="3"
+                        required
+                    ></textarea>
+                    </div>
+                    <button 
+                        type="submit" 
+                        className="btn-2" 
+                        disabled={loading}
+                    >
+                        {"Send"}
+                    </button>
+                </form>
+                {loading2 ? (
+                        <div className="loader-wrapper-2">
+                        <div className="lds-ellipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    ) : <div></div>}
+                {error3 && <p className="text-danger text-center mt-5">{error3}</p>}
+            </div>
+
+
             </div>
             <Tooltip id="logout-tooltip" />
             <Tooltip id="back-tooltip" />

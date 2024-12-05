@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, g, Response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message, send_feedback_message
+from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
 from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
 import logging
@@ -451,7 +451,6 @@ def change_email():
 
     except Exception as e:
         db.rollback()  # Rollback in case of any error
-        print("Error during email change:", e)  # Log the error for debugging
         return jsonify({"error": "An error occurred while updating the email."}), 500
 
     finally:
@@ -469,8 +468,6 @@ def forgot_password():
     result = cursor.fetchone()
 
     name = result['first_name']
-
-    print(name)
     
     if not email:
         return jsonify({"message": "Email is required"}), 400
@@ -527,7 +524,6 @@ def reset_password(resetToken):
         return response
     
     except Exception as e:
-        print(f"Error in resetting password: {e}")
         return jsonify({"message": "The reset link is invalid or has expired."}), 400
 
 
@@ -565,3 +561,39 @@ def submit_feedback():
         import traceback
         traceback.print_exc()
         return jsonify({"error": "An error occurred while submitting feedback"}), 500
+
+
+@user_bp.route('/message-users', methods=['POST'])
+def send_message_to_all():
+    data = request.json
+    message_text = data.get('message') 
+
+    if not message_text:
+        return jsonify({"error": "Message text is required"}), 400
+
+    db = connect_to_db()
+    cursor = db.cursor()
+    try:
+        # Query all registered users' emails
+        cursor.execute("SELECT email FROM users")
+        user_emails = cursor.fetchall()
+
+        for (email,) in user_emails:  # Unpack tuple from query
+            try:
+                # Find or create the user's Google Chat space
+                space_info = create_user_space(email)
+                space_id = space_info.get('name')
+                add_members_to_space(space_id, email)
+                # Send the admin's message to the user's Chat space
+                send_message(space_id, message_text)
+
+            except Exception as e:
+                continue  # Skip to the next user in case of an error
+
+        return jsonify({"message": "Messages sent to all users"}), 200
+
+    except Exception as e:
+        return jsonify({"error": "Internal server error"}), 500
+    finally:
+        cursor.close()
+        db.close()
