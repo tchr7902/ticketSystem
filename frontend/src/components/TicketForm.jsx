@@ -137,17 +137,18 @@ function TicketForm({ selectedTicket, onSave }) {
                 </div>
             )}
 
+            {!selectedTicket ? (
             <div className="input-form-box d-flex flex-column align-items-center">
                 <div className="input-div">
-                    <input
-                        type="file"
-                        className="form-control form-select-boxes image-upload select-box"
-                        id="imageUpload"
-                        onChange={handleImageChange}
-                    />
+                <input
+                    type="file"
+                    className="form-control form-select-boxes image-upload select-box"
+                    id="imageUpload"
+                    onChange={handleImageChange}
+                />
                 </div>
             </div>
-
+            ) : null}
 
             <div className="input-form-box d-flex flex-column align-items-center">
                 <div className="input-div">

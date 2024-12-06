@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, g, redirect, url_for
 import requests
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from chat import create_user_space, add_members_to_space, send_message, upload_image_to_gcs, send_google_chat_message
+from chat import create_user_space, add_members_to_space, send_message, upload_image_to_gcs, send_google_chat_message, delete_image_from_gcs
 import json
 
 
@@ -222,6 +222,10 @@ def delete_ticket(ticket_id):
 
     if ticket['user_id'] != user['id'] and user['role'] != 'admin':
         return jsonify({"error": "Unauthorized access."}), 403
+    
+    image_url = ticket.get('image_url')
+    if image_url:
+        delete_image_from_gcs(image_url)
 
     cursor.execute("DELETE FROM tickets WHERE id = %s", (ticket_id,))
     get_db().commit()
@@ -327,7 +331,6 @@ def search_tickets():
         cursor.close()
 
 
-
 # Archive Ticket
 @tickets_bp.route('/<int:ticket_id>/archive', methods=['POST'])
 @jwt_required()
@@ -351,9 +354,7 @@ def archive_ticket(ticket_id):
 
         get_db().commit()
 
-        cursor.execute("DELETE FROM tickets WHERE id = %s", (ticket_id,))
-
-        get_db().commit()
+        delete_ticket(ticket_id)
 
     except Exception as e:
         get_db().rollback()
@@ -363,6 +364,7 @@ def archive_ticket(ticket_id):
         cursor.close()
 
     return jsonify({"message": "Ticket archived successfully."}), 200
+
 
 
 # Get Archived Tickets

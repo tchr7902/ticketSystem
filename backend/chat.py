@@ -7,11 +7,12 @@ import requests
 from werkzeug.utils import secure_filename
 from datetime import timedelta
 from google.cloud import storage
+from google.cloud.exceptions import NotFound
+from urllib.parse import urlparse
 
 
 # Load environment variables from the .env file
 load_dotenv('../../.env')
-
 # Google Chat API URL
 chatURL = os.getenv('CHATURL')
 GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
@@ -20,6 +21,7 @@ service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT'))
 credentials = service_account.Credentials.from_service_account_info(service_account_info)
 
 storage_client = storage.Client(credentials=credentials, project=service_account_info['project_id'])
+bucket = storage_client.bucket(GCS_BUCKET_NAME)  # Use your actual bucket name
 
 
 def send_google_chat_message(ticket, image_url=None):
@@ -262,3 +264,23 @@ def upload_image_to_gcs(file):
     signed_url = blob.generate_signed_url(expiration=expiration_time, method="GET")
 
     return signed_url
+
+
+from urllib.parse import urlparse
+
+def delete_image_from_gcs(image_url):
+    """Delete an image from Google Cloud Storage using the file path."""
+    parsed_url = urlparse(image_url)
+    
+    image_path = parsed_url.path.lstrip('/')  
+    
+    if image_path.startswith(GCS_BUCKET_NAME + '/'):
+        image_path = image_path[len(GCS_BUCKET_NAME) + 1:] 
+    
+    blob = storage_client.bucket(GCS_BUCKET_NAME).blob(image_path)
+
+    try:
+        blob.delete()
+    except Exception as e:
+        print(f"Error deleting image {image_path}: {str(e)}")
+
