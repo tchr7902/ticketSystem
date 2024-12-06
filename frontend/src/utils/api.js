@@ -28,6 +28,24 @@ export const createTicket = async (ticket) => {
     }
 };
 
+export const uploadImage = async (imageFile) => {
+    try {
+        const formData = new FormData();
+        formData.append('image', imageFile);  // 'image' is the field name used on the backend
+
+        const response = await axiosInstance.post(`${BASE_URL}/upload-image`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',  // Set the correct header for file upload
+            },
+        });
+
+        return response.data;  // Return the response from the backend (e.g., the image URL)
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        throw error;
+    }
+};
+
 export const updateTicket = async (id, updates) => {
     try {
         const response = await axiosInstance.put(`${BASE_URL}/${id}`, updates); 

@@ -3,8 +3,10 @@ import os
 from google.oauth2 import service_account
 import json
 from googleapiclient.discovery import build
-from google.oauth2 import service_account
 import requests
+from werkzeug.utils import secure_filename
+from datetime import timedelta
+from google.cloud import storage
 
 
 # Load environment variables from the .env file
@@ -12,27 +14,57 @@ load_dotenv('../../.env')
 
 # Google Chat API URL
 chatURL = os.getenv('CHATURL')
+GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
 
-def send_google_chat_message(ticket):
+service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT'))
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+storage_client = storage.Client(credentials=credentials, project=service_account_info['project_id'])
+
+
+def send_google_chat_message(ticket, image_url=None):
     webhook_url = chatURL
 
-    message = {
-        'text': (
-            f"🚨 *New Ticket Created!*\n\n"
-            f"*Title:* {ticket['title']}\n"
-            f"*Description:* {ticket['description']}\n"
-            f"*Severity:* {ticket['severity']}\n"
-            f"*Submitted By:* {ticket['name']}\n"
-            f"*Contact Method:* {ticket['contact_method']}\n"
-        )
-    }
+    # Create the primary text message
+    message_text = (
+        f"🚨 *New Ticket Created!*\n\n"
+        f"*Title:* {ticket['title']}\n"
+        f"*Description:* {ticket['description']}\n"
+        f"*Severity:* {ticket['severity']}\n"
+        f"*Submitted By:* {ticket['name']}\n"
+        f"*Contact Method:* {ticket['contact_method']}\n"
+    )
 
+    # Prepare the message payload
+    message = {"text": message_text}
+
+    # If there's an image URL, include it as a card
+    if image_url:
+        message["cards"] = [
+            {
+                "sections": [
+                    {
+                        "widgets": [
+                            {
+                                "image": {
+                                    "imageUrl": image_url,
+                                    "altText": "Attached Image"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+
+    # Send the message to Google Chat webhook
     response = requests.post(webhook_url, json=message)
 
     if response.status_code == 200:
         print('Message sent successfully!')
     else:
         print(f'Failed to send message: {response.content}')
+
 
 
 # Define the scope for the Chat API
@@ -211,3 +243,22 @@ def send_feedback_message(feedback_data):
         print('Feedback message sent successfully!')
     else:
         print(f'Failed to send feedback message: {response.content}')
+
+
+
+def upload_image_to_gcs(file):
+    """Upload the image to Google Cloud Storage and return a signed URL"""
+    # Sanitize filename
+    filename = secure_filename(file.filename)
+    blob = storage_client.bucket(GCS_BUCKET_NAME).blob(filename)
+
+    # Upload the file to the bucket
+    blob.upload_from_file(file)
+
+    # Set the expiration time for the signed URL (e.g., 1 hour)
+    expiration_time = timedelta(hours=1)
+
+    # Generate a signed URL for the uploaded image
+    signed_url = blob.generate_signed_url(expiration=expiration_time, method="GET")
+
+    return signed_url

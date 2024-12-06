@@ -2,8 +2,9 @@ from flask import Blueprint, request, jsonify, g, redirect, url_for
 import requests
 from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
+from chat import create_user_space, add_members_to_space, send_message, upload_image_to_gcs, send_google_chat_message
 import json
+
 
 tickets_bp = Blueprint('tickets', __name__)
 
@@ -71,39 +72,55 @@ def get_tickets():
     cursor.close()
     return jsonify(tickets), 200
 
+
 # Create Ticket
 @tickets_bp.route('', methods=['POST'])
 @jwt_required()
 def create_ticket():
     user_identity_str = get_jwt_identity()
     user = json.loads(user_identity_str)  # Deserialize identity
-    data = request.json
+    data = request.json  # JSON payload from the frontend
 
-    status = data.get('status') if data.get('status') else 'Open'
+    status = data.get('status', 'Open')  # Default status to 'Open' if not provided
 
+    # Get user details
     name = get_user_name(user['id'])
     first_name = get_user_first_name(user['id'])
     email = get_user_email(user['id'])
     phone_number = get_user_phone(user['id'])
 
+    # Extract image URL from the request data (uploaded by the frontend)
+    image_url = data.get('image_url')
+
+    # Save the ticket to the database
     cursor = get_db().cursor()
     cursor.execute(
-        "INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email, phone_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-        (data['title'], data['description'], data['severity'], user['id'], status, data['contact_method'], name, email, phone_number)
+        """
+        INSERT INTO tickets (title, description, severity, user_id, status, contact_method, name, email, phone_number, image_url)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """,
+        (
+            data['title'], data['description'], data['severity'], user['id'], status,
+            data['contact_method'], name, email, phone_number, image_url
+        )
     )
     get_db().commit()
     cursor.close()
 
+    # Prepare message data
     message_data = {
         'title': data['title'],
         'description': data['description'],
         'severity': data['severity'],
         'name': name,
-        'contact_method': data['contact_method']
+        'contact_method': data['contact_method'],
+        'image_url': image_url  # Include the image URL
     }
 
-    send_google_chat_message(message_data)
+    # Send message to Google Chat with the image URL
+    send_google_chat_message(message_data, image_url)
 
+    # Create Google Chat space for the user and notify them
     space_info = create_user_space(email)
 
     if space_info:
@@ -112,14 +129,14 @@ def create_ticket():
         # Add the ticket owner to the space
         add_members_to_space(space_id, email)
 
-        # Send the chat notification
+        # Send a chat notification
         message_text = (
             f"🛠️ *Hello {first_name}!*\n\n"
             f"The IT team has received your ticket: *{data['title']}*.\n\n"
             f"We will begin addressing your request as soon as possible. "
             f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
             "Thank you!"
-            )
+        )
         send_message(space_id, message_text)
 
     return jsonify({"message": "Ticket created successfully!"}), 201
@@ -457,3 +474,18 @@ def submit_chat_ticket():
         return jsonify({'text': 'Your ticket has been successfully submitted!'}), 200
     else:
         return jsonify({'text': 'Invalid event data'}), 400
+
+
+# Flask route for file upload
+@tickets_bp.route('/upload-image', methods=['POST'])
+@jwt_required()
+def upload_image():
+    file = request.files['image']  # Assumes the file is uploaded as 'image'
+
+    if file:
+        # Upload image and get signed URL
+        signed_url = upload_image_to_gcs(file)
+
+        return jsonify({'image_url': signed_url}), 200
+    else:
+        return jsonify({'error': 'No image uploaded'}), 400
