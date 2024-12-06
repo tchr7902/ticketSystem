@@ -31,9 +31,10 @@ function TicketForm({ selectedTicket, onSave }) {
         }
     };
     
+    const handleImageRemove = () => {
+        setImage(null);
+    };
     
-    
-
     // Populate form with ticket data if editing an existing ticket
     useEffect(() => {
         if (selectedTicket) {
@@ -139,15 +140,16 @@ function TicketForm({ selectedTicket, onSave }) {
 
             {!selectedTicket ? (
             <div className="input-form-box d-flex flex-column align-items-center">
-                <div className="input-div">
+            <div className="input-div">
                 <input
                     type="file"
                     className="form-control form-select-boxes image-upload select-box"
                     id="imageUpload"
                     onChange={handleImageChange}
                 />
-                </div>
             </div>
+
+        </div>
             ) : null}
 
             <div className="input-form-box d-flex flex-column align-items-center">
