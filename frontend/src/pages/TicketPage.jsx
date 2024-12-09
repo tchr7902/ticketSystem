@@ -27,6 +27,8 @@ const CollapsibleCard = ({
     created_at,
     archived_at,
     notes,
+    time_spent,
+    parts_needed,
     archivedTicketId,
     handleDeleteArchivedTicket,
 }) => {
@@ -62,49 +64,54 @@ const CollapsibleCard = ({
     };
 
     return (
-        <div className={`card ${isOpen ? 'active' : ''}`} onClick={handleCardClick}>
-            <div className="card-header">
+        <div className={`card ${isOpen ? 'active open-card' : ''}`}>
+            <div className="card-header" onClick={handleCardClick}>
                 <strong>{title}</strong>
                 <span>{isOpen ? '-' : '+'}</span>
             </div>
             {isOpen && (
-                <div className="card-body">
+                <div className="card-body collapsible-card-body">
                     <p><strong>Submitted By:</strong> {name}</p>
                     <p><strong>Contact Method:</strong> {contact_method}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Status:</strong> {status}</p>
-                    <p><strong>Priority:</strong> {priority}</p>
+                    <p><strong>Priority:</strong> {priority.charAt(0).toUpperCase() + priority.slice(1)}</p>
                     <p><strong>Created:</strong> {formatDate(created_at)}</p>
                     <p><strong>Archived:</strong> {formatDate(archived_at)}</p>
+                    <p><strong>Time Spent:</strong> {time_spent}</p>
+                    <p><strong>Parts Needed:</strong> {parts_needed}</p>
                     <p><strong>Notes:</strong> {notes}</p>
                     <div className="delete-button-container">
                         {!showConfirmation && (
                             <FaTrashAlt onClick={handleDeleteClick}
-                            data-tooltip-id="delete"
+                            data-tooltip-id="archive-delete"
                             data-tooltip-content="Delete"
                             data-tooltip-delay-show={300}
+                            className="react-icon"
                             />
                         )}
                         {showConfirmation && (
                             <div className="delete-confirmation">
                                 <FaTimes onClick={handleCancelDelete}
-                                data-tooltip-id="cancel"
+                                data-tooltip-id="archive-cancel"
                                 data-tooltip-content="Cancel"
                                 data-tooltip-delay-show={300}
+                                className="react-icon"
                                 /> 
                                 <FaCheck onClick={handleConfirmDelete}
-                                data-tooltip-id="confirm"
+                                data-tooltip-id="archive-confirm"
                                 data-tooltip-delay-show={300}
                                 data-tooltip-content="Confirm"
+                                className="react-icon"
                                 />
                             </div>
                         )}
                     </div>
                 </div>     
             )}
-            <Tooltip id="delete" />
-            <Tooltip id="cancel" />
-            <Tooltip id="confirm" />
+            <Tooltip id="archive-delete" />
+            <Tooltip id="archive-cancel" />
+            <Tooltip id="archive-confirm" />
         </div>
     );
 };
@@ -484,7 +491,7 @@ function TicketPage() {
                         <p>Loading...</p>
                     ) : archivedTickets.length > 0 ? (
                         archivedTickets.map((ticket) => {
-                            const [archivedTicketId, , , title, description, status, archived_at, notes, created_at, priority, contact_method, name] = ticket;
+                            const [archivedTicketId, , , title, description, status, archived_at, notes, created_at, priority, contact_method, name, time_spent, parts_needed] = ticket;
                             return (
                                 <CollapsibleCard
                                     key={archivedTicketId}
@@ -496,6 +503,8 @@ function TicketPage() {
                                     priority={priority}
                                     created_at={created_at}
                                     archived_at={archived_at}
+                                    time_spent={time_spent}
+                                    parts_needed={parts_needed}
                                     notes={notes}
                                     archivedTicketId={archivedTicketId}
                                     handleDeleteArchivedTicket={handleDeleteArchivedTicket}

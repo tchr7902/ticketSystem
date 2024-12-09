@@ -126,13 +126,7 @@ function TicketList({setShowArchivedModal}) {
         try {
             setLoading(true);
             if (ticketToArchive) {
-                const combinedNotes = `
-                    Time Spent: ${timeSpent}
-                    Parts Needed: ${partsNeeded}
-                    Additional Notes: ${archiveNotes}
-                `;
-                
-                await archiveTicket(ticketToArchive.id, combinedNotes); 
+                await archiveTicket(ticketToArchive.id, archiveNotes, timeSpent, partsNeeded); 
                 setTickets(tickets.filter((ticket) => ticket.id !== ticketToArchive.id));
                 showToast("Ticket archived successfully!", "success");
             }
@@ -502,7 +496,7 @@ function TicketList({setShowArchivedModal}) {
                             className="input-box"
                             as="textarea"
                             rows={3}
-                            value={archiveNotes}  // Combined field for all notes
+                            value={archiveNotes}
                             onChange={(e) => setArchiveNotes(e.target.value)}
                             placeholder="Additional Notes"
                         />

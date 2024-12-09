@@ -31,21 +31,16 @@ function TicketForm({ selectedTicket, onSave }) {
         }
     };
     
-    const handleImageRemove = () => {
-        setImage(null);
-    };
     
-    // Populate form with ticket data if editing an existing ticket
     useEffect(() => {
         if (selectedTicket) {
             setTitle(selectedTicket.title);
             setDescription(selectedTicket.description);
             setSeverity(selectedTicket.severity);
             setStatus(selectedTicket.status);
-            setContactMethod(selectedTicket.contact_method || "");
+            setContactMethod(selectedTicket.contact_method);
             setNotes("");
         } else {
-            // Clear form if no ticket is selected (creating a new one)
             setTitle("");
             setDescription("");
             setSeverity("");
@@ -59,7 +54,7 @@ function TicketForm({ selectedTicket, onSave }) {
     
         // Update the description with any additional notes
         const updatedDescription = notes ? `${description}\n\nUpdate:\n${notes}` : description;
-    
+
         // Create the ticket data object
         const ticketData = { 
             title, 
@@ -71,14 +66,12 @@ function TicketForm({ selectedTicket, onSave }) {
     
         // Include the image URL if it exists
         if (imageUrl) {
-            ticketData.image_url = imageUrl; // Use the already uploaded image URL
+            ticketData.image_url = imageUrl;
         }
     
         try {
-            // Send the ticket data to the backend
             await onSave(ticketData);
     
-            // Optionally reset the form after successful submission
             setTitle("");
             setDescription("");
             setSeverity("");
@@ -86,7 +79,7 @@ function TicketForm({ selectedTicket, onSave }) {
             setContactMethod("");
             setNotes("");
             setImage(null);
-            setImageUrl(null); // Clear the image URL state
+            setImageUrl(null);
         } catch (error) {
             console.error('Error submitting ticket:', error);
             alert("Failed to submit the ticket. Please try again.");
@@ -105,7 +98,7 @@ function TicketForm({ selectedTicket, onSave }) {
                         placeholder="Issue"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        maxLength={20}
+                        maxLength={30}
                         required
                     />
                 </div>
@@ -162,20 +155,16 @@ function TicketForm({ selectedTicket, onSave }) {
                     >
                     <option value="" disabled>Select Priority</option>
                     
-                    {/* If editing an existing ticket, show the selected severity and provide other options */}
                     {selectedTicket ? (
                         <>
-                        {/* Pre-select the existing severity */}
                         <option value={selectedTicket.severity} disabled>
                             {selectedTicket.severity.charAt(0).toUpperCase() + selectedTicket.severity.slice(1)}
                         </option>
-                        {/* Add other severity options */}
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
                         <option value="High">High</option>
                         </>
                     ) : (
-                        // If creating a new ticket, show all options
                         <>
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
@@ -197,14 +186,11 @@ function TicketForm({ selectedTicket, onSave }) {
                 >
                 <option value="" disabled>Contact Method</option>
                 
-                {/* If editing an existing ticket, show the selected contact method and provide other options */}
                 {selectedTicket ? (
                     <>
-                    {/* Pre-select the existing contact method */}
                     <option value={selectedTicket.contact_method} disabled>
                         {selectedTicket.contact_method}
                     </option>
-                    {/* Add the other options the user can change to */}
                     <option value={user?.email}>{user?.email}</option>
                     <option value={`Call - ${user?.phone_number}`}>Call - {user?.phone_number}</option>
                     <option value={`Text - ${user?.phone_number}`}>Text - {user?.phone_number}</option>
@@ -212,7 +198,6 @@ function TicketForm({ selectedTicket, onSave }) {
                     <option value="Store">Store</option>
                     </>
                 ) : (
-                    // If creating a new ticket, show all options
                     <>
                     <option value={user?.email}>{user?.email}</option>
                     <option value={`Call - ${user?.phone_number}`}>Call - {user?.phone_number}</option>

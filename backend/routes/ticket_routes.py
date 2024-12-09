@@ -168,8 +168,8 @@ def update_ticket(ticket_id):
 
     # Update ticket description with new data (including title, description, severity, status)
     cursor.execute(
-        "UPDATE tickets SET title = %s, description = %s, severity = %s, status = %s WHERE id = %s",
-        (data['title'], data['description'], data['severity'], data['status'], ticket_id)
+        "UPDATE tickets SET title = %s, description = %s, severity = %s, contact_method = %s, status = %s WHERE id = %s",
+        (data['title'], data['description'], data['severity'], data['contact_method'], data['status'], ticket_id)
     )
 
     # Prepare message text and check if there's a new update in the description
@@ -336,18 +336,21 @@ def search_tickets():
 @jwt_required()
 def archive_ticket(ticket_id):
     data = request.get_json()
-    notes = data.get('notes', '')
+    notes = data.get('archiveNotes', '')
+    time_spent = data.get('timeSpent', '')
+    parts_needed = data.get('partsNeeded', '')
 
     cursor = get_db().cursor()
 
     try:
         cursor.execute("""
             INSERT INTO archived_tickets 
-            (original_ticket_id, user_id, title, description, created_at, severity, status, notes, contact_method, name)
-            SELECT id, user_id, title, description, created_at, severity, status, %s, contact_method, name
+            (original_ticket_id, user_id, title, description, created_at, severity, status, notes, contact_method, name, time_spent, parts_needed)
+            SELECT id, user_id, title, description, created_at, severity, status, %s, contact_method, name, %s, %s
             FROM tickets
             WHERE id = %s
-        """, (notes, ticket_id))
+        """, (notes, time_spent, parts_needed, ticket_id))
+
 
         if cursor.rowcount == 0:
             raise Exception("Ticket transfer failed. No ticket with this ID found.")

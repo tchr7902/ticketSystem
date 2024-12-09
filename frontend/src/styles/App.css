@@ -328,6 +328,12 @@ img {
   justify-content: center;
   align-items: center;
   padding-bottom: 30px;
+  p {
+    margin: 0;
+  }
+  h4 {
+    margin: 0;
+  }
 }
 
 .new-ticket {
@@ -692,6 +698,7 @@ input, select, textarea {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-bottom: 10px;
 }
 
 .delete-confirmation {
@@ -895,6 +902,20 @@ input, select, textarea {
   align-items: center;
 }
 
+.collapsible-card-body {
+  cursor: default;
+
+  p {
+    cursor: text;
+  }
+
+  svg {
+    cursor: pointer;
+  }
+}
+
+
+
 
 .card-body {
   max-height: 0;
@@ -904,10 +925,14 @@ input, select, textarea {
 }
 
 .card.active .card-body {
-  max-height: 2000px;
-  height: auto;
+  max-height: 100%;
+  height: 100%;
   padding: 15px;
-  overflow: auto !important;
+}
+
+.open-card {
+  max-height: 100%;
+  height: auto;
 }
 
 .card:hover {
