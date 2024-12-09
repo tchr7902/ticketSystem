@@ -117,9 +117,10 @@ def register():
 @jwt_required()
 def register_admin():
     # Get the JWT identity to verify the role
-    identity = get_jwt_identity()
+    user_identity_str = get_jwt_identity()
+    user_identity = json.loads(user_identity_str)
     
-    if identity['role'] != 'admin':
+    if user_identity['role'] != 'admin':
         return jsonify({"error": "Unauthorized. Only admins can register new admins."}), 403
 
     data = request.json
