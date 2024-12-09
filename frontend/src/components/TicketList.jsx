@@ -473,23 +473,25 @@ function TicketList({setShowArchivedModal}) {
                 </Modal.Body>
                 <Modal.Body>
                     <Form>
-                    <Form.Group controlId="archiveNotes">
+                    <Form.Group>
                         <Form.Control
                             className="input-box"
                             as="textarea"
                             rows={1}
-                            value={timeSpent}  // Manage separate states for each field
+                            value={timeSpent} 
                             onChange={(e) => setTimeSpent(e.target.value)}
                             placeholder="Time Spent"
+                            id="timeSpent"
                         />
                         
                         <Form.Control
                             className="input-box"
                             as="textarea"
                             rows={1}
-                            value={partsNeeded}  // Manage separate states for each field
+                            value={partsNeeded}  
                             onChange={(e) => setPartsNeeded(e.target.value)}
                             placeholder="Parts Needed"
+                            id="partsNeeded"
                         />
 
                         <Form.Control
@@ -499,6 +501,7 @@ function TicketList({setShowArchivedModal}) {
                             value={archiveNotes}
                             onChange={(e) => setArchiveNotes(e.target.value)}
                             placeholder="Additional Notes"
+                            id="notes"
                         />
                         </Form.Group>
                     </Form>
