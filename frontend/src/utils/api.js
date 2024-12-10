@@ -284,3 +284,16 @@ export const messageUsers = async (message) => {
         throw error; 
     }
 };
+
+
+export const updateUser = async (id, updates) => {
+    try {
+        const response = await axiosInstance.put(`${USER_URL}/${id}`, updates); 
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            throw error;
+        }
+        throw error;
+    }
+};

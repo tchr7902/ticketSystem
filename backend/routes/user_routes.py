@@ -249,7 +249,7 @@ def get_current_user():
                 }), 200
         else:
             cursor.execute(
-                "SELECT id, first_name, email, store_id, phone_number FROM users WHERE id = %s", 
+                "SELECT id, first_name, last_name, email, store_id, phone_number FROM users WHERE id = %s", 
                 (user_identity['id'],)
             )
             user = cursor.fetchone()
@@ -258,6 +258,7 @@ def get_current_user():
                 return jsonify({
                     'id': user['id'],
                     'first_name': user['first_name'],
+                    'last_name': user['last_name'],
                     'email': user['email'],
                     'phone_number': user['phone_number'],
                     'store_id': user['store_id'],
@@ -598,3 +599,53 @@ def send_message_to_all():
     finally:
         cursor.close()
         db.close()
+
+
+# Update User
+@user_bp.route('/<int:user_id>', methods=['PUT'])
+@jwt_required()
+def update_ticket(user_id):
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str)  # Deserialize identity
+    data = request.json
+
+    # Validate input data
+    required_fields = ['first_name', 'last_name', 'phone_number', 'store_id']
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields."}), 400
+
+    phone_number = data['phone_number']
+
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    # Check if the user exists
+    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+    existing_user = cursor.fetchone()
+    if not existing_user:
+        return jsonify({"error": "User not found."}), 404
+
+    # Check if the phone number is already in use by another user
+    cursor.execute("SELECT id FROM users WHERE phone_number = %s AND id != %s", (phone_number, user_id))
+    phone_conflict = cursor.fetchone()
+    if phone_conflict:
+        return jsonify({"error": "Phone number registered to another account."}), 400
+
+    # Update user data
+    try:
+        cursor.execute(
+            """
+            UPDATE users
+            SET first_name = %s, last_name = %s, phone_number = %s, store_id = %s
+            WHERE id = %s
+            """,
+            (data['first_name'], data['last_name'], phone_number, data['store_id'], user_id)
+        )
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        return jsonify({"error": f"Failed to update user: {str(e)}"}), 500
+    finally:
+        cursor.close()
+
+    return jsonify({"message": "User info updated successfully!"}), 200
