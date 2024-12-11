@@ -28,7 +28,6 @@ const App = () => {
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    window.location.reload();
   };
 
   useEffect(() => {

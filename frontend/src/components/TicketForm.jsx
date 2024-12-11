@@ -189,7 +189,7 @@ function TicketForm({ selectedTicket, onSave }) {
                     )}
                     </select>
                 </div>
-                </div>
+            </div>
 
 
             <div className="input-form-box d-flex flex-column align-items-center">
