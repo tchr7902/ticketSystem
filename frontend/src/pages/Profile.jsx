@@ -5,16 +5,18 @@ import { getUserTickets, updateUser } from '../utils/api';
 import { ToastContainer, Bounce } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { FaUser, FaArrowLeft, FaSignOutAlt, FaPencilAlt } from 'react-icons/fa';
+import { FaUser, FaArrowLeft, FaSignOutAlt, FaPencilAlt, FaTimes } from 'react-icons/fa';
 import { Tooltip } from 'react-tooltip';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
-import logo from '../images/gem_logo.png';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
 import logo2 from '../images/gem-singlelogo.png';
 
 const ProfilePage = () => {
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [logo, setLogo] = useState('../images/gem_logo.png');
     const [tickets, setTickets] = useState({ open: 0, inProgress: 0, closed: 0 });
     const [loading, setLoading] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -100,6 +102,15 @@ const ProfilePage = () => {
     };
 
     useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        console.log(theme)
+        if (theme == 'light') {
+        setLogo(lightLogo);
+        console.log(logo)
+        } else if (theme == 'dark') {
+        setLogo(darkLogo);
+        console.log(logo)
+        }
         if (user) {
             setFormData({
                 first_name: user.first_name,
@@ -200,8 +211,14 @@ const ProfilePage = () => {
                 )}
             </div>
             <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Edit Profile</Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setShowEditModal(false);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>

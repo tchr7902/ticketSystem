@@ -3,7 +3,7 @@ import { fetchTickets, deleteTicket, createTicket, updateTicket, archiveTicket }
 import { AuthContext } from "../utils/authContext";
 import TicketForm from "./TicketForm.jsx";
 import { Modal, Form } from 'react-bootstrap';
-import { FaTrashAlt, FaArchive, FaPencilAlt, FaSpinner, FaRegFolderOpen, FaRegCheckCircle  } from 'react-icons/fa';
+import { FaTrashAlt, FaArchive, FaPencilAlt, FaSpinner, FaRegFolderOpen, FaRegCheckCircle, FaTimes  } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Tooltip } from 'react-tooltip'
 import { format } from 'date-fns';
@@ -409,8 +409,15 @@ function TicketList({setShowArchivedModal}) {
                     setSelectedTicket(null);
                 }}
             >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title><h3 className="m-0">Edit Ticket</h3></Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setShowEditModal(false);
+                            setSelectedTicket(null);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body>
                     <TicketForm
@@ -444,8 +451,14 @@ function TicketList({setShowArchivedModal}) {
                 show={showDeleteModal}
                 onHide={() => setShowDeleteModal(false)}
             >
-                <Modal.Header closeButton>
+                <Modal.Header >
                     <Modal.Title><h3 className="m-0">Confirm Deletion</h3></Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setShowDeleteModal(false);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body>
                     Are you sure you want to delete "{ticketToDelete ? ticketToDelete.title : ''}"? This cannot be undone!
@@ -465,8 +478,14 @@ function TicketList({setShowArchivedModal}) {
 
             {/* Archive Modal */}
             <Modal show={showArchiveModal} onHide={() => setShowArchiveModal(false)}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title><h3 className="m-0">Confirm Archive</h3></Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setShowArchiveModal(false);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body>
                     Are you sure you want to archive "{ticketToArchive ? ticketToArchive.title : ''}"?

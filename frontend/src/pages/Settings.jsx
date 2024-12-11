@@ -6,13 +6,14 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { Tooltip } from 'react-tooltip'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
-import logo from '../images/gem_logo.png';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
 import logo2 from '../images/gem-singlelogo.png';
 
-const SettingsPage = () => {
+const SettingsPage = ({toggleTheme, theme}) => {
     const { user, logout, changePassword, changeEmail } = useContext(AuthContext);
     const navigate = useNavigate();
-
+    const [logo, setLogo] = useState('../images/gem_logo.png');
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,6 +26,15 @@ const SettingsPage = () => {
     const [successMessage, setSuccessMessage] = useState("");
 
     useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        console.log(theme)
+        if (theme == 'light') {
+        setLogo(lightLogo);
+        console.log(logo)
+        } else if (theme == 'dark') {
+        setLogo(darkLogo);
+        console.log(logo)
+        }
         if (user) {
             setCurrentEmail(user.email);
         }
@@ -38,6 +48,8 @@ const SettingsPage = () => {
     const backButton = () => {
         navigate('/home');
     };
+
+
 
     const handleEmailChange = async (e) => {
         e.preventDefault();
@@ -155,6 +167,12 @@ const SettingsPage = () => {
                 data-tooltip-content="Logout"
                 data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
+            <div className="darkmode-div">
+                <button 
+                onClick={toggleTheme} className="btn-important">
+                Switch to {theme === "dark" ? "Light" : "Dark"} Mode
+                </button>
+            </div>
             <div className="change-div">
                 <div className="col-md-6 change">
                     <h3>Change Email</h3>

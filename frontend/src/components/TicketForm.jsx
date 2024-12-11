@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaFileUpload } from 'react-icons/fa'
 import { useAuth } from "../utils/authContext";
 import { uploadImage } from "../utils/api";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,6 +12,7 @@ function TicketForm({ selectedTicket, onSave }) {
     const [contactMethod, setContactMethod] = useState(""); 
     const [notes, setNotes] = useState("");
     const [image, setImage] = useState(null);
+    const [fileName, setFileName] = useState('');
     const [imageUrl, setImageUrl] = useState(null); 
     const { user } = useAuth(); 
 
@@ -18,6 +20,7 @@ function TicketForm({ selectedTicket, onSave }) {
         const file = e.target.files[0]; 
         if (file) {
             setImage(file); 
+            setFileName(file.name);
     
             try {
                 const response = await uploadImage(file);
@@ -30,6 +33,10 @@ function TicketForm({ selectedTicket, onSave }) {
             }
         }
     };
+
+    const handleDivClick = () => {
+        document.getElementById('imageUpload').click();
+      };
     
     
     useEffect(() => {
@@ -132,17 +139,26 @@ function TicketForm({ selectedTicket, onSave }) {
             )}
 
             {!selectedTicket ? (
-            <div className="input-form-box d-flex flex-column align-items-center">
-            <div className="input-div">
-                <input
-                    type="file"
-                    className="form-control form-select-boxes image-upload select-box"
-                    id="imageUpload"
-                    onChange={handleImageChange}
-                />
+            <div className="input-form-box" onClick={handleDivClick}>
+            <div className="form-control image-upload">
+              {/* Hidden File Input */}
+              <input
+                type="file"
+                id="imageUpload"
+                onChange={handleImageChange}
+                style={{ display: 'none' }} // Hide default file input
+              />
+                <span>Upload Image</span>
+                <FaFileUpload/>
             </div>
-
-        </div>
+      
+            {/* Display selected file name */}
+            {fileName && (
+              <div className="file-name">
+                Selected file: {fileName}
+              </div>
+            )}
+          </div>
             ) : null}
 
             <div className="input-form-box d-flex flex-column align-items-center">

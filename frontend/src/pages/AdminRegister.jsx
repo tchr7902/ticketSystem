@@ -1,13 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Modal } from 'react-bootstrap';
 import { registerAdmin, searchUsers, deleteUser, messageUsers } from "../utils/api";
 import { AuthContext } from "../utils/authContext.js";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../images/gem_logo.png';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
 import logo2 from '../images/gem-singlelogo.png';
-import { FaSignOutAlt, FaArrowLeft, FaTrashAlt, FaEye } from 'react-icons/fa';
+import { FaSignOutAlt, FaArrowLeft, FaTrashAlt, FaEye, FaTimes } from 'react-icons/fa';
 import { Tooltip } from 'react-tooltip'
 import '../styles/App.css';
 
@@ -31,6 +32,7 @@ function AdminRegister() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null); 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
+    const [logo, setLogo] = useState('../images/gem_logo.png');
 
 
     const stores = [
@@ -165,7 +167,18 @@ function AdminRegister() {
             setLoading2(false);
         }
     };
-    
+
+    useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        console.log(theme)
+        if (theme == 'light') {
+        setLogo(lightLogo);
+        console.log(logo)
+        } else if (theme == 'dark') {
+        setLogo(darkLogo);
+        console.log(logo)
+        }
+    })
 
 
     return (
@@ -403,12 +416,17 @@ function AdminRegister() {
             <Modal
                 show={isModalOpen}
                 onHide={closeModal}
-                centered
             >
                 {selectedUser && (
                     <div>
-                        <Modal.Header closeButton>
+                        <Modal.Header>
                             <Modal.Title>User Information</Modal.Title>
+                            <FaTimes
+                            className="close-modal-times"
+                        onClick={() => {
+                            closeModal();
+                        }}
+                    ></FaTimes>
                         </Modal.Header>
                         <Modal.Body>
                             <p><strong>User ID:</strong> {selectedUser.id}</p>
@@ -424,8 +442,14 @@ function AdminRegister() {
                 show={isDeleteModalOpen}
                 onHide={closeDeleteModal}
             >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Confirm Deletion</Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            closeDeleteModal();
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body>
                     <p>Are you sure you want to delete <strong>{userToDelete?.first_name} {userToDelete?.last_name}</strong>?</p>

@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns-tz';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
-import logo from '../images/gem_logo.png';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
 import { ToastContainer, Bounce } from 'react-toastify';
 import { FaBars, FaCheck, FaTimes } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -128,13 +129,12 @@ function TicketPage() {
     const [contactITModalOpen, setContactITModalOpen] = useState(false);
     const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
     const [feedback, setFeedback] = useState('');
+    const [logo, setLogo] = useState('../images/gem_logo.png');
     const dropdownRef = useRef(null);
     const backupDropdownRef = useRef(null);
     const chatDropdownRef = useRef(null); 
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
-
     const showToast = (message, type = "success") => {
         toast(message, { type });
     };
@@ -227,6 +227,15 @@ function TicketPage() {
 
     
     useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        console.log(theme)
+        if (theme == 'light') {
+        setLogo(lightLogo);
+        console.log(logo)
+        } else if (theme == 'dark') {
+        setLogo(darkLogo);
+        console.log(logo)
+        }
         // Handling outside clicks for dropdowns
         const handleOutsideClick = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -274,7 +283,6 @@ function TicketPage() {
                         <img src={logo} alt="Logo" style={{ width: '263px', height: '61px', marginRight: '30px' }} />
                         <h2>IT Support Hub</h2>
                     </a>
-
                     {/* Menu items */}
                     <div className="d-flex align-items-center">
                         <div className="nav-items">
@@ -398,7 +406,6 @@ function TicketPage() {
                 <FontAwesomeIcon
                     className="responsive-chat-icon"
                     icon={regularComment}
-                    style={{ color: '#1C1C1C' }}
                 />
             </div>
 
@@ -425,10 +432,16 @@ function TicketPage() {
                     setContactITModalOpen(false);
                 }}
             >
-                <Modal.Header closeButton className="modal-title text-white">
+                <Modal.Header>
                     <Modal.Title>
                         <h3 className="m-0">Contact IT</h3>
                     </Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setContactITModalOpen(false);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body className="chat-modal px-4 py-3">
                     <div className="contact-info">
@@ -436,15 +449,15 @@ function TicketPage() {
                             <h5 className="mb-1">
                                 Nathan Bascom
                             </h5>
-                            <p className="text-muted mb-1">(385) 272-1205</p>
-                            <p className="text-muted">nathan.b@goodearthmarkets.com</p>
+                            <p className="mb-1">(385) 272-1205</p>
+                            <p>nathan.b@goodearthmarkets.com</p>
                         </div>
                         <div className="mb-3">
                             <h5 className="mb-1">
                                 Trevor Christensen
                             </h5>
-                            <p className="text-muted mb-1">(385) 228-6977</p>
-                            <p className="text-muted">trevor.c@goodearthmarkets.com</p>
+                            <p className="mb-1">(385) 228-6977</p>
+                            <p className="">trevor.c@goodearthmarkets.com</p>
                         </div>
                     </div>
                 </Modal.Body>
@@ -466,10 +479,16 @@ function TicketPage() {
                 show={feedbackModalOpen}
                 onHide={() => setFeedbackModalOpen(false)}
             >
-                <Modal.Header closeButton className="modal-title text-white">
+                <Modal.Header>
                     <Modal.Title>
                         <h3 className="m-0">Submit Feedback</h3>
                     </Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setFeedbackModalOpen(false);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body>
                     <textarea
@@ -487,8 +506,14 @@ function TicketPage() {
             </Modal>
             {/* Archived Tickets Modal */}
             <Modal show={showArchivedModal} onHide={() => setShowArchivedModal(false)}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title><h3>Archived Tickets</h3></Modal.Title>
+                    <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setShowArchivedModal(false);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
                     {loading ? (

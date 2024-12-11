@@ -1,11 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { loginUser, registerUser } from "../utils/api";
 import { AuthContext } from "../utils/authContext.js";
 import { useNavigate } from "react-router-dom";
 import { Modal, Form } from 'react-bootstrap';
+import { FaTimes } from 'react-icons/fa';
 import ForgotPasswordPage from "../components/ForgotPass.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../images/gem_logo.png';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
 import logo2 from '../images/gem-singlelogo.png';
 import '../styles/App.css';
 
@@ -22,6 +24,7 @@ function LoginPage() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false); 
+    const [logo, setLogo] = useState('../images/gem_logo.png');
     const navigate = useNavigate();
 
     const stores = [
@@ -133,6 +136,18 @@ function LoginPage() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        console.log(theme)
+        if (theme == 'light') {
+        setLogo(lightLogo);
+        console.log(logo)
+        } else if (theme == 'dark') {
+        setLogo(darkLogo);
+        console.log(logo)
+        }
+    })
 
     return (
         <div className="container login-div">
@@ -261,10 +276,16 @@ function LoginPage() {
 
             {/* React-Bootstrap Modal */}
             <Modal show={modalVisible} onHide={() => setModalVisible(false)} centered>
-                <Modal.Header closeButton className="modal-title text-white">
+                <Modal.Header>
                         <Modal.Title>
                             <h3 className="m-0">Forgot Password?</h3>
                         </Modal.Title>
+                        <FaTimes
+                        className="close-modal-times"
+                        onClick={() => {
+                            setModalVisible(false);
+                        }}
+                    ></FaTimes>
                 </Modal.Header>
                 <Modal.Body>
                     <ForgotPasswordPage />

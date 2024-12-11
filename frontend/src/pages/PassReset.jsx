@@ -4,7 +4,8 @@ import { AuthContext } from '../utils/authContext';
 import { resetPassword } from "../utils/api"; 
 import { Tooltip } from 'react-tooltip'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../images/gem_logo.png';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
 import logo2 from '../images/gem-singlelogo.png';
 import '../styles/App.css';
 import { ToastContainer, toast, Bounce } from 'react-toastify'; 
@@ -13,6 +14,7 @@ import { FaSignOutAlt } from 'react-icons/fa';
 function PassReset() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [logo, setLogo] = useState('../images/gem_logo.png');
     const pathParts = location.pathname.split('/');
     const resetToken = pathParts[pathParts.length - 1];
     const { logout } = useContext(AuthContext);
@@ -65,6 +67,18 @@ function PassReset() {
             toast.error('Failed to reset password. Please try again.');
         }
     };
+
+    useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        console.log(theme)
+        if (theme == 'light') {
+        setLogo(lightLogo);
+        console.log(logo)
+        } else if (theme == 'dark') {
+        setLogo(darkLogo);
+        console.log(logo)
+        }
+    })
 
 
     return (

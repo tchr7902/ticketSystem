@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaSignOutAlt } from 'react-icons/fa';
@@ -6,13 +6,15 @@ import { ToastContainer, Bounce } from 'react-toastify';
 import { Tooltip } from 'react-tooltip';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
-import logo from '../images/gem_logo.png';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
 import logo2 from '../images/gem-singlelogo.png';
 
 const GuidesPage = () => {
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const [filter, setFilter] = useState('');
+    const [logo, setLogo] = useState('../images/gem_logo.png');
     const [iframeSrc, setIframeSrc] = useState(
         'https://docs.google.com/document/d/e/2PACX-1vT4q0E40LawciciDfBaNqL4cRGBDfT6p6SRfYHOuB9TYd127UII4jlBDO4icwcDSNFGo_HLXRpGlz5t/pub?embedded=true#heading=h.oadzu9jhr0yn'
     );
@@ -49,6 +51,18 @@ const GuidesPage = () => {
             );
         }
     };
+
+    useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        console.log(theme)
+        if (theme == 'light') {
+        setLogo(lightLogo);
+        console.log(logo)
+        } else if (theme == 'dark') {
+        setLogo(darkLogo);
+        console.log(logo)
+        }
+    })
 
     if (!user) {
         return (
