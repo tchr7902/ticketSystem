@@ -233,7 +233,7 @@ def get_current_user():
 
         if user_identity['role'] == 'admin':
             cursor.execute(
-                "SELECT id, first_name, last_name, store_id, email FROM admin WHERE id = %s", 
+                "SELECT id, first_name, last_name, store_id, email, phone_number FROM admin WHERE id = %s", 
                 (user_identity['id'],)
             )
             admin = cursor.fetchone()
@@ -245,6 +245,7 @@ def get_current_user():
                     'last_name': admin['last_name'],
                     'email': admin['email'],
                     'store_id': admin['store_id'],
+                    'phone_number': admin['phone_number'],
                     'role': 'admin'
                 }), 200
         else:
@@ -606,24 +607,18 @@ def send_message_to_all():
 @jwt_required()
 def update_ticket(user_id):
     user_identity_str = get_jwt_identity()
-    user = json.loads(user_identity_str)  # Deserialize identity
+    user_identity = json.loads(user_identity_str) 
     data = request.json
 
     # Validate input data
     required_fields = ['first_name', 'last_name', 'phone_number', 'store_id']
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields."}), 400
-
+    
     phone_number = data['phone_number']
 
     db = get_db()
     cursor = db.cursor(dictionary=True)
-
-    # Check if the user exists
-    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-    existing_user = cursor.fetchone()
-    if not existing_user:
-        return jsonify({"error": "User not found."}), 404
 
     # Check if the phone number is already in use by another user
     cursor.execute("SELECT id FROM users WHERE phone_number = %s AND id != %s", (phone_number, user_id))
@@ -633,15 +628,28 @@ def update_ticket(user_id):
 
     # Update user data
     try:
-        cursor.execute(
-            """
-            UPDATE users
-            SET first_name = %s, last_name = %s, phone_number = %s, store_id = %s
-            WHERE id = %s
-            """,
-            (data['first_name'], data['last_name'], phone_number, data['store_id'], user_id)
-        )
-        db.commit()
+        if user_identity['role'] != 'admin':  # Regular user update
+            cursor.execute(
+                """
+                UPDATE users
+                SET first_name = %s, last_name = %s, phone_number = %s, store_id = %s
+                WHERE id = %s
+                """,
+                (data['first_name'], data['last_name'], phone_number, data['store_id'], user_id)
+            )
+            db.commit()
+
+        else:  # Admin user update
+            cursor.execute(
+                """
+                UPDATE admin
+                SET first_name = %s, last_name = %s, phone_number = %s, store_id = %s
+                WHERE id = %s
+                """,
+                (data['first_name'], data['last_name'], phone_number, data['store_id'], user_id)
+            )
+            db.commit()
+
     except Exception as e:
         db.rollback()
         return jsonify({"error": f"Failed to update user: {str(e)}"}), 500
@@ -649,3 +657,4 @@ def update_ticket(user_id):
         cursor.close()
 
     return jsonify({"message": "User info updated successfully!"}), 200
+

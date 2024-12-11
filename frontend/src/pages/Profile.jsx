@@ -6,19 +6,11 @@ import { ToastContainer, Bounce } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { FaUser, FaArrowLeft, FaSignOutAlt, FaPencilAlt } from 'react-icons/fa';
-import { format } from 'date-fns-tz';
 import { Tooltip } from 'react-tooltip';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import logo from '../images/gem_logo.png';
 import logo2 from '../images/gem-singlelogo.png';
-
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const timeZone = 'America/Denver';
-    return format(date, "MMMM dd, yyyy 'at' h:mm a", { timeZone });
-};
-
 
 const ProfilePage = () => {
     const { user, logout } = useContext(AuthContext);
@@ -27,6 +19,7 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [formData, setFormData] = useState({});
+    const [editFormData, setEditFormData] = useState({});
 
 
     const showToast = (message, type = "success") => {
@@ -46,9 +39,11 @@ const ProfilePage = () => {
     ];
 
     const getStoreName = (store_id) => {
+        store_id = Number(store_id); // Ensure it's a number
         const store = stores.find(store => store.store_id === store_id);
         return store ? store.store_name : "Unknown Store";
     };
+    
 
     const handleLogout = () => {
         logout();
@@ -60,14 +55,17 @@ const ProfilePage = () => {
     };
 
     const handleEdit = () => {
+        setEditFormData({ ...formData });
         setShowEditModal(true);
     };
 
     const handleSave = async () => {
         try {
             setLoading(true);
-            await updateUser(user.id, formData);
+            await updateUser(user.id, editFormData);
+            setFormData({ ...editFormData }); 
             showToast("Profile updated successfully!");
+            setShowEditModal(false)
         } catch (error) {
             showToast(error.message || "Failed to update profile.", "error");
         } finally {
@@ -78,7 +76,7 @@ const ProfilePage = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setEditFormData({ ...editFormData, [name]: value });
     };
 
     const handlePhoneNumberChange = (e) => {
@@ -212,7 +210,7 @@ const ProfilePage = () => {
                             <Form.Control
                                 type="text"
                                 name="first_name"
-                                value={formData.first_name}
+                                value={editFormData.first_name}
                                 onChange={handleInputChange}
                                 className="edit-user-div"
                             />
@@ -222,7 +220,7 @@ const ProfilePage = () => {
                             <Form.Control
                                 type="text"
                                 name="last_name"
-                                value={formData.last_name}
+                                value={editFormData.last_name}
                                 onChange={handleInputChange}
                                 className="edit-user-div"
                             />
@@ -232,7 +230,7 @@ const ProfilePage = () => {
                             <Form.Control
                                 type="text"
                                 name="phone_number"
-                                value={formData.phone_number}
+                                value={editFormData.phone_number}
                                 onChange={handlePhoneNumberChange}
                                 className="edit-user-div"
                             />
@@ -241,7 +239,7 @@ const ProfilePage = () => {
                             <Form.Label className="edit-user-label">Store</Form.Label>
                             <Form.Select
                                 name="store_id"
-                                value={formData.store_id}
+                                value={editFormData.store_id}
                                 onChange={handleInputChange}
                                 className="edit-user-div"
                             >
