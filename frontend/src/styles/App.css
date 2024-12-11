@@ -41,6 +41,9 @@
   --dropdown-hover: #232323;
 }
 
+.root {
+  background-color: var(--background-color);
+}
 
 body {
   background-color: var(--root-color);
