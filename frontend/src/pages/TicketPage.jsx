@@ -420,42 +420,46 @@ function TicketPage() {
             )}
              {/* Contact IT Modal */}
              <Modal
-                    show={contactITModalOpen}
-                    onHide={() => {
-                        setContactITModalOpen(false);
-                    }}
-                >
-                    <Modal.Header closeButton className="modal-title text-white">
-                        <Modal.Title>
-                            <h3 className="m-0">Have a showstopping problem?</h3>
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="chat-modal px-4 py-3">
-                        <h5 className="modal-header text-secondary">
-                            Call or Text the IT Team Directly
-                        </h5>
-                        <div className="contact-info mb-2">
-                            <p className="mb-1">
-                                <strong>Nathan Bascom</strong> 
-                                <span className="text-muted"> - (385) 272-1205</span>
-                            </p>
-                            <p>
-                                <strong>Trevor Christensen</strong> 
-                                <span className="text-muted"> - (385) 228-6977</span>
-                            </p>
+                show={contactITModalOpen}
+                onHide={() => {
+                    setContactITModalOpen(false);
+                }}
+            >
+                <Modal.Header closeButton className="modal-title text-white">
+                    <Modal.Title>
+                        <h3 className="m-0">Contact IT</h3>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="chat-modal px-4 py-3">
+                    <div className="contact-info">
+                        <div className="mb-4 mt-3">
+                            <h5 className="mb-1">
+                                Nathan Bascom
+                            </h5>
+                            <p className="text-muted mb-1">(385) 272-1205</p>
+                            <p className="text-muted">nathan.b@goodearthmarkets.com</p>
                         </div>
-                    </Modal.Body>
-                    <Modal.Footer className="d-flex justify-content-end px-4">
-                        <button
-                            className="btn-2"
-                            onClick={() => {
-                                setContactITModalOpen(false);
-                            }}
-                        >
-                            Close
-                        </button>
-                    </Modal.Footer>
-                </Modal>
+                        <div className="mb-3">
+                            <h5 className="mb-1">
+                                Trevor Christensen
+                            </h5>
+                            <p className="text-muted mb-1">(385) 228-6977</p>
+                            <p className="text-muted">trevor.c@goodearthmarkets.com</p>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer className="d-flex justify-content-end px-4">
+                    <button
+                        className="btn-2"
+                        onClick={() => {
+                            setContactITModalOpen(false);
+                        }}
+                    >
+                        Close
+                    </button>
+                </Modal.Footer>
+            </Modal>
+
 
             {/* Submit Feedback Modal */}
             <Modal

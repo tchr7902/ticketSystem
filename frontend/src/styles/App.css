@@ -217,7 +217,7 @@ img {
 }
 
 .contact-info p {
-  padding-top: 20px;
+  padding-top: 5px;
   padding-left: 20px;
   font-size: 1.1rem;
 }
@@ -686,6 +686,7 @@ input, select, textarea {
 .icon:hover {
   transform: scale(1.09);
 }
+
 
 .register-icon {
   width: 45px;
