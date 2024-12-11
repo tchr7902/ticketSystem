@@ -36,7 +36,7 @@
   --btn-important-shadow: rgba(150, 193, 145, .15) 0 -25px 18px -14px inset,rgba(150, 193, 145, .10) 0 1px 2px,rgba(150, 193, 145, .10) 0 2px 4px,rgba(150, 193, 145, .10) 0 4px 8px,rgba(150, 193, 145, .10) 0 8px 16px,rgba(150, 193, 145, .10) 0 16px 32px;
   --btn-important-transition: box-shadow 0.3s ease, max-height 0.5s ease, padding 0.3s ease, max-height 0.3s ease-in-out;
   --btn-important-hover: rgba(100, 140, 95, .3) 0 -25px 18px -14px inset,rgba(100, 140, 95, .25) 0 1px 2px,rgba(100, 140, 95, .25) 0 2px 4px,rgba(100, 140, 95, .25) 0 4px 8px,rgba(100, 140, 95, .25) 0 8px 16px,rgba(100, 140, 95, .25) 0 16px 32px;
-  --background-opacity: .025;
+  --background-opacity: .04;
   --navbar-border: 1px solid rgba(105, 105, 105, 0.3);
   --dropdown-hover: #232323;
 }
