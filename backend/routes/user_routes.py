@@ -500,6 +500,7 @@ def forgot_password():
         mail.send(msg)
         return jsonify({"message": "Password reset email sent! Follow the link in your email to reset your password."}), 200
     except Exception as e:
+        print({str(e)})
         return jsonify({"message": f"Error sending email: {str(e)}"}), 500
 
 # Reset Pass
