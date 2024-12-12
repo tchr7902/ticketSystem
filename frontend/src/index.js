@@ -11,8 +11,8 @@ import 'react-tooltip/dist/react-tooltip.css'
 ReactDOM.render(
     <Router>
         <AuthProvider>
-=            <App />
-=        </AuthProvider>
+           <App />
+        </AuthProvider>
     </Router>,
     document.getElementById('root')
 );
