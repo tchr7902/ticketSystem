@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'r
 import LoginPage from './pages/Login';
 import TicketPage from './pages/TicketPage';
 import ProfilePage from './pages/Profile';
-import SettingsPage from './pages/Settings';  // Import SettingsPage
+import SettingsPage from './pages/Settings';  
 import AdminRegister from './pages/AdminRegister';
 import PassReset from './pages/PassReset';
 import GuidesPage from './pages/Guides';
@@ -31,11 +31,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme); }
-
+    localStorage.setItem('theme', theme); 
   }, [theme]);
 
   useEffect(() => {

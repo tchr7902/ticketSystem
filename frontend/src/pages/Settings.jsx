@@ -139,7 +139,7 @@ const SettingsPage = ({toggleTheme, theme}) => {
                 pauseOnFocusLoss={false}
                 draggable
                 pauseOnHover={false}
-                theme="light"
+                theme={theme}
                 transition={Bounce}
             />
             <nav className="profile-navbar">

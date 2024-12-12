@@ -11,7 +11,7 @@ import '../styles/App.css';
 import { ToastContainer, toast, Bounce } from 'react-toastify'; 
 import { FaSignOutAlt } from 'react-icons/fa';
 
-function PassReset() {
+function PassReset({}) {
     const navigate = useNavigate();
     const location = useLocation();
     const [logo, setLogo] = useState('../images/gem_logo.png');
@@ -22,6 +22,7 @@ function PassReset() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const theme = localStorage.getItem('theme');
 
     const handleLogout = () => {
         logout();
@@ -69,7 +70,6 @@ function PassReset() {
     };
 
     useEffect(() => {
-        const theme = localStorage.getItem('theme');
         if (theme == 'light') {
         setLogo(lightLogo);
         } else if (theme == 'dark') {
@@ -90,7 +90,7 @@ function PassReset() {
                 pauseOnFocusLoss={false}
                 draggable
                 pauseOnHover={false}
-                theme="light"
+                theme={theme}
                 transition={Bounce}
             />
             <nav className="profile-navbar">

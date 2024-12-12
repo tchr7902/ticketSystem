@@ -12,7 +12,7 @@ import { FaSignOutAlt, FaArrowLeft, FaTrashAlt, FaEye, FaTimes } from 'react-ico
 import { Tooltip } from 'react-tooltip'
 import '../styles/App.css';
 
-function AdminRegister() {
+function AdminRegister({}) {
     const { logout } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -33,6 +33,7 @@ function AdminRegister() {
     const [userToDelete, setUserToDelete] = useState(null); 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
     const [logo, setLogo] = useState('../images/gem_logo.png');
+    const theme = localStorage.getItem('theme');
 
 
     const stores = [
@@ -181,17 +182,17 @@ function AdminRegister() {
     return (
         <div className="container d-flex flex-column align-items-center vh-100">
             <ToastContainer
-                    position="top-center"
-                    autoClose={3000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss={false}
-                    draggable
-                    pauseOnHover={false}
-                    theme="light"
-                    transition={Bounce}
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover={false}
+                theme={theme}
+                transition={Bounce}
             />
             <nav className="profile-navbar">
                 <FaArrowLeft className="react-icon" size={40} onClick={backButton}

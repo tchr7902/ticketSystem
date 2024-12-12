@@ -119,7 +119,7 @@ const CollapsibleCard = ({
 
 
 
-function TicketPage() {
+function TicketPage({}) {
     const { user, logout, getArchivedTickets } = useContext(AuthContext);
     const [archivedTickets, setArchivedTickets] = useState([]);
     const [showArchivedModal, setShowArchivedModal] = useState(false);
@@ -134,6 +134,7 @@ function TicketPage() {
     const backupDropdownRef = useRef(null);
     const chatDropdownRef = useRef(null); 
     const [loading, setLoading] = useState(false);
+    const theme = localStorage.getItem('theme');
     const navigate = useNavigate();
     const showToast = (message, type = "success") => {
         toast(message, { type });
@@ -227,7 +228,6 @@ function TicketPage() {
 
     
     useEffect(() => {
-        const theme = localStorage.getItem('theme');
         if (theme == 'light') {
         setLogo(lightLogo);
         } else if (theme == 'dark') {
@@ -372,7 +372,7 @@ function TicketPage() {
                 {/* Toast Container */}
                 <ToastContainer
                     position="top-center"
-                    autoClose={3000}
+                    autoClose={5000}
                     hideProgressBar={false}
                     newestOnTop={false}
                     closeOnClick
@@ -380,7 +380,7 @@ function TicketPage() {
                     pauseOnFocusLoss={false}
                     draggable
                     pauseOnHover={false}
-                    theme="light"
+                    theme={theme}
                     transition={Bounce}
                 />
                 <TicketList setShowArchivedModal={setShowArchivedModal}/>

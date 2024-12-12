@@ -13,7 +13,7 @@ import lightLogo from '../images/gem_logo.png';
 import darkLogo from '../images/gem_logo_white.png';
 import logo2 from '../images/gem-singlelogo.png';
 
-const ProfilePage = () => {
+const ProfilePage = ({}) => {
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const [logo, setLogo] = useState('../images/gem_logo.png');
@@ -22,6 +22,7 @@ const ProfilePage = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [formData, setFormData] = useState({});
     const [editFormData, setEditFormData] = useState({});
+    const theme = localStorage.getItem('theme');
 
 
     const showToast = (message, type = "success") => {
@@ -102,7 +103,6 @@ const ProfilePage = () => {
     };
 
     useEffect(() => {
-        const theme = localStorage.getItem('theme');
         if (theme == 'light') {
         setLogo(lightLogo);
         } else if (theme == 'dark') {
@@ -148,7 +148,7 @@ const ProfilePage = () => {
         <div className="container mt-5">
             <ToastContainer
                 position="top-center"
-                autoClose={3000}
+                autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick
@@ -156,7 +156,7 @@ const ProfilePage = () => {
                 pauseOnFocusLoss={false}
                 draggable
                 pauseOnHover={false}
-                theme="light"
+                theme={theme}
                 transition={Bounce}
             />
             <nav className="profile-navbar">
