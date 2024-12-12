@@ -31,9 +31,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    
+    if (token) {
+      
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme); 
+    localStorage.setItem('theme', theme); }
+
   }, [theme]);
 
   useEffect(() => {
