@@ -103,13 +103,10 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const theme = localStorage.getItem('theme');
-        console.log(theme)
         if (theme == 'light') {
         setLogo(lightLogo);
-        console.log(logo)
         } else if (theme == 'dark') {
         setLogo(darkLogo);
-        console.log(logo)
         }
         if (user) {
             setFormData({
@@ -268,6 +265,7 @@ const ProfilePage = () => {
                             </Form.Select>
                         </Form.Group>
                     </Form>
+                    <p><small><i>To change your email or password, please visit the settings page.</i></small></p>
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn-2" onClick={() => setShowEditModal(false)}>

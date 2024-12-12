@@ -27,7 +27,6 @@ function TicketForm({ selectedTicket, onSave }) {
                 const { image_url } = response; 
                 
                 setImageUrl(image_url);
-                console.log("Signed URL:", image_url); 
             } catch (error) {
                 console.error("Error uploading image:", error);
             }

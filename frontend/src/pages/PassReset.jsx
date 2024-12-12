@@ -70,13 +70,10 @@ function PassReset() {
 
     useEffect(() => {
         const theme = localStorage.getItem('theme');
-        console.log(theme)
         if (theme == 'light') {
         setLogo(lightLogo);
-        console.log(logo)
         } else if (theme == 'dark') {
         setLogo(darkLogo);
-        console.log(logo)
         }
     })
 

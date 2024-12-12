@@ -139,13 +139,10 @@ function LoginPage() {
 
     useEffect(() => {
         const theme = localStorage.getItem('theme');
-        console.log(theme)
         if (theme == 'light') {
         setLogo(lightLogo);
-        console.log(logo)
         } else if (theme == 'dark') {
         setLogo(darkLogo);
-        console.log(logo)
         }
     })
 
@@ -255,7 +252,7 @@ function LoginPage() {
                         {loading ? "Loading..." : (isRegister ? "Register" : "Login")}
                     </button>
                     <p 
-                        className="text-center text-secondary mt-3 text-decoration-underline" 
+                        className="text-center mt-3 text-decoration-underline" 
                         style={{ cursor: "pointer" }} 
                         onClick={() => setIsRegister(!isRegister)}
                     >
@@ -264,7 +261,7 @@ function LoginPage() {
                             : "Don't have an account? Register"}
                     </p>
                     <p 
-                        className="text-center text-secondary text-decoration-underline" 
+                        className="text-center text-decoration-underline" 
                         style={{ cursor: "pointer" }}
                         onClick={() => setModalVisible(true)} // Open modal on click
                     >
