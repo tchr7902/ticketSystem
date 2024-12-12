@@ -18,6 +18,7 @@
   --background-opacity: .05;
   --navbar-border: 1px solid rgb(28, 28, 28, .3);
   --dropdown-hover: #eeeeee;
+  --severity-banner-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 /* Dark Theme */
@@ -41,6 +42,9 @@
   --btn-important-hover: rgba(100, 140, 95, .3) 0 -25px 18px -14px inset,rgba(100, 140, 95, .25) 0 1px 2px,rgba(100, 140, 95, .25) 0 2px 4px,rgba(100, 140, 95, .25) 0 4px 8px,rgba(100, 140, 95, .25) 0 8px 16px,rgba(100, 140, 95, .25) 0 16px 32px;
   --navbar-border: 1px solid rgba(105, 105, 105, 0.3);
   --dropdown-hover: #333333;
+  --severity-banner-shadow: 0 2px 5px rgba(158, 158, 158, 0.4);
+  --toastify-color-dark: #1f1f1f !important;
+  --toastify-text-color-dark: #cccccc !important;
 }
 
 .root {
@@ -949,7 +953,7 @@ option:hover {
   transform-origin: top right;
   height: 15px;
   width: 100px; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--severity-banner-shadow);
 }
 
 .severity-banner.Low {

@@ -138,8 +138,8 @@ function TicketForm({ selectedTicket, onSave }) {
             )}
 
             {!selectedTicket ? (
-            <div className="input-form-box" onClick={handleDivClick}>
-            <div className="form-control image-upload">
+            <div className="input-form-box">
+            <div className="form-control image-upload" onClick={handleDivClick}>
               {/* Hidden File Input */}
               <input
                 type="file"
