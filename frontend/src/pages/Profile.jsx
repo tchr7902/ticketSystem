@@ -276,9 +276,9 @@ const ProfilePage = ({}) => {
                     </button>
                 </Modal.Footer>
             </Modal>
-            <Tooltip id="logout-tooltip" />
-            <Tooltip id="back-tooltip" />
-            <Tooltip id="edit-user-tooltip" />
+            <Tooltip className="react-tooltip" id="logout-tooltip" />
+            <Tooltip className="react-tooltip" id="back-tooltip" />
+            <Tooltip className="react-tooltip" id="edit-user-tooltip" />
         </div>
     );
 };

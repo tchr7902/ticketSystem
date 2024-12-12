@@ -253,8 +253,8 @@ const SettingsPage = ({toggleTheme, theme}) => {
                     </form>
                 </div>
             </div>
-            <Tooltip id="logout-tooltip" />
-            <Tooltip id="back-tooltip" />
+            <Tooltip className="react-tooltip" id="logout-tooltip" />
+            <Tooltip className="react-tooltip" id="back-tooltip" />
         </div>
     );
 };

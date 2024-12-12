@@ -968,6 +968,12 @@ option:hover {
   background-color: rgba(233, 56, 56, 0.7);
 }
 
+.react-tooltip {
+  background-color: var(--text-color) !important;
+  color: var(--background-color) !important;
+  padding: 3px 6px 2px !important;
+}
+
 .static-status {
   text-align: center;
   margin-top: 5px;

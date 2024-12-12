@@ -107,7 +107,7 @@ function PassReset({}) {
                 data-tooltip-content="Logout"
                 data-tooltip-delay-show={300}></FaSignOutAlt>
             </nav>
-            <Tooltip id="logout-tooltip" />
+            <Tooltip className="react-tooltip" id="logout-tooltip" />
             <div className="change-div">
                 <div className="col-md-6 change">
                     <h3 className="mb-4">Reset Password</h3>

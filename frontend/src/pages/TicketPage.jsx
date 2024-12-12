@@ -34,34 +34,30 @@ const CollapsibleCard = ({
     handleDeleteArchivedTicket,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false); // State for showing confirmation buttons
+    const [showConfirmation, setShowConfirmation] = useState(false); 
 
     const formatDate = (dateString) => {
-        const date = new Date(dateString); // Ensure valid date
-        if (isNaN(date)) return 'Invalid Date'; // Handle invalid date
+        const date = new Date(dateString); 
+        if (isNaN(date)) return 'Invalid Date';
         const timeZone = 'America/Denver';
         return format(date, "MMMM dd, yyyy 'at' h:mm a", { timeZone });
     };
 
-    // Toggle card open/close
     const handleCardClick = () => setIsOpen(!isOpen);
 
-    // Handle delete click to show confirmation buttons
     const handleDeleteClick = (e) => {
-        e.stopPropagation(); // Prevent the card from collapsing when clicking delete
-        setShowConfirmation(true); // Show the confirmation buttons (check and X)
+        e.stopPropagation(); 
+        setShowConfirmation(true); 
     };
 
-    // Handle delete confirmation
     const handleConfirmDelete = () => {
-        handleDeleteArchivedTicket(archivedTicketId); // Call delete function
-        setShowConfirmation(false); // Hide confirmation buttons and show trash can again
+        handleDeleteArchivedTicket(archivedTicketId); 
+        setShowConfirmation(false); 
     };
 
-    // Handle cancel delete
     const handleCancelDelete = (e) => {
-        e.stopPropagation(); // Prevent the card from collapsing when clicking delete
-        setShowConfirmation(false); // Hide confirmation buttons and show trash can again
+        e.stopPropagation(); 
+        setShowConfirmation(false); 
     };
 
     return (
@@ -110,9 +106,9 @@ const CollapsibleCard = ({
                     </div>
                 </div>     
             )}
-            <Tooltip id="archive-delete" />
-            <Tooltip id="archive-cancel" />
-            <Tooltip id="archive-confirm" />
+            <Tooltip className="react-tooltip" id="archive-delete" />
+            <Tooltip className="react-tooltip" id="archive-cancel" />
+            <Tooltip className="react-tooltip" id="archive-confirm" />
         </div>
     );
 };
@@ -233,7 +229,6 @@ function TicketPage({}) {
         } else if (theme == 'dark') {
         setLogo(darkLogo);
         }
-        // Handling outside clicks for dropdowns
         const handleOutsideClick = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setDropdownOpen(false);
@@ -246,7 +241,6 @@ function TicketPage({}) {
             }
         };
     
-        // Fetch archived tickets if modal is shown
         if (showArchivedModal) {
             fetchArchivedTickets();
         }

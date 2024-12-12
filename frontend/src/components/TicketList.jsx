@@ -207,7 +207,7 @@ function TicketList({setShowArchivedModal}) {
                             />
                         </div>
                     </div>
-                    <Tooltip id="archive-button-tooltip" />
+                    <Tooltip className="react-tooltip" id="archive-button-tooltip" />
                     <div className="type-div">
                         <input
                             type="text"
@@ -396,11 +396,11 @@ function TicketList({setShowArchivedModal}) {
                 )}
             </div>
 
-            <Tooltip id="status-tooltip" />
-            <Tooltip id="edit-tooltip" />
-            <Tooltip id="delete-tooltip" />
-            <Tooltip id="archive-tooltip" />
-            <Tooltip id="severity-tooltip" />
+            <Tooltip className="react-tooltip" id="status-tooltip" />
+            <Tooltip className="react-tooltip" id="edit-tooltip" />
+            <Tooltip className="react-tooltip" id="delete-tooltip" />
+            <Tooltip className="react-tooltip" id="archive-tooltip" />
+            <Tooltip className="react-tooltip" id="severity-tooltip" />
              {/* Edit Ticket Modal */}
              <Modal
                 show={showEditModal}
