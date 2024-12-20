@@ -76,7 +76,11 @@ def register():
     cursor = db.cursor()
     try:
         # Check for existing email
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        cursor.execute("""
+            SELECT * FROM admin WHERE email = %s
+            UNION
+            SELECT * FROM users WHERE email = %s
+        """, (email, email))
         if cursor.fetchone():
             return jsonify({"error": "Account already registered with this email."}), 400
 
@@ -433,7 +437,11 @@ def change_email():
                 return jsonify({"error": "Current email is incorrect."}), 401
             
             # Check for existing email
-            cursor.execute("SELECT * FROM users WHERE email = %s", (new_email,))
+            cursor.execute("""
+                SELECT * FROM admin WHERE email = %s
+                UNION
+                SELECT * FROM users WHERE email = %s
+            """, (new_email, new_email))
             if cursor.fetchone():
                 return jsonify({"error": "Account already registered with this email."}), 400
 

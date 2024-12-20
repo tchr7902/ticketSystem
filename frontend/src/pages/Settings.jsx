@@ -77,7 +77,7 @@ const SettingsPage = ({toggleTheme, theme}) => {
 
             setTimeout(() => toast.success('Email updated successfully!'), 100);
         } catch (err) {
-            setTimeout(() => toast.error(err.message), 100); 
+            setTimeout(() => toast.error("Error updating email. User may already be registered with this email."), 100); 
         }
     };
 
