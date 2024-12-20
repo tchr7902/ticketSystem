@@ -96,7 +96,7 @@ const ProfilePage = ({}) => {
         }
     
         // Update formData state with formatted phone number
-        setFormData((prevData) => ({
+        setEditFormData((prevData) => ({
             ...prevData,
             phone_number: formatted,
         }));
