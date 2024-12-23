@@ -78,6 +78,7 @@ function TicketList({setShowArchivedModal}) {
     };
 
     const handleDelete = async () => {
+        setLoading(true);
         try {
             if (ticketToDelete) {
                 await deleteTicket(ticketToDelete.id);
@@ -89,6 +90,7 @@ function TicketList({setShowArchivedModal}) {
             showToast("Error deleting ticket. Please try again.", "error");
         } finally {
             setShowDeleteModal(false);
+            setLoading(false);
         }
     };
 

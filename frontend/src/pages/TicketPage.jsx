@@ -492,7 +492,7 @@ function TicketPage({}) {
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn-2" onClick={() => setFeedbackModalOpen(false)}>Close</button>
-                    <button className="btn-important" onClick={handleSubmitUserFeedback}>Submit</button>
+                    <button className="btn-important" onClick={handleSubmitUserFeedback}>Send</button>
                 </Modal.Footer>
             </Modal>
             {/* Archived Tickets Modal */}

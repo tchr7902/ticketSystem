@@ -491,6 +491,10 @@ img {
   margin-right: 5px;
  }
 
+ .react-icon {
+  color: var(--text-color)
+ }
+
  .react-icon:hover {
   cursor: pointer;
   transform: scale(1.07);
@@ -1037,12 +1041,13 @@ option:hover {
 }
 
 .card-header {
-  background-color: var(--background-color);
+  background-color: var(--navbar-color);
   padding: 15px;
   font-weight: 500;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: var(--text-color)
 }
 
 .collapsible-card-body {
@@ -1070,13 +1075,17 @@ option:hover {
   padding: 15px;
 }
 
+.card.active {
+  box-shadow: var(--box-shadow)
+}
+
 .open-card {
   max-height: 100%;
   height: auto;
 }
 
 .card:hover {
-  scale: 1.005;
+  scale: 1.002;
   box-shadow: var(--box-shadow-hover);
 }
 
