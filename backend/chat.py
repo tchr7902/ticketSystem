@@ -237,7 +237,7 @@ def send_feedback_message(feedback_data):
         'text': (
             f"💬 *New Feedback Received!*\n\n"
             f"*Submitted By:* {feedback_data['name']}\n"
-            f"*Feedback:* {feedback_data['feedback']}\n\n"
+            f"*Feedback:* {feedback_data['feedback']}\n"
             f"*Contact Info:* {feedback_data['contact_method']}\n"
         )
     }

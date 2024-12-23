@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, g, Response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message
+from chat import create_user_space, add_members_to_space, send_message, send_google_chat_message, send_feedback_message
 from werkzeug.security import generate_password_hash, check_password_hash
 from config.db_config import connect_to_db
 import logging
