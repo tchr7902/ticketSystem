@@ -154,7 +154,7 @@ function TicketForm({ selectedTicket, onSave }) {
                 {/* Display selected file name */}
                 {fileName && (
                 <div className="file-name">
-                    Selected file: {fileName}
+                    Selected image: {fileName}
                 </div>
                 )}
             </div>

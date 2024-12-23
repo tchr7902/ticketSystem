@@ -38,7 +38,7 @@ def send_google_chat_message(ticket, image_url=None):
     )
 
     if image_url:
-        message_text += f"*Image URL:* {image_url}\n"
+        message_text += f"Image: <{image_url}|Download>\n"
 
     # Prepare the message payload
     message = {"text": message_text}
