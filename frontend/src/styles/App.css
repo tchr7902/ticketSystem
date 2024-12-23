@@ -807,6 +807,29 @@ option:hover {
   overflow: visible;
 }
 
+.download-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.download-image a {
+  color: var(--text-color);
+  margin: 10px 0px 5px;
+}
+
+.url-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.url-image p {
+  margin: 0px 0px 7px;
+  opacity: .5;
+}
+
 .delete-button-container {
   display: flex;
   flex-direction: row;

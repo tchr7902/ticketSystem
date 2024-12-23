@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaFileUpload } from 'react-icons/fa'
+import { FaFileUpload, FaFileDownload } from 'react-icons/fa'
 import { useAuth } from "../utils/authContext";
 import { uploadImage } from "../utils/api";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -139,26 +139,38 @@ function TicketForm({ selectedTicket, onSave }) {
 
             {!selectedTicket ? (
             <div className="input-form-box">
-            <div className="form-control image-upload" onClick={handleDivClick}>
-              {/* Hidden File Input */}
-              <input
-                type="file"
-                id="imageUpload"
-                onChange={handleImageChange}
-                style={{ display: 'none' }} // Hide default file input
-              />
+                <div className="form-control image-upload" onClick={handleDivClick}>
+                {/* Hidden File Input */}
+                <input
+                    type="file"
+                    id="imageUpload"
+                    onChange={handleImageChange}
+                    style={{ display: 'none' }} // Hide default file input
+                />
                 <span>Upload Image</span>
-                <FaFileUpload/>
+                <FaFileUpload />
+                </div>
+
+                {/* Display selected file name */}
+                {fileName && (
+                <div className="file-name">
+                    Selected file: {fileName}
+                </div>
+                )}
             </div>
-      
-            {/* Display selected file name */}
-            {fileName && (
-              <div className="file-name">
-                Selected file: {fileName}
-              </div>
+            ) : (
+            selectedTicket.image_url ? (
+                <div>
+                <div className="download-image">
+                <a href={selectedTicket.image_url}>Download Uploaded Image</a>
+                <FaFileDownload />
+                </div>
+                <div className="url-image">
+                <p>{selectedTicket.image_url.split('/').pop().split('?')[0]}</p>
+                </div>
+                </div>
+            ) : null
             )}
-          </div>
-            ) : null}
 
             <div className="input-form-box d-flex flex-column align-items-center">
                 <div className="input-div">
