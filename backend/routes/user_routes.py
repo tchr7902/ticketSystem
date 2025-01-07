@@ -631,12 +631,6 @@ def update_ticket(user_id):
     db = get_db()
     cursor = db.cursor(dictionary=True)
 
-    # Check if the phone number is already in use by another user
-    cursor.execute("SELECT id FROM users WHERE phone_number = %s AND id != %s", (phone_number, user_id))
-    phone_conflict = cursor.fetchone()
-    if phone_conflict:
-        return jsonify({"error": "Phone number registered to another account."}), 400
-
     # Update user data
     try:
         if user_identity['role'] != 'admin':  # Regular user update
