@@ -76,11 +76,13 @@ def register():
     cursor = db.cursor()
     try:
         # Check for existing email
+        print('attempting to see if theres other users')
         cursor.execute("""
-            SELECT * FROM admin WHERE email = %s
+            SELECT email FROM admin WHERE email = %s
             UNION
-            SELECT * FROM users WHERE email = %s
+            SELECT email FROM users WHERE email = %s
         """, (email, email))
+        print('query worked')
         if cursor.fetchone():
             return jsonify({"error": "Account already registered with this email."}), 400
 
