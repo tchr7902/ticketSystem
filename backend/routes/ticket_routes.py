@@ -132,10 +132,7 @@ def create_ticket():
         # Send a chat notification
         message_text = (
             f"🛠️ *Hello {first_name}!*\n\n"
-            f"The IT team has received your ticket: *{data['title']}*.\n\n"
-            f"We will begin addressing your request as soon as possible. "
-            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
-            "Thank you!"
+            f"The IT Team has received your ticket '*{data['title']}*' and will start working on it shortly.\n"
         )
         send_message(space_id, message_text)
 
@@ -177,7 +174,7 @@ def update_ticket(ticket_id):
     if old_description != data['description']:  # Only if description has changed
         last_update_index = data['description'].rfind("Update:")  # Find the last "Update:"
         if last_update_index != -1:
-            notes = f"*Update*: {data['description'][last_update_index + len('Update:'):].strip()}\n\n"  # Capture after "Update:"
+            notes = f"\n*Update*: {data['description'][last_update_index + len('Update:'):].strip()}"  # Capture after "Update:"
 
     # Send the message regardless of whether there is a new update
     if user['role'] == 'admin':
@@ -193,9 +190,8 @@ def update_ticket(ticket_id):
             # Send the chat notification, including the new "Update:" if there is one
             message_text = (
                 f"📢 *Hello {first_name}!*\n\n"
-                f"The status of your ticket *{ticket['title']}* has been updated to: *{data['status']}*.\n\n"
+                f"Your ticket '*{ticket['title']}*' is now *{data['status']}*.\n"
                 f"{notes}"
-                f"Thank you for your patience!"
             )
             send_message(space_id, message_text)
 
@@ -469,11 +465,8 @@ def submit_chat_ticket():
             add_members_to_space(space_id, ticket_email)
             message_text = (
             f"🛠️ *Hello {first_name}!*\n\n"
-            f"The IT team has received your ticket: *{data['title']}*.\n\n"
-            f"We will begin addressing your request as soon as possible. "
-            f"If your issue is *urgent* or *disrupting normal operations*, please don't hesitate to contact an IT member directly.\n\n"
-            "Thank you!"
-            )
+            f"The IT Team has received your ticket '*{data['title']}*' and will start working on it shortly.\n"
+        )
             send_message(space_id, message_text)
 
         return jsonify({'text': 'Your ticket has been successfully submitted!'}), 200

@@ -103,9 +103,9 @@ def register():
             message_text = (
                 f"🎉 *Hello {first_name}!*\n\n"
                 f"Thank you for registering with our IT Support Hub!\n\n"
-                f"You can create, view, update, and delete tickets anytime by visiting *gemtickets.org*.\nTo submit your tickets via Chats, please start a New Chat with *'Ticket System'*.\n\n"
+                f"You can create, view, update, and delete tickets anytime by visiting *gemtickets.org*.\nTo submit your tickets through Chats, please start a New Chat with *'Ticket System'*.\n\n"
                 f"Once we receive your ticket, we will get to it as soon as possible. You'll receive updates on your tickets right here in this chat.\n\n"
-                f"If you have any questions or need further assistance, feel free to reach out to the IT team directly.\n\n"
+                f"If you have any *urgent issues*, please reach out to the IT team directly.\n\n"
                 f"Thank you!"
             )
             send_message(space_id, message_text)
