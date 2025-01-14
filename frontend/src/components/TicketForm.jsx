@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaFileUpload, FaFileDownload } from 'react-icons/fa'
+import { FaFileUpload, FaFileDownload, FaEye } from 'react-icons/fa'
 import { useAuth } from "../utils/authContext";
 import { uploadImage } from "../utils/api";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,6 +14,7 @@ function TicketForm({ selectedTicket, onSave }) {
     const [image, setImage] = useState(null);
     const [fileName, setFileName] = useState('');
     const [imageUrl, setImageUrl] = useState(null); 
+    const [showImage, setShowImage] = useState(false);
     const { user } = useAuth(); 
 
     const handleImageChange = async (e) => {
@@ -36,7 +37,10 @@ function TicketForm({ selectedTicket, onSave }) {
     const handleDivClick = () => {
         document.getElementById('imageUpload').click();
       };
-    
+
+    const toggleImage = () => {
+    setShowImage((prevShowImage) => !prevShowImage);
+    };
     
     useEffect(() => {
         if (selectedTicket) {
@@ -162,12 +166,18 @@ function TicketForm({ selectedTicket, onSave }) {
             selectedTicket.image_url ? (
                 <div>
                 <div className="download-image">
-                <a href={selectedTicket.image_url}>Download Uploaded Image</a>
-                <FaFileDownload />
+                <a>Download Uploaded Image</a>
+                <a href={selectedTicket.image_url}><FaFileDownload className="react-icon"/></a>
                 </div>
                 <div className="url-image">
                 <p>{selectedTicket.image_url.split('/').pop().split('?')[0]}</p>
+                <FaEye className="react-icon image-eye" onClick={toggleImage}></FaEye>
                 </div>
+                {showImage && (
+                    <div className="uploaded-image-div">
+                    <img src={selectedTicket.image_url}></img>
+                    </div>
+                )}
                 </div>
             ) : null
             )}

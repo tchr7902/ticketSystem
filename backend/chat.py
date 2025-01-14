@@ -253,18 +253,16 @@ def send_feedback_message(feedback_data):
 
 def upload_image_to_gcs(file):
     """Upload the image to Google Cloud Storage and return a signed URL"""
-    # Sanitize filename
     filename = secure_filename(file.filename)
     blob = storage_client.bucket(GCS_BUCKET_NAME).blob(filename)
 
-    # Upload the file to the bucket
     blob.upload_from_file(file)
 
-    # Set the expiration time for the signed URL (e.g., 1 hour)
-    expiration_time = timedelta(hours=1)
+    expiration_time = timedelta(hours=730)
 
-    # Generate a signed URL for the uploaded image
     signed_url = blob.generate_signed_url(expiration=expiration_time, method="GET")
+
+    print(signed_url)
 
     return signed_url
 

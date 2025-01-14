@@ -118,7 +118,7 @@ def create_ticket():
     }
 
     # Send message to Google Chat with the image URL
-    send_google_chat_message(message_data, image_url)
+    # send_google_chat_message(message_data, image_url)
 
     # Create Google Chat space for the user and notify them
     space_info = create_user_space(email)

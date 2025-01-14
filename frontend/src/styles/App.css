@@ -508,6 +508,11 @@ img {
   outline: none;
 }
 
+.image-eye {
+  margin: 0px 0px 7px;
+  opacity: .5;
+}
+
 .backup-navbar {
   display: none;
 }
@@ -827,11 +832,18 @@ option:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 10px;
 }
 
 .url-image p {
   margin: 0px 0px 7px;
   opacity: .5;
+}
+
+.uploaded-image-div {
+  border: 1px solid var(--border-color-light);
+  padding: 10px;
+  margin: 10px;
 }
 
 .delete-button-container {
