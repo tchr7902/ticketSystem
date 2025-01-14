@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaFileUpload, FaFileDownload, FaEye } from 'react-icons/fa'
+import { FaFileUpload, FaFileDownload, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useAuth } from "../utils/authContext";
 import { uploadImage } from "../utils/api";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -171,11 +171,15 @@ function TicketForm({ selectedTicket, onSave }) {
                 </div>
                 <div className="url-image">
                 <p>{selectedTicket.image_url.split('/').pop().split('?')[0]}</p>
-                <FaEye className="react-icon image-eye" onClick={toggleImage}></FaEye>
+                {showImage ? (
+                    <FaEye className="react-icon image-eye" onClick={toggleImage} />
+                    ) : (
+                    <FaEyeSlash className="react-icon image-eye" onClick={toggleImage} />
+                    )}
                 </div>
                 {showImage && (
                     <div className="uploaded-image-div">
-                    <img src={selectedTicket.image_url}></img>
+                    <img src={selectedTicket.image_url} alt="Uploaded image not found"></img>
                     </div>
                 )}
                 </div>
