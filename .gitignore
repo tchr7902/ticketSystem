@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+./snipeit-credentials.json
+snipeit-credentials.json
+
 # C extensions
 *.so
 

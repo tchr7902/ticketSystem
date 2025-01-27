@@ -26,6 +26,7 @@ function TicketList({setShowArchivedModal}) {
     const [partsNeeded, setPartsNeeded] = useState("");
     const [archiveNotes, setArchiveNotes] = useState("");
     const [searchQuery, setSearchQuery] = useState('');
+    const [addToGoogleSheet, setAddToGoogleSheet] = useState(true);
 
     const filteredTickets = tickets.filter(ticket => {
         const formattedDate = ticket.created_at 
@@ -128,7 +129,7 @@ function TicketList({setShowArchivedModal}) {
         try {
             setLoading(true);
             if (ticketToArchive) {
-                await archiveTicket(ticketToArchive.id, archiveNotes, timeSpent, partsNeeded); 
+                await archiveTicket(ticketToArchive.id, archiveNotes, timeSpent, partsNeeded, addToGoogleSheet); 
                 setTickets(tickets.filter((ticket) => ticket.id !== ticketToArchive.id));
                 showToast("Ticket archived successfully!", "success");
             }
@@ -523,6 +524,14 @@ function TicketList({setShowArchivedModal}) {
                             onChange={(e) => setArchiveNotes(e.target.value)}
                             placeholder="Additional Notes"
                             id="notes"
+                        />
+
+                        <Form.Check
+                            className="add-to-sheets"
+                            type="checkbox"
+                            label="Add to Google Sheets"
+                            checked={addToGoogleSheet} 
+                            onChange={(e) => setAddToGoogleSheet(e.target.checked)} 
                         />
                         </Form.Group>
                     </Form>

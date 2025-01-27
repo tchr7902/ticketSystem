@@ -169,11 +169,11 @@ export const getUserTickets = async (user_id) => {
     }
 };
 
-export const archiveTicket = async (ticketId, archiveNotes, timeSpent, partsNeeded) => {
+export const archiveTicket = async (ticketId, archiveNotes, timeSpent, partsNeeded, addToGoogleSheet) => {
     try {
         const response = await axiosInstance.post(
             `${BASE_URL}/${ticketId}/archive`,
-            { archiveNotes, timeSpent, partsNeeded },
+            { archiveNotes, timeSpent, partsNeeded, addToGoogleSheet },
             {
                 headers: {
                     'Content-Type': 'application/json',

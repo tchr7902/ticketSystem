@@ -4,7 +4,14 @@ from config.db_config import connect_to_db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from chat import create_user_space, add_members_to_space, send_message, upload_image_to_gcs, send_google_chat_message, delete_image_from_gcs
 import json
+from googleapiclient.errors import HttpError
+from google.auth.transport.requests import Request
+from google.auth import credentials
+from google_sheet import add_ticket_to_google_sheet
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 tickets_bp = Blueprint('tickets', __name__)
 
@@ -335,6 +342,7 @@ def archive_ticket(ticket_id):
     notes = data.get('archiveNotes', '')
     time_spent = data.get('timeSpent', '')
     parts_needed = data.get('partsNeeded', '')
+    add_to_google_sheet = data.get('addToGoogleSheet', False)
 
     cursor = get_db().cursor()
 
@@ -352,6 +360,26 @@ def archive_ticket(ticket_id):
             raise Exception("Ticket transfer failed. No ticket with this ID found.")
 
         get_db().commit()
+
+        if add_to_google_sheet:
+            cursor.execute("SELECT title, description, severity, status, name, created_at, archived_at FROM archived_tickets WHERE original_ticket_id = %s", (ticket_id,))
+            ticket_data = cursor.fetchone()
+
+            ticket_values = {
+                "title": ticket_data[0],
+                "description": ticket_data[1],
+                "severity": ticket_data[2],
+                "notes": notes,
+                "time_spent": time_spent,
+                "parts_needed": parts_needed,
+                "status": ticket_data[3],
+                "submitted_by": ticket_data[4],
+                "created_at": ticket_data[5],
+                "archive_date": ticket_data[6]
+            }
+
+            spreadsheet_id = os.getenv('SHEET_ID')
+            add_ticket_to_google_sheet(ticket_values, spreadsheet_id)
 
         delete_ticket(ticket_id)
 

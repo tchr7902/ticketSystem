@@ -1176,6 +1176,10 @@ option:hover {
   max-width: 150px;
 }
 
+.add-to-sheets {
+  margin: 20px 0 0 10px;
+  
+}
 
 .dropdown-item:active {
   background-color: var(--primary-color);
