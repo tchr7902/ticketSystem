@@ -269,7 +269,7 @@ function TicketForm({ selectedTicket, onSave }) {
       </div>
 
       {user?.role === "admin" && (
-        <div className="form-box d-flex flex-column align-items-center">
+        <div className="form-box w-100 d-flex flex-column align-items-center">
           <div className="type-div">
             <textarea
               className="form-control input-box"
@@ -404,7 +404,7 @@ function TicketForm({ selectedTicket, onSave }) {
 
       <div className="input-form-box d-flex flex-column align-items-center">
         {user?.role === "admin" ? (
-          <div className="col-md-8 col-lg-4">
+          <div className="col-md-8 col-lg-4 w-100">
             <select
               className="form-select form-select-boxes select-box"
               value={status}
