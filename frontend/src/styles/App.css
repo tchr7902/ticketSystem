@@ -409,12 +409,20 @@ img {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .new-ticket-admin {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.ticket-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -593,11 +601,23 @@ input.imageUpload.form-control {
 
 option:hover {
   background-color: green !important;
+  cursor: pointer;
 }
 
 .type-div {
-  width: 80%;
+  width: 100%;
   max-width: 500px;
+  padding: 0 30px;
+}
+
+.title-form-box {
+  width: 100%;
+  max-width: 500px;
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .input-div {
@@ -743,6 +763,18 @@ option:hover {
 }
 
 .input-form-box {
+  width: 100%;
+  max-width: 225px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-input-form-box {
+  width: 100%;
+  max-width: 500px;
+  padding: 0 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1161,6 +1193,10 @@ option:hover {
 
 .form-select-boxes {
   max-width: 225px;
+}
+
+.title-form-select-boxes {
+  max-width: 500px;
 }
 
 .static-status {
