@@ -248,9 +248,15 @@ function TicketList({setShowArchivedModal}) {
                                         data-tooltip-delay-show={300}>
                                         {getStatusIcon(ticket.status)}
                                     </span>
-                                <div className="title-div">
-                                    <strong className="hide-text">{ticket.title}</strong>
-                                </div>
+                                    <div className="title-div">
+                                        <strong className="hide-text"
+                                            data-tooltip-id="title-tooltip"
+                                            data-tooltip-content={ticket.title}
+                                            data-tooltip-delay-show={300}
+                                            onClick={() => handleEdit(ticket)}>
+                                            {ticket.title}
+                                        </strong>
+                                    </div>
                                 <div className="icon-div">
                                     <button className="icon"
                                         onClick={() => handleEdit(ticket)}
@@ -302,9 +308,15 @@ function TicketList({setShowArchivedModal}) {
                                         data-tooltip-delay-show={300}>
                                         {getStatusIcon(ticket.status)}
                                     </span>
-                                <div className="title-div">
-                                    <strong className="hide-text">{ticket.title}</strong>
-                                </div>
+                                    <div className="title-div">
+                                        <strong className="hide-text"
+                                            data-tooltip-id="title-tooltip"
+                                            data-tooltip-content={ticket.title}
+                                            data-tooltip-delay-show={300}
+                                            onClick={() => handleEdit(ticket)}>
+                                            {ticket.title}
+                                        </strong>
+                                    </div>
                                 <div className="icon-div">
                                     <button className="icon"
                                         onClick={() => handleEdit(ticket)}
@@ -357,9 +369,15 @@ function TicketList({setShowArchivedModal}) {
                                         data-tooltip-delay-show={300}>
                                         {getStatusIcon(ticket.status)}
                                     </span>
-                                <div className="title-div">
-                                    <strong className="hide-text">{ticket.title}</strong>
-                                </div>
+                                    <div className="title-div">
+                                        <strong className="hide-text"
+                                            data-tooltip-id="title-tooltip"
+                                            data-tooltip-content={ticket.title}
+                                            data-tooltip-delay-show={300}
+                                            onClick={() => handleEdit(ticket)}>
+                                            {ticket.title}
+                                        </strong>
+                                    </div>
                                 <div className="icon-div">
                                     <button className="icon"
                                         onClick={() => handleEdit(ticket)}
@@ -404,6 +422,7 @@ function TicketList({setShowArchivedModal}) {
             <Tooltip className="react-tooltip" id="delete-tooltip" />
             <Tooltip className="react-tooltip" id="archive-tooltip" />
             <Tooltip className="react-tooltip" id="severity-tooltip" />
+            <Tooltip className="react-tooltip" id="title-tooltip" />
              {/* Edit Ticket Modal */}
              <Modal
                 show={showEditModal}

@@ -192,6 +192,11 @@ li:hover {
   max-width: 60%;
 }
 
+.hide-text:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
 .title-div {
   display: flex;
   justify-content: center;
