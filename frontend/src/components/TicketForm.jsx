@@ -27,6 +27,7 @@ function TicketForm({ selectedTicket, onSave }) {
       "Handheld Devices",
       "Workstations",
       "Battery Backups",
+      "Phones",
       "Cameras",
       "Music",
       "Other",
@@ -209,7 +210,7 @@ function TicketForm({ selectedTicket, onSave }) {
                 placeholder="Title"
                 value={customDetail}
                 onChange={handleCustomDetailChange}
-                maxLength={30}
+                maxLength={100}
                 required
               />
             </div>
@@ -247,7 +248,7 @@ function TicketForm({ selectedTicket, onSave }) {
                 placeholder="Title"
                 value={customDetail}
                 onChange={handleCustomDetailChange}
-                maxLength={30}
+                maxLength={100}
                 required
               />
             </div>
