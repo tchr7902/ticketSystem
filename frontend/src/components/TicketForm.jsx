@@ -246,7 +246,7 @@ function TicketForm({ selectedTicket, onSave }) {
         {ticketSubcategory === "Other" && ticketCategory !== "Other" && (
           <div className="title-form-box d-flex flex-column align-items-center">
             <div className="input-div">
-            <label className="custom-label" htmlFor="ticketCategory">Category</label>
+            <label className="custom-label" htmlFor="ticketCategory">Title</label>
               <input
                 type="text"
                 className="form-control input-box"
