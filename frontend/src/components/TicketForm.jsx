@@ -182,6 +182,7 @@ function TicketForm({ selectedTicket, onSave }) {
       <div className="form-box w-100 d-flex flex-column align-items-center">
         <div className="title-form-box d-flex flex-column align-items-center">
           <div className="input-div">
+          <label className="custom-label" htmlFor="ticketCategory">Category</label>
             <select
               className="form-select title-form-select-boxes select-box"
               value={ticketCategory}
@@ -204,6 +205,8 @@ function TicketForm({ selectedTicket, onSave }) {
         {ticketCategory === "Other" && (
           <div className="title-input-form-box d-flex flex-column align-items-center">
             <div className="input-div">
+            <label className="custom-label" htmlFor="ticketCategory">Title</label>
+
               <input
                 type="text"
                 className="form-control input-box"
@@ -220,6 +223,7 @@ function TicketForm({ selectedTicket, onSave }) {
         {ticketCategory && ticketCategory !== "Other" && (
           <div className="title-form-box d-flex flex-column align-items-center">
             <div className="input-div">
+            <label className="custom-label" htmlFor="ticketCategory">Subcategory</label>
               <select
                 className="form-select title-form-select-boxes select-box"
                 value={ticketSubcategory}
@@ -242,6 +246,7 @@ function TicketForm({ selectedTicket, onSave }) {
         {ticketSubcategory === "Other" && ticketCategory !== "Other" && (
           <div className="title-form-box d-flex flex-column align-items-center">
             <div className="input-div">
+            <label className="custom-label" htmlFor="ticketCategory">Category</label>
               <input
                 type="text"
                 className="form-control input-box"
@@ -258,6 +263,7 @@ function TicketForm({ selectedTicket, onSave }) {
 
       <div className="form-box w-100 d-flex flex-column align-items-center">
         <div className="type-div">
+        <label className="custom-label" htmlFor="ticketCategory">Description</label>
           <textarea
             className="form-control input-box"
             placeholder="Description"
@@ -272,6 +278,7 @@ function TicketForm({ selectedTicket, onSave }) {
       {user?.role === "admin" && (
         <div className="form-box w-100 d-flex flex-column align-items-center">
           <div className="type-div">
+          <label className="custom-label" htmlFor="ticketCategory">Updates</label>
             <textarea
               className="form-control input-box"
               placeholder="Updates"
@@ -285,6 +292,7 @@ function TicketForm({ selectedTicket, onSave }) {
 
       {!selectedTicket ? (
         <div className="input-form-box">
+          <label className="custom-label" htmlFor="ticketCategory">Image</label>
           <div className="form-control image-upload" onClick={handleDivClick}>
             <input
               type="file"
@@ -330,6 +338,7 @@ function TicketForm({ selectedTicket, onSave }) {
 
       <div className="input-form-box d-flex flex-column align-items-center">
         <div className="input-div">
+        <label className="custom-label" htmlFor="ticketCategory">Priority</label>
           <select
             className="form-select form-select-boxes select-box"
             value={severity}
@@ -362,6 +371,7 @@ function TicketForm({ selectedTicket, onSave }) {
 
       <div className="input-form-box d-flex flex-column align-items-center">
         <div className="input-div">
+        <label className="custom-label" htmlFor="ticketCategory">Contact Method</label>
           <select
             className="form-select form-select-boxes select-box"
             value={contactMethod}
@@ -405,7 +415,8 @@ function TicketForm({ selectedTicket, onSave }) {
 
       <div className="input-form-box d-flex flex-column align-items-center">
         {user?.role === "admin" ? (
-          <div className="col-md-8 col-lg-4 w-100">
+          <div className="input-form-box col-md-8 col-lg-4 w-100">
+          <label className="custom-label" htmlFor="ticketCategory">Ticket Status</label>
             <select
               className="form-select form-select-boxes select-box"
               value={status}
@@ -422,6 +433,7 @@ function TicketForm({ selectedTicket, onSave }) {
           </div>
         ) : (
           <div className="input-form-box col-md-8 col-lg-4">
+            <label className="custom-label" htmlFor="ticketCategory">Ticket Status</label>
             <input
               type="text"
               className="form-control form-select-boxes static-status"

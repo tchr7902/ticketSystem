@@ -613,6 +613,9 @@ option:hover {
   width: 100%;
   max-width: 500px;
   padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .title-form-box {
@@ -626,7 +629,10 @@ option:hover {
 }
 
 .input-div {
-  width: 100%
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .pass-form {
@@ -635,7 +641,7 @@ option:hover {
 
 .input-box {
   padding: 10px 15px;
-  margin-top: 7px;
+  margin-top: 0;
   margin-bottom: 7px;
   background-color: var(--background-color);
   color: var(--text-color);
@@ -656,7 +662,7 @@ option:hover {
 }
 
 .select-box {
-  margin-top: 7px;
+  margin-top: 0;
   margin-bottom: 7px;
   background-color: var(--background-color);
   border-radius: 15px;
@@ -773,7 +779,7 @@ option:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .title-input-form-box {
@@ -790,8 +796,8 @@ option:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 10px auto;
+  margin-top: 0;
   background-color: var(--background-color);
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 10px;
@@ -1052,7 +1058,7 @@ option:hover {
 
 .static-status {
   text-align: center;
-  margin-top: 5px;
+  margin-top: 0;
   margin-bottom: 5px;
   background-color: var(--background-color);
   border-radius: 15px;
@@ -1060,11 +1066,17 @@ option:hover {
   border: 0.5px solid var(--border-color-light);
   opacity: 0.8;
   color: var(--light-gray);
-  max-width: 150px;
+  max-width: 225px;
 }
 
 .static-status:hover {
   cursor: not-allowed;
+}
+
+.custom-label {
+  font-size: 0.7rem;
+  color: var(--secondary-text-color);
+  margin: 7px 0 2px;
 }
 
 .ticket-status-numbers {
@@ -1206,7 +1218,7 @@ option:hover {
 
 .static-status {
   text-align: center;
-  margin-top: 5px;
+  margin-top: 0;
   margin-bottom: 5px;
   background-color: var(--background-color);
   border-radius: 15px;
@@ -1214,7 +1226,7 @@ option:hover {
   border: 0.5px solid var(--border-color-light);
   opacity: 0.8;
   color: var(--light-gray);
-  max-width: 150px;
+  max-width: 225px;
 }
 
 .add-to-sheets {
@@ -1253,7 +1265,7 @@ option:hover {
   }
   .static-status {
     text-align: center;
-    margin-top: 5px;
+    margin-top: 0;
     margin-bottom: 5px;
     background-color: var(--background-color);
     border-radius: 15px;
@@ -1261,7 +1273,7 @@ option:hover {
     border: 0.5px solid var(--border-color-light);
     opacity: 0.8;
     color: var(--light-gray);
-    max-width: 150px;
+    max-width: 225px;
   }
 
 }
@@ -1269,12 +1281,11 @@ option:hover {
 @media screen and (max-width: 768px) {
   .form-select-boxes {
     width: 100%;
-    max-width: 180px;
   }
 
   .static-status {
     text-align: center;
-    margin-top: 5px;
+    margin-top: 0;
     margin-bottom: 5px;
     background-color: var(--background-color);
     border-radius: 15px;
@@ -1282,7 +1293,6 @@ option:hover {
     border: 0.5px solid var(--border-color-light);
     opacity: 0.8;
     color: var(--light-gray);
-    max-width: 150px;
   }
 }
 
