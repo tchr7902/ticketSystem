@@ -3,11 +3,12 @@ import { AuthContext } from '../utils/authContext';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaSignOutAlt, FaChartBar, FaChartLine, FaDownload } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
+import lightLogo from '../images/gem_logo.png';
+import darkLogo from '../images/gem_logo_white.png';
+import logo2 from '../images/gem-singlelogo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.css';
 import { fetchTickets, fetchArchivedTickets } from '../utils/api.js';
-
-// Import chart components and register Chart.js modules
 import { Line, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -23,11 +24,10 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
-const Analytics = () => {
+const Analytics = ({toggleTheme, theme}) => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // State for normal tickets, archived tickets, and combined filtered tickets
   const [tickets, setTickets] = useState([]);
   const [archivedTickets, setArchivedTickets] = useState([]);
   const [filteredTickets, setFilteredTickets] = useState([]);
@@ -36,9 +36,8 @@ const Analytics = () => {
   const [trendData, setTrendData] = useState([]);
   const [categoryData, setCategoryData] = useState({});
   const [priorityData, setPriorityData] = useState({});
+  const [logo, setLogo] = useState('../images/gem_logo.png');
 
-  // Helper to parse date strings.
-  // Converts archived ticket date format ("YYYY-MM-DD HH:MM:SS") to ISO ("YYYY-MM-DDTHH:MM:SS")
   const parseDate = (dateString) => {
     if (!dateString) return new Date();
     if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(dateString)) {
@@ -47,8 +46,6 @@ const Analytics = () => {
     return new Date(dateString);
   };
 
-  // Normalize archived tickets, which are received as arrays, into objects
-  // Assumes each archived ticket array has 14 items and the created_at field is at index 8.
   const normalizeArchivedTickets = (ticketsArray) => {
     return ticketsArray.map(ticketArr => {
       const [
@@ -68,7 +65,6 @@ const Analytics = () => {
         additionalInfo,
       ] = ticketArr;
       
-      // Convert created_at to ISO format if needed.
       const normalizedCreatedAt = created_at && created_at.indexOf('T') === -1
         ? created_at.replace(" ", "T")
         : created_at;
@@ -83,13 +79,17 @@ const Analytics = () => {
         severity,
         contact_method,
         name,
-        // Add other fields as needed.
       };
     });
   };
 
-  // Fetch tickets and archived tickets on mount
   useEffect(() => {
+    const theme = localStorage.getItem('theme');
+            if (theme == 'light') {
+            setLogo(lightLogo);
+            } else if (theme == 'dark') {
+            setLogo(darkLogo);
+            }
     const loadTickets = async () => {
       try {
         const data = await fetchTickets();
@@ -115,8 +115,6 @@ const Analytics = () => {
     }
   }, [user]);
 
-  // Combine tickets and filter based on the selected time range.
-  // Uses the parseDate helper to correctly handle both formats.
   useEffect(() => {
     const aggregatedTickets = [...tickets, ...archivedTickets];
     let cutoff;
@@ -140,19 +138,15 @@ const Analytics = () => {
     setFilteredTickets(filtered);
   }, [tickets, archivedTickets, timeFilter]);
 
-  // Compute overview metrics and chart data whenever filteredTickets changes.
   useEffect(() => {
-    // Overview metrics
     const openCount = filteredTickets.filter(ticket => ticket.status === "Open").length;
     const inProgressCount = filteredTickets.filter(ticket => ticket.status === "In Progress").length;
     const closedCount = filteredTickets.filter(ticket => ticket.status === "Closed").length;
     setOverviewMetrics({ open: openCount, inProgress: inProgressCount, closed: closedCount });
 
-    // Trend data: group by date (using local date string)
-    // Trend data: count tickets per day using created_at
+
     const trend = {};
     filteredTickets.forEach(ticket => {
-    // Use toISOString() to ensure consistent date formatting (YYYY-MM-DD)
     const date = parseDate(ticket.created_at).toISOString().split('T')[0];
     trend[date] = (trend[date] || 0) + 1;
     });
@@ -161,7 +155,6 @@ const Analytics = () => {
     setTrendData(trendArray);
 
 
-    // Category breakdown: using the first part of title split by " - "
     const catCount = {};
     filteredTickets.forEach(ticket => {
       const title = ticket.title || "Uncategorized";
@@ -174,7 +167,6 @@ const Analytics = () => {
     });
     setCategoryData(catCount);
 
-    // Priority breakdown: count by severity
     const prioCount = {};
     filteredTickets.forEach(ticket => {
       const sev = ticket.severity || "Unspecified";
@@ -183,7 +175,6 @@ const Analytics = () => {
     setPriorityData(prioCount);
   }, [filteredTickets]);
 
-  // Helper to compute average resolution time (in hours) from archived tickets.
   const computeAverageResolutionTime = () => {
     if (archivedTickets.length === 0) return 0;
     let totalHours = 0;
@@ -196,7 +187,6 @@ const Analytics = () => {
     return (totalHours / archivedTickets.length).toFixed(2);
   };
 
-  // Filter submission handler (triggers re-filtering based on the selected time range).
   const handleFilterSubmit = (e) => {
     e.preventDefault();
     const aggregatedTickets = [...tickets, ...archivedTickets];
@@ -222,7 +212,6 @@ const Analytics = () => {
     toast.info('Filters applied');
   };
 
-  // Export filtered tickets to CSV (using key fields).
   const exportToCsv = () => {
     if (filteredTickets.length === 0) {
       toast.error("No data to export");
@@ -249,7 +238,6 @@ const Analytics = () => {
     document.body.removeChild(link);
   };
 
-  // Navigation functions.
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -272,7 +260,6 @@ const Analytics = () => {
     );
   }
 
-  // Prepare chart data for visualizations.
   const trendChartData = {
     labels: trendData.map(item => item.date),
     datasets: [
@@ -337,14 +324,29 @@ const Analytics = () => {
 
   return (
     <div className="container mt-5 analytics-page">
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} />
-
       {/* Header */}
-      <nav className="analytics-navbar d-flex justify-content-between align-items-center">
-        <FaArrowLeft className="react-icon" size={30} onClick={handleBack} style={{ cursor: 'pointer' }} />
-        <h2 className="page-title">Analytics</h2>
-        <FaSignOutAlt className="react-icon" size={30} onClick={handleLogout} style={{ cursor: 'pointer' }} />
-      </nav>
+      <nav className="profile-navbar">
+                      <FaArrowLeft className="react-icon" size={40} onClick={handleBack}
+                      data-tooltip-id="back-tooltip"
+                      data-tooltip-content="Back"
+                      data-tooltip-delay-show={300}></FaArrowLeft>
+                      <img src={logo} alt="Logo" style={{ width: '375px', height: '86px' }} />
+                      <FaSignOutAlt className="react-icon" size={40} onClick={handleLogout}
+                      data-tooltip-id="logout-tooltip"
+                      data-tooltip-content="Logout"
+                      data-tooltip-delay-show={300}></FaSignOutAlt>
+                  </nav>
+                  <nav className="backup-profile-navbar">
+                      <FaArrowLeft className="react-icon" size={30} onClick={handleBack}
+                      data-tooltip-id="back-tooltip"
+                      data-tooltip-content="Back"
+                      data-tooltip-delay-show={300}></FaArrowLeft>
+                      <img src={logo2} alt="Logo" style={{ width: '91px', height: '91px' }} />
+                      <FaSignOutAlt className="react-icon" size={30} onClick={handleLogout}
+                      data-tooltip-id="logout-tooltip"
+                      data-tooltip-content="Logout"
+                      data-tooltip-delay-show={300}></FaSignOutAlt>
+                  </nav>
 
       {/* Overview Metrics */}
       <section className="overview-metrics mt-4">
