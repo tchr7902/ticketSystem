@@ -10,7 +10,7 @@ import darkLogo from '../images/gem_logo_white.png';
 import { ToastContainer, Bounce } from 'react-toastify';
 import { FaBars, FaCheck, FaTimes } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook, FaTrashAlt, FaArchive } from 'react-icons/fa';
+import { FaUser, FaCog, FaHome, FaUserPlus, FaSignOutAlt, FaBook, FaTrashAlt, FaArchive, FaChartLine } from 'react-icons/fa';
 import { faComment as regularComment } from '@fortawesome/free-regular-svg-icons';
 import { Modal } from 'react-bootstrap';
 import { Tooltip } from 'react-tooltip'
@@ -151,6 +151,10 @@ function TicketPage({}) {
 
     const handleSettingsClick = () => {
         navigate("/settings");
+    };
+
+    const handleAnalyticsClick = () => {
+        navigate("/analytics");
     };
 
     const handleAdminClick = () => {
@@ -302,6 +306,14 @@ function TicketPage({}) {
                                 </div>
                             </div>
                             {user.role === "admin" && (
+                                <div className="navbar-item" onClick={handleAnalyticsClick}>
+                                    <FaChartLine size={24}/>
+                                    <div className="navbar-text">
+                                        Analytics
+                                    </div>
+                                </div>
+                            )}
+                            {user.role === "admin" && (
                                 <div className="navbar-item" onClick={handleAdminClick}>
                                     <FaUserPlus size={24}/>
                                     <div className="navbar-text">
@@ -347,6 +359,11 @@ function TicketPage({}) {
                             <button className="dropdown-item" onClick={handleGuidesClick}>
                                 Guides
                             </button>
+                            {user.role == "admin" && (
+                            <button className="dropdown-item" onClick={handleAnalyticsClick}>
+                                Analytics
+                            </button>
+                            )}
                             {user.role == "admin" && (
                             <button className="dropdown-item" onClick={handleAdminClick}>
                                 + Admin

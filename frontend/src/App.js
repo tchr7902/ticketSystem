@@ -7,13 +7,29 @@ import SettingsPage from './pages/Settings';
 import AdminRegister from './pages/AdminRegister';
 import PassReset from './pages/PassReset';
 import GuidesPage from './pages/Guides';
+import Analytics from './pages/Analytics'
 import { AuthProvider, useAuth } from './utils/authContext';
 
 const AdminRoute = ({ element: Component }) => {
-  const { user, token } = useAuth();
+  const { user, token, loading } = useAuth();
 
-  if (!token || user?.role !== 'admin') {
-    return <Navigate to="/home" />;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // If user isn't loaded but token exists, decode the token to extract the role
+  let role = user?.role;
+  if (!role && token) {
+    try {
+      const decoded = jwt_decode(token);
+      role = decoded.role;
+    } catch (error) {
+      console.error("Token decoding failed:", error);
+    }
+  }
+
+  if (!token || role !== 'admin') {
+    return <Navigate to="/home" replace />;
   }
 
   return Component;
@@ -59,6 +75,7 @@ const App = () => {
         <Route path="/profile" element={token ? <ProfilePage /> : <Navigate to="/login" />} />
         <Route path="/guides" element={token ? <GuidesPage /> : <Navigate to="/login" />} />
         <Route path="/admin" element={<AdminRoute element={<AdminRegister />} />} />
+        <Route path="/analytics" element={<AdminRoute element={<Analytics />} />} />
 
         {/* Catch-all route */}
         <Route path="/*" element={token ? <Navigate to={storedRoute} /> : <Navigate to="/" />} />

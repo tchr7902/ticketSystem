@@ -8,11 +8,13 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(sessionStorage.getItem('token') || null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
         const loadUser = async () => {
             if (window.location.pathname.startsWith('/reset_password')) {
+                setLoading(false);
                 return;
             }
     
@@ -27,12 +29,12 @@ export const AuthProvider = ({ children }) => {
             } else {
                 logout();
             }
+            setLoading(false);
         };
     
         loadUser(); 
     }, [token, navigate]); 
     
-
     const login = (token, userData) => {
         const expirationTime = new Date().getTime() + 3 * 60 * 60 * 1000;
         sessionStorage.setItem('token', token);
@@ -53,7 +55,6 @@ export const AuthProvider = ({ children }) => {
         if (!user) {
             throw new Error("User not authenticated.");
         }
-
         try {
             const response = await changeUserPassword(user.email, currentPassword, newPassword);
             return response;
@@ -66,7 +67,6 @@ export const AuthProvider = ({ children }) => {
         if (!user) {
             throw new Error("User not authenticated.");
         }
-
         try {
             const response = await changeUserEmail(currentEmail, newEmail);
             return response;
@@ -98,11 +98,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, changePassword, changeEmail, archiveTicket, getArchivedTickets }}>
+        <AuthContext.Provider value={{ user, token, loading, login, logout, changePassword, changeEmail, archiveTicket, getArchivedTickets }}>
             {children}
         </AuthContext.Provider>
     );
-
 };
 
 export const useAuth = () => useContext(AuthContext);
