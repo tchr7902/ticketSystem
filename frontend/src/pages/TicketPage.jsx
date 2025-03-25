@@ -453,19 +453,11 @@ function TicketPage({}) {
                 </Modal.Header>
                 <Modal.Body className="chat-modal px-4 py-3">
                     <div className="contact-info">
-                        <div className="mb-4 mt-3">
-                            <h5 className="mb-1">
-                                Nathan Bascom
-                            </h5>
-                            <p className="mb-1">(385) 272-1205</p>
-                            <p>nathan.b@goodearthmarkets.com</p>
-                        </div>
                         <div className="mb-3">
                             <h5 className="mb-1">
-                                Trevor Christensen
+                                IT Phone Number
                             </h5>
-                            <p className="mb-1">(385) 228-6977</p>
-                            <p className="">trevor.c@goodearthmarkets.com</p>
+                            <p className="mb-1">(385) 204-3181</p>
                         </div>
                     </div>
                 </Modal.Body>
