@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaFileUpload, FaFileDownload, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "../utils/authContext";
-import { uploadImage } from "../utils/api";
+import { uploadImage, assignAdminToTicket, getAdmins } from "../utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function TicketForm({ selectedTicket, onSave }) {
@@ -16,6 +16,8 @@ function TicketForm({ selectedTicket, onSave }) {
   const [fileName, setFileName] = useState("");
   const [imageUrl, setImageUrl] = useState(null);
   const [showImage, setShowImage] = useState(false);
+  const [admins, setAdmins] = useState([]);
+  const [selectedAdminId, setSelectedAdminId] = useState("");
   const { user } = useAuth();
 
   const [ticketCategory, setTicketCategory] = useState("");
@@ -102,7 +104,19 @@ function TicketForm({ selectedTicket, onSave }) {
   };
 
   useEffect(() => {
+
+    if (user?.role === "admin") {
+      getAdmins()
+        .then((data) => {
+          setAdmins(data);
+        })
+        .catch((err) => {
+          console.error("Failed to load admin list:", err);
+        });
+    }
+
     if (selectedTicket) {
+      setSelectedAdminId(selectedTicket.assigned_employee?.toString() || "");
       const titleParts = selectedTicket.title.split(" - ");
       if (titleParts[0] === "Other") {
         setTicketCategory("Other");
@@ -137,7 +151,7 @@ function TicketForm({ selectedTicket, onSave }) {
       setTicketSubcategory("");
       setCustomDetail("");
     }
-  }, [selectedTicket]);
+  }, [selectedTicket, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -156,6 +170,14 @@ function TicketForm({ selectedTicket, onSave }) {
 
     if (imageUrl) {
       ticketData.image_url = imageUrl;
+    }
+
+    if (user?.role === "admin" && selectedTicket && selectedAdminId) {
+      try {
+        await assignAdminToTicket(selectedTicket.id, parseInt(selectedAdminId));
+      } catch (err) {
+        console.error("Error assigning admin on submit:", err);
+      }
     }
 
     try {
@@ -413,6 +435,37 @@ function TicketForm({ selectedTicket, onSave }) {
           </select>
         </div>
       </div>
+
+      {user?.role === "admin" && selectedTicket && (
+        <div className="input-form-box col-md-8 col-lg-4 w-100">
+          <label className="custom-label">Assigned Employee</label>
+          <select
+            className="form-select form-select-boxes select-box"
+            value={selectedAdminId || ""}
+            onChange={(e) => setSelectedAdminId(e.target.value)}
+            required
+          >
+            {selectedTicket.assigned_employee ? (
+              <option value={selectedTicket.assigned_employee} disabled>
+                {admins.find(a => a.id === selectedTicket.assigned_employee)
+                  ? `${admins.find(a => a.id === selectedTicket.assigned_employee).first_name} ${admins.find(a => a.id === selectedTicket.assigned_employee).last_name}`
+                  : "Loading..."}
+              </option>
+            ) : (
+              <option value="" disabled>
+                Unassigned
+              </option>
+            )}
+
+            <option value="">Unassigned</option>
+            {admins.map(admin => (
+              <option key={admin.id} value={admin.id}>
+                {admin.first_name} {admin.last_name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="input-form-box d-flex flex-column align-items-center">
         {user?.role === "admin" ? (

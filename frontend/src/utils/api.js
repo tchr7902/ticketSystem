@@ -83,6 +83,41 @@ export const searchTickets = async (keywords) => {
     }
 };
 
+export const assignAdminToTicket = async (ticketId, adminId) => {
+    try {
+        const response = await axiosInstance.post(
+            `${BASE_URL}/${ticketId}/assign`,
+            { admin_id: adminId },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            throw error;
+        }
+        throw error;
+    }
+};
+
+export const getAdmins = async () => {
+    try {
+      const response = await axiosInstance.get(`${BASE_URL}/get-admins`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching admins:", error);
+      throw error;
+    }
+  };
+  
+
 // User-related functions
 export const loginUser = async (email, password) => {
     const response = await axiosInstance.post(`${USER_URL}/login`, { email, password });

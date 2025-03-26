@@ -30,6 +30,7 @@ const CollapsibleCard = ({
     notes,
     time_spent,
     parts_needed,
+    assigned_employee,
     archivedTicketId,
     handleDeleteArchivedTicket,
 }) => {
@@ -78,6 +79,7 @@ const CollapsibleCard = ({
                     <p><strong>Time Spent:</strong> {time_spent}</p>
                     <p><strong>Parts Needed:</strong> {parts_needed}</p>
                     <p><strong>Notes:</strong> {notes}</p>
+                    <p><strong>Assigned To:</strong> {assigned_employee}</p>
                     <div className="delete-button-container">
                         {!showConfirmation && (
                             <FaTrashAlt onClick={handleDeleteClick}
@@ -520,7 +522,7 @@ function TicketPage({}) {
                         <p>Loading...</p>
                     ) : archivedTickets.length > 0 ? (
                         archivedTickets.map((ticket) => {
-                            const [archivedTicketId, , , title, description, status, archived_at, notes, created_at, priority, contact_method, name, time_spent, parts_needed] = ticket;
+                            const [archivedTicketId, , , title, description, status, archived_at, notes, created_at, priority, contact_method, name, time_spent, parts_needed, assigned_employee] = ticket;
                             return (
                                 <CollapsibleCard
                                     key={archivedTicketId}
@@ -535,6 +537,7 @@ function TicketPage({}) {
                                     time_spent={time_spent}
                                     parts_needed={parts_needed}
                                     notes={notes}
+                                    assigned_employee={assigned_employee}
                                     archivedTicketId={archivedTicketId}
                                     handleDeleteArchivedTicket={handleDeleteArchivedTicket}
                                 />

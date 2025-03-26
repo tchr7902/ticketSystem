@@ -334,6 +334,45 @@ def search_tickets():
         cursor.close()
 
 
+# Assign Ticket
+@tickets_bp.route('/<int:ticket_id>/assign', methods=['POST'])
+@jwt_required()
+def assign_admin(ticket_id):
+    user_identity_str = get_jwt_identity()
+    user = json.loads(user_identity_str) 
+
+    if user['role'] != 'admin':
+        return jsonify({"error": "Unauthorized"}), 403
+
+    data = request.get_json()
+    admin_id = data.get('admin_id')
+
+    cursor = get_db().cursor()
+
+    cursor.execute("SELECT id FROM admin WHERE id = %s", (admin_id,))
+    assigned_admin = cursor.fetchone()
+    if not assigned_admin:
+        return jsonify({"error": "Assigned admin not found"}), 404
+
+    cursor.execute("UPDATE tickets SET assigned_employee = %s WHERE id = %s", (admin_id, ticket_id))
+    get_db().commit()
+    cursor.close()
+
+    return jsonify({"message": "Admin assigned to ticket successfully."})
+
+
+
+# Get all Admins for ticket
+@tickets_bp.route('/get-admins', methods=['GET'])
+@jwt_required()
+def get_admins():
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute("SELECT id, first_name, last_name FROM admin")
+    admins = cursor.fetchall()
+    cursor.close()
+    return jsonify(admins)
+
+
 # Archive Ticket
 @tickets_bp.route('/<int:ticket_id>/archive', methods=['POST'])
 @jwt_required()
@@ -349,11 +388,17 @@ def archive_ticket(ticket_id):
     try:
         cursor.execute("""
             INSERT INTO archived_tickets 
-            (original_ticket_id, user_id, title, description, created_at, severity, status, notes, contact_method, name, time_spent, parts_needed)
-            SELECT id, user_id, title, description, created_at, severity, status, %s, contact_method, name, %s, %s
-            FROM tickets
-            WHERE id = %s
+            (original_ticket_id, user_id, title, description, created_at, severity, status, notes, contact_method, name, time_spent, parts_needed, assigned_employee)
+            SELECT 
+                t.id, t.user_id, t.title, t.description, t.created_at, t.severity, t.status, %s, 
+                t.contact_method, t.name, %s, %s, 
+                COALESCE(CONCAT(a.first_name, ' ', a.last_name), 'Unassigned')
+            FROM tickets t
+            LEFT JOIN admin a ON t.assigned_employee = a.id
+            WHERE t.id = %s
         """, (notes, time_spent, parts_needed, ticket_id))
+
+
 
 
         if cursor.rowcount == 0:
