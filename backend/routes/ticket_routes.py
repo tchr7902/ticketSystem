@@ -161,6 +161,8 @@ def update_ticket(ticket_id):
     cursor.execute("SELECT * FROM tickets WHERE id = %s", (ticket_id,))
     ticket = cursor.fetchone()
 
+    old_status = ticket['status']
+
     if not ticket:
         return jsonify({"error": "Ticket not found."}), 404
 
@@ -183,8 +185,11 @@ def update_ticket(ticket_id):
         if last_update_index != -1:
             notes = f"\n*Update*: {data['description'][last_update_index + len('Update:'):].strip()}"  # Capture after "Update:"
 
+
+    status_changed = old_status != data['status']
+
     # Send the message regardless of whether there is a new update
-    if user['role'] == 'admin':
+    if user['role'] == 'admin' and (status_changed or notes):
         # Create a named space for the ticket notification
         space_info = create_user_space(ticket['email'])
 
