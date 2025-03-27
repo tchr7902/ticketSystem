@@ -159,7 +159,7 @@ const Analytics = ({toggleTheme, theme}) => {
     filteredTickets.forEach(ticket => {
       const title = ticket.title || "Uncategorized";
       const parts = title.split(" - ");
-      let cat = parts[1];
+      let cat = parts[0];
       if (cat.toLowerCase() === "other" && parts.length > 1) {
         cat = "Other";
       }
