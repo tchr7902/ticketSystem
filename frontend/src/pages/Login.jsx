@@ -126,7 +126,7 @@ function LoginPage() {
                     // Redirect based on user role
                     navigate(user.role === 'admin' ? '/home' : '/home');
                 } catch (loginError) {
-                    const backendMessage = loginError.response?.data?.error || "Invalid email or password. Please try again.";
+                    const backendMessage = loginError.response?.data?.error || "Invalid credentials. Please try again.";
                     setError(backendMessage);
                     setLoading(false);
                 }

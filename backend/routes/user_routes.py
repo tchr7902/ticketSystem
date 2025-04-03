@@ -198,11 +198,11 @@ def login():
 
         # If no account found
         if not account:
-            return jsonify({"error": "No user registered with that email."}), 404
+            return jsonify({"error": "Invalid credentials. Please try again."}), 404
 
         # Check if the password is correct
         if not check_password_hash(account['password'], password):
-            return jsonify({"error": "Password is incorrect."}), 401
+            return jsonify({"error": "Invalid credentials. Please try again."}), 401
 
         expiration_time = timedelta(hours=3)
 
