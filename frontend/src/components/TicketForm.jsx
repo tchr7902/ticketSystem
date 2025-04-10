@@ -246,7 +246,7 @@ function TicketForm({ selectedTicket, onSave }) {
         {ticketCategory && ticketCategory !== "Other" && (
           <div className="title-form-box d-flex flex-column align-items-center">
             <div className="input-div">
-            <label className="custom-label" htmlFor="ticketCategory">Subcategory</label>
+              <label className="custom-label" htmlFor="ticketCategory">Subcategory</label>
               <select
                 className="form-select title-form-select-boxes select-box"
                 value={ticketSubcategory}
@@ -263,8 +263,23 @@ function TicketForm({ selectedTicket, onSave }) {
                 ))}
               </select>
             </div>
+
+            {ticketSubcategory && (
+              <div className="text-center">
+                <a
+                  href="https://docs.google.com/document/d/e/2PACX-1vT4q0E40LawciciDfBaNqL4cRGBDfT6p6SRfYHOuB9TYd127UII4jlBDO4icwcDSNFGo_HLXRpGlz5t/pub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-link"
+                  style={{ fontWeight: "bold", color: "#7FAC6E", textDecoration: "underline", margin: "0"}}
+                >
+                  Self Troubleshooting Guide
+                </a>
+              </div>
+            )}
           </div>
         )}
+
 
         {ticketSubcategory === "Other" && ticketCategory !== "Other" && (
           <div className="title-form-box d-flex flex-column align-items-center">
