@@ -263,20 +263,6 @@ function TicketForm({ selectedTicket, onSave }) {
                 ))}
               </select>
             </div>
-
-            {ticketSubcategory && (
-              <div className="text-center">
-                <a
-                  href="https://docs.google.com/document/d/e/2PACX-1vT4q0E40LawciciDfBaNqL4cRGBDfT6p6SRfYHOuB9TYd127UII4jlBDO4icwcDSNFGo_HLXRpGlz5t/pub"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-link"
-                  style={{ fontWeight: "bold", color: "#7FAC6E", textDecoration: "underline", margin: "0"}}
-                >
-                  Self Troubleshooting Guide
-                </a>
-              </div>
-            )}
           </div>
         )}
 
@@ -512,6 +498,18 @@ function TicketForm({ selectedTicket, onSave }) {
           </div>
         )}
       </div>
+
+      <div className="text-center m-2">
+                <a
+                  href="https://docs.google.com/document/d/e/2PACX-1vT4q0E40LawciciDfBaNqL4cRGBDfT6p6SRfYHOuB9TYd127UII4jlBDO4icwcDSNFGo_HLXRpGlz5t/pub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-link guide-link"
+                  style={{ fontWeight: "bold", textDecoration: "underline", margin: "0"}}
+                >
+                  Self Troubleshooting Guide
+                </a>
+        </div>
 
       <div className="d-flex justify-content-center">
         <div>

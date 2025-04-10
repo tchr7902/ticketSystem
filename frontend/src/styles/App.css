@@ -267,6 +267,14 @@ img {
 
 
 /* Container Styles */
+.guide-link {
+  color: var(--primary-color)
+}
+
+.guide-link:hover {
+  color: var(--darker-primary-color)
+}
+
 .modal-content {
   background-color: var(--background-color);
   color: var(--text-color);
